@@ -1,38 +1,33 @@
-# 4004-SeleniumBlackjack
-A basic blackjack web application to get experience using selenium as a testing method.
+# 4004-SeleniumPoker
+A basic Poker web application to get experience using selenium as a testing method.
 
 Some code taken from the web (spring documentation), see:
 
 https://github.com/spring-projects/spring-boot/tree/master/spring-boot-samples/spring-boot-sample-websocket-tomcat
 
+Acknowledgments 
+Some of this code was taken from Mike's blackjack game: https://github.com/Sacredify/4004-SeleniumBlackjack.git
 
 To build this project
 ---------------------
 
 Building this project requires git (or download it manually), and maven. 
 
-  1. `git clone https://github.com/Sacredify/4004-SeleniumBlackjack.git`
-  2. `cd 4004-SeleniumBlackjack`
+  1. `git clone https://github.com/CD11/SeleniumPoker`
+  2. `cd SelemiumPoker`
   3. `mvn clean install`
   
-To log output
--------------
-
-Two options:
-
-  1. `mvn clean install --log-file resultbj.txt`
-  2. `mvn clean install > resultbj.txt`
 
 To run this project
 -------------------
 
 Build the project as above to assemble the stand-alone jar.
 
-  1. `java -jar SeleniumBlackjack-1.0-SNAPSHOT.jar`
+  1. `java -jar Poker-1.0-SNAPSHOT.jar`
 
 Allow the code to run until you see this message:
   
-  `... c.c.blackjack.BlackJackApplication       : Started BlackJackApplication in 4.512 seconds`
+  `... c.c.poker.PokerApplication       : Started PokerApplication in 4.512 seconds`
   
 After that, open any browser and navigate to:
 
@@ -47,24 +42,26 @@ Running the tests (selenium) is best done through maven:
   
 Tests aren't run as part of the build process, although they are compiled for errors.
 
-IMPORTING AND RUNNING WITH ECLIPSE (Eclipse Mars)
+IMPORTING AND RUNNING WITH ECLIPSE (Eclipse NEON)
 ----------------------
 
 For the eclipse users, you can:
 
-  1. `git clone https://github.com/Sacredify/4004-SeleniumBlackjack.git`
-  2. `File --> Import --> Maven --> Import existing maven projects --> 4004-SeleniumBlackjack --> pom.xml selected.
-  3. From there, you can do whatever. Select the main class (BlackJackApplication) and run (as application).
-  4. To run the tests, you can right click src/test/java/ and do run as JUnit which will run both selenium (allow the browser to do its thing, or switch to PhantomJS) and cucumber tests. 
+  1. downloand Selenium poker from the zip or githu clone
+  2. `File --> Import --> Maven --> Import existing maven projects --> SeleniumPoker --> pom.xml selected.
+  3. From there, you can do whatever. Select the main class (PokerApplication) and run (as application).
 
-IMPORTANT INFO
+
+How To Play the Game
 --------------
 
-  1. When someone disconnects, if they were the admin, the entire game shuts down. Re-connect as a new admin.
-  2. When someone else disconnects, they will be replaced by an AI.
-  3. Aces are automaticlly converted when possible.
-  4. And probably some other stuff.
-  5. The cucumber tests cover basic AI functionality and whatnot.
-  6. The selenium tests will try to run through an actual game.
-  7. I'm not spending 100% more time making it 'truly testable' by allowing custom input - thats not the point of this assignment.
-  8. Please note there may be timing issues with the tests - they worked for me but selenium is like that. Try re-running them. Who knows?
+  1. Connect to the game
+     -> if you are the first person to connect you will be assigned as admin
+     -> As admin you can set the number of players and open the loby 
+  2. Once enough people have connected you can start the game
+  3. All UI Players will play first
+  4. When it is your turn the game option buttons will be enabled and you can decide to stay or hit. 
+     -> If you hit you need to click on cards to improve them.
+     -> When you have clicked all cards you want to imrpove click done.
+     -> Note:  Once you click a card you cannot unselect it.
+  5. Once Each player has had one turn the system will display the winner and you can disconnect or start the game again.
