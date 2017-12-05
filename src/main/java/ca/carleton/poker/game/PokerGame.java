@@ -74,6 +74,7 @@ public class PokerGame {
     @PostConstruct
     public void init() {
         this.players = new ArrayList<>();
+        this.players.clear();
         this.gameState = State.WAITING_FOR_ADMIN;
         this.deck.reset();
         this.roundMaxPlayers = -1;
@@ -101,6 +102,7 @@ public class PokerGame {
         }
        
     }
+    
     
     /**
      * Replace an existing player with an AI.
@@ -138,21 +140,21 @@ public class PokerGame {
      * @return true if the player was added successfully.
      */
     public boolean registerPlayer(final WebSocketSession session) {
-        final RealPlayer player = new RealPlayer(session, session.getId());
-    	if (this.players.isEmpty()) {
+        RealPlayer player = new RealPlayer(session, session.getId());
+    	// Set to admin if they are the first conneciton
+        LOG.info("Player is trying to connect {}, {}", player.getuid(), player.getSession());
+        if (this.players.isEmpty()) {
             LOG.info("Setting first player as admin.");
             player.setAdmin(true);
-            if(!this.players.contains(player)){
+    	}
+        // Check that the player doesn't exist and add them
+    	//if(!this.players.contains(player)){
+           if(!this.players.contains(player)){
+            	 LOG.info("Player is being added {}, {}", player.getuid(), player.getSession());
             	 return this.players.add(player);
-            }else{
-            return false;
-            }
-        }else{
-        	if(!this.players.contains(player)){
-            	 return this.players.add(player);
-              }
-        }
-    	return false;
+           }
+       
+           return false;
     }
 
     /**
@@ -378,12 +380,18 @@ public class PokerGame {
 		 
 		ArrayList<Player> ordering = new ArrayList<>();
 		int size = 0;
+		for(AIPlayer p: this.getConnectedAIPlayers()){
+			if(p.getLastOption() == null){
+				return p;
+			}
+		}
 		// Add  real players who haven't played yet
 		for(RealPlayer p: this.getConnectedRealPlayers()){
-			if(p.isReal() && p.getLastOption()== null){
+			if(p.getLastOption()== null){
 				ordering.add(p);
+				size++;
 			}
-			size++;
+			
 		}
 		
 		// get the last player in the ordering
@@ -418,11 +426,11 @@ public class PokerGame {
                         if (card.isHidden()) {
                             card.setHidden(false);
                             playerMessages.add(message(MessageUtil.Message.ADD_PLAYER_CARD,
-                                    card.toHTMLString()).build());
+                                    card.toFormHTML()).build());
                             card.setHidden(true);
                         } else {
                             playerMessages.add(message(MessageUtil.Message.ADD_PLAYER_CARD,
-                                    card.toHTMLString()).build());
+                                    card.toFormHTML()).build());
                         }
                     });
      
@@ -432,7 +440,7 @@ public class PokerGame {
             	if(!player.equals(playerOtherThanCurrent)){
             		for (final Card card : playerOtherThanCurrent.getHand().getCards()) {
 	                    playerMessages.add(message(MessageUtil.Message.ADD_OTHER_PLAYER_CARD,
-	                            card.toHTMLString(),
+	                            card.toFormHTML(),
 	                            otherPlayerIndex,
 	                            playerOtherThanCurrent.getuid())
 	                            .build());
@@ -546,6 +554,15 @@ public class PokerGame {
 	private void setGameState(State state) {
 		this.gameState = state;
 		
+	}
+
+
+	public boolean AIDone() {
+		for(AIPlayer ai :this.getConnectedAIPlayers()){
+			if(ai.getLastOption() != null)
+				return false;
+		}
+		return true;
 	}
 
 

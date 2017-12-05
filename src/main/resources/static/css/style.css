@@ -52,6 +52,7 @@
     width: 200%;
 }
 
+
 #otherHand2 {
     border: 1px solid #CCCCCC;
     border-right-color: #999999;
@@ -77,6 +78,23 @@
 #info-container {
     font-size: 10px;
 }
+
+
+ form{
+    display: inline-flex;
+    margin-top:20px;
+}
+
+
+#otherHand1 input, #otherHand2 input, #otherHand3 input{
+    display: none;
+}
+
+#playerHand input{
+    position: absolute;
+    top: -20px;
+}
+
 
 label {
     display: block;

@@ -32,9 +32,10 @@
             <button id="hit" disabled="disabled" onclick="game_option('HIT');">
                 Hit
             </button>
-            <button id="done" disabled="disabled" onclick="sendCards();">
+            <button  id="done" type="submit" form="playerHandCards" onClick="sendCards();">
                 Done
             </button>
+         
         </div>
         <!--
         <div>
@@ -106,8 +107,131 @@
 
         <div id="console"></div>
         <label id="yourHandText" for="playerHand">Your Hand</label>
-
         <div id="playerHand" class="playingCards fourColours">
+        <form id = "playerHandCards">
+            <div id="card1" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>
+            <div id="card2" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>
+            <div id="card3" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>
+            <div id="card4" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>
+              <div id="card4" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>
+            <input type="Submit" name="done">
+            
+        </form>
+    </div>
+     <label id="otherHandText1" for="otherHand1">Other Player's Hand</label>
+    <div id="otherHand1" class="playingCards fourColours">
+        <form id = "otherHandCards1">
+            <div id="card1" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>
+            <div id="card2" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>
+            <div id="card3" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>
+            <div id="card4" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>
+              <div id="card4" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>
+        </form>
+    </div>
+     <label id="otherHandText2" for="otherHand2">Other Player's Hand</label>
+    <div id="otherHand2" class="playingCards fourColours">
+        <form id = "otherHandCards2">
+            <div id="card1" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>
+            <div id="card2" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>
+            <div id="card3" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>
+            <div id="card4" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>
+              <div id="card4" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>
+            <input type="Submit" name="done">
+            
+        </form>
+    </div>
+     <label id="otherHandText3" for="otherHand3">Other Player's Hand</label>
+    <div id="otherHand3" class="playingCards fourColours">
+        <form id = "otherHandCards3">
+            <div id="card1" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>
+            <div id="card2" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>
+            <div id="card3" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>
+            <div id="card4" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>
+              <div id="card4" class="card rank-7 spades">
+                <input type="checkbox" name="card1" value="card rank-7 spades">
+                <span class="rank">7</span>
+                <span class="suit">&spades;</span>
+            </div>           
+        </form>
+    </div>
+
+       <!--  <div id="playerHand" class="playingCards fourColours">
             <ul id="playerHandCards" class="table" >
                 <li>
                     <div id="card1" class="card rank-7 spades">
@@ -204,7 +328,7 @@
                 </li>
             </ul>
         </div>
-    </div>
+    </div> -->
 </div>
 </div>
 </body>

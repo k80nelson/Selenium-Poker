@@ -17,16 +17,15 @@ public interface AIStrategy {
 	
 	 static final Logger LOG = LoggerFactory.getLogger(AIStrategy1.class);
 	  public static  List<Card> doStrategy(AIPlayer player, ArrayList<AIPlayer>players){
-		  boolean has3 = true;
+		  boolean has3 = false;
 		  boolean first = true;
 		  PokerHand handvalue = player.getHand().getPokerValue();
 		  ArrayList<AIPlayer> others = new ArrayList<>();
 		  
 		  for(AIPlayer p : players){
 			if(!p.equals(player)){
-				LOG.info("AI checking others {}, {}", player.getuid(), p.getuid());
 				others.add(p);
-				has3 = p.getHand().visibleHand().isThreeOfAKind() ||p.getHand().visibleHand().isThreeOfASuit();
+				has3 = p.getHand().visibleHand().isThreeOfAKind(); 
 				if(p.getLastOption() != null){
 					first = false;
 				}	 
@@ -35,35 +34,31 @@ public interface AIStrategy {
 		  }
 		  
 		 
-		  
-		  //  If royal flush we do not improve any cards
-		  if(handvalue.equals(PokerHand.ROYAL_FLUSH)){
-	        	LOG.info("AI Staying for Royal Flush ");
-	        	return null;
-		  }
-		  // if straight we do not improve cards
-	      else if(handvalue.equals(PokerHand.STRAIGHT)){
-	        	LOG.info("AI Staying for Straight ");
-	        	return null;
-	      }
 		  /*
 			  * if player is not the first to player and another user has a visible 3 of a kind
+			  * use strategy2
 			  */
-	      else if(has3 && !first){
-			  LOG.info("AI is using Strategy 2 becuase they see a visible 3 of a kind ");
-			  AIStrategy2 ai = new AIStrategy2(player, others);
+	     if(has3 && !first){
+			  LOG.info("AI is using Strategy 2. first: {}, has3{}", first, has3);
+			  AIStrategy2 ai =  new AIStrategy2(player, others);
+
 			  return ai.chooseCard();
 			  
 		  }
-		  /* 
-		   * if players have a > straight 
-		   * or first player
-		   * or other Players have 3 cards of the same suit or same rank use Strategy 1
-		  */		
-		  else{
-			  LOG.info("AI is using Strategy 1");
+		  
+		  /*
+		   *  If you are the first player use strategy 1, or you do not see a 3 of a kind use stategy 1
+		   */
+	     else if(first && !has3){
+			  LOG.info("AI is using Strategy 1. first:{},has3:{}", first, has3);
 			  AIStrategy1 ai =  new AIStrategy1(player);
-			  return ai.chooseCard(); 
+			  return ai.chooseCard();   
 		  }
-	    }		
+	     else{
+	    	  LOG.info("AI is using Strategy 1. first:{},has3:{}", first, has3);
+			  AIStrategy1 ai =  new AIStrategy1(player);
+			  return ai.chooseCard();   
+		    	 
+	     }
+	  }
 }

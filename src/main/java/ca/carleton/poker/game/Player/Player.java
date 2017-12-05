@@ -6,7 +6,7 @@ import ca.carleton.poker.game.GameOption;
 import ca.carleton.poker.game.entity.card.Hand;
 
 public abstract class Player {
-	private final Hand hand;
+	private Hand hand;
 	private final WebSocketSession session;
 	private final String uid;
 	private GameOption lastOption;
@@ -36,10 +36,9 @@ public abstract class Player {
 	    public void setLastOption(final GameOption lastOption) {
 	        this.lastOption = lastOption;
 	    }
-
-	    @Override
-	    public boolean equals(final Object rhs) {
-	        return rhs instanceof RealPlayer && ((RealPlayer) rhs).getHand().equals(this.hand);
-	    }
+	    
+	   public void setHand(Hand h){
+		   this.hand = h;
+	   }
 
 }

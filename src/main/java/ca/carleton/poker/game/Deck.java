@@ -69,5 +69,7 @@ public class Deck {
     public Card draw() {
         return this.cards.size() >= 1 ? this.cards.remove(0) : null;
     }
+    
+  
 
 }

@@ -1,18 +1,12 @@
 package ca.carleton.poker.strategy;
 
-import ca.carleton.poker.game.GameOption;
-import ca.carleton.poker.game.Player.AIPlayer;
-import ca.carleton.poker.game.Player.RealPlayer;
+import ca.carleton.poker.game.Player.*;
 import ca.carleton.poker.game.entity.card.Card;
 import ca.carleton.poker.game.entity.card.PokerHand;
-import ca.carleton.poker.game.entity.card.Rank;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 
 
@@ -31,8 +25,6 @@ public class AIStrategy1 implements AIStrategy {
 	   this.player = p;
    }
     
-   
-     
     /* 
      * attempt to get a full house by exchanging everything not a pair or 3 of a kind
      * 
@@ -41,11 +33,26 @@ public class AIStrategy1 implements AIStrategy {
     	List<Card> improve = new ArrayList<>();
         List<Card> cards = this.player.getHand().sortRank();
         PokerHand handvalue = this.player.getHand().getPokerValue();
+        improve.clear();
         
+        
+        
+        //  If royal flush we do not improve any cards
+		  if(handvalue.equals(PokerHand.ROYAL_FLUSH)){
+	        	LOG.info("AI Staying for Royal Flush ");
+	        	
+	        	return improve;
+		  }
+		  // if straight we do not improve cards
+	      else if(handvalue.equals(PokerHand.STRAIGHT)){
+	        	LOG.info("AI Staying for Straight ");
+	        	return improve;
+	      }
+		  
         // if we have a full house we do not improve 
-       if(handvalue.equals(PokerHand.FULL_HOUSE)   ){
+	      else if(handvalue.equals(PokerHand.FULL_HOUSE)   ){
         	LOG.info("AI FUll House ");
-        	return null;	
+        	return improve;	
         }
       
         /* if its a three of a kind, 

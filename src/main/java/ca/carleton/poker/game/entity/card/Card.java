@@ -7,9 +7,9 @@ package ca.carleton.poker.game.entity.card;
  */
 public class Card {
 
-    private final Rank rank;
+    private Rank rank;
 
-    private final Suit suit;
+    private Suit suit;
 
     private boolean hidden;
 
@@ -48,6 +48,19 @@ public class Card {
                 this.rank.getHtml(),
                 this.suit.getHtml());
     }
+    
+    public String toFormHTML(){
+    	 return this.isHidden() ? "<div class=\"card back\">*</div>" : String.format("<div class=\"card rank-%s %s\">\n"
+    	 		+ "<input type=\"checkbox\" value=\"card rank-%s %s\">\n"
+    	 		+"<span class=\"rank\">%s</span>\n"
+                + "<span class=\"suit\">&%s;</span>\n"
+    	 		+ "</div>" 
+    	 		, this.rank.getHtml(), this.suit.getHtml(),
+    	 		this.rank.getHtml(), this.suit.getHtml(),
+    	 		this.rank.getHtml(), this.suit.getHtml()
+    	 		);
+    	
+    }
 
     public boolean isHidden() {
         return this.hidden;
@@ -64,6 +77,18 @@ public class Card {
     public Suit getSuit() {
         return this.suit;
     }
+
+	public void setCard(String string) {
+		System.out.println(string);
+		String[] sub = string.split(" ");
+		String r = sub[1].replaceAll("rank-", "");
+		String s = sub[2];
+		System.out.println(r);
+		this.rank = Rank.fromString(r); 
+		System.out.println(s);
+		this.suit = Suit.fromString(s);
+		
+	}
 
 	
 

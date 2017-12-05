@@ -10,7 +10,8 @@ function setConnected(connected) {
 function setGameOptionsEnabled(enabled) {
     document.getElementById('stay').disabled = !enabled;
     document.getElementById('hit').disabled = !enabled;
-    //document.getElementById('split').disabled = !enabled;
+    document.getElementById('done').disabled = true;
+    document.getElementsByTagName('input').disabled=true;
 }
 
 function setAdmin(enabled) {
@@ -108,7 +109,6 @@ function dispatch(message) {
             enableStart(false);
             break;
         case 'GAME+START':
-            disableGetCard();
             log(logMessage);
             break;
         case 'OTHER+MOVE':
@@ -180,45 +180,63 @@ function dispatch(message) {
  */
 function game_option(option) {
     ws.send('GAME_'.concat(option));
+    document.getElementById('done').disabled =true;
     console.log('Sent ' + option);
-    clientLog('You decided to ' + option + '. Sending to server - please wait for your next turn.');
+    clientLog('You decided to ' + option + '. Sending to server ');
     setGameOptionsEnabled(false);
 }
 
 /*
 *  get user to pick a card 
+ 
 */
 function getCard(){
-    console.log('getting card');
-    var eles = document.getElementById('playerHandCards').childElementCount
-     document.getElementById('done').disabled = false;
-    for (var i=0; i < eles; i++){
-        var node = document.getElementById('playerHandCards').childNodes[i];     
-        node.addEventListener("click", function(e){  
-            cards = cards.concat('_'+this.id);   
-            console.log('Selected ' + this.id);
-            node.style.color = "#cccccc";
-            });
-       }
+   var done = document.getElementById('done').disabled = false;
+   clientLog('Getting Cards');
 }
+
 
 /*
 * Send cards back to server
 */
 function sendCards(){
+    var eles = document.forms["playerHandCards"].getElementsByTagName("input");
     document.getElementById('done').disabled = true;
+    
+    var cards = " ";
+   for(var i = 0; i< eles.length; i++){
+        if(eles[i].checked == true){
+            clientLog("selected "+ eles[i].value.replace("card ", "_"));
+            cards += eles[i].value.replace("card ", "_"+i+" ");
+        }
+    }
+
     ws.send('CARD_DONE|'.concat(cards));
     clientLog('You decided to improve card ' + cards + '. Sending to server - please wait for results.');
     cards ="";
 }
 
+
 /*
-*  get user to pick a card 
+* Send cards back to server
 */
-function disableGetCard(id){
-    var node = document.getElementById('playerHandCards').childNodes[id];
+function sendOtherCards(id){
+    var eles = document.forms["playerHandCards"].getElementsByTagName("input");
+    document.getElementById('done').disabled = true;
     
+    var cards = " ";
+   for(var i = 0; i< eles.length; i++){
+        if(eles[i].checked == true){
+            clientLog("selected "+ eles[i].value.replace("card ", "_"));
+            cards += eles[i].value.replace("card ", "_"+i+" ");
+        }
+    }
+
+    ws.send('CARD_DONE|'.concat(cards));
+    clientLog('You decided to improve card ' + cards + '. Sending to server - please wait for results.');
+    cards ="";
 }
+
 
 
 
@@ -233,25 +251,43 @@ function start() {
 
 /**
  * Add a new card to the player's list.
- */
+ 
 function addCardForPlayer(card) {
     var id = document.getElementById('playerHandCards').childElementCount+1;
     var li = document.createElement('li');
-    li.id = id;
     li.innerHTML = card;
+    li.id = li.getElementsByTagName("DIV").className;
     document.getElementById('playerHandCards').appendChild(li);
+}
+*/
+
+function addCardForPlayer(card) {
+    var id = document.getElementById('playerHandCards').childElementCount+1;
+    var input = document.createElement('div');
+    input.innerHTML = card;
+    input.id=("PlayerCard"+id);
+
+    document.getElementById('playerHandCards').appendChild(input);
 }
 
 
 /**
  * Add a new card for another player.
- */
-function addCardForOther(card, id, sessionID) {
     var li = document.createElement('li');
     li.innerHTML = card;
     console.log('Trying to append to ' + 'otherHandCards'.concat(id));
     document.getElementById('otherHandCards'.concat(id)).appendChild(li);
     document.getElementById('otherHandText'.concat(id)).innerHTML = "Other Player's Hand (" + sessionID + ")";
+ */
+function addCardForOther(card, id, sessionID) {
+    var input = document.createElement('div');
+    input.innerHTML = card;
+     input.id=("card"+id);
+    console.log('Trying to append to ' + 'otherHandCards'.concat(id));
+    document.getElementById('otherHandCards'.concat(id)).appendChild(input);
+    document.getElementById('otherHandText'.concat(id)).innerHTML = "Other Player's Hand (" + sessionID + ")";
+
+    
 }
 
 function removeOldValue(old) {

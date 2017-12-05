@@ -1,5 +1,6 @@
 package selenium;
 
+import ca.carleton.poker.PokerApplication;
 import config.MockUserFactory;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
@@ -10,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import ca.carleton.poker.PokerApplication;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.not;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;

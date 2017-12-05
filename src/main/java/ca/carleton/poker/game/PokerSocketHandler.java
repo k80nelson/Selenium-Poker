@@ -30,9 +30,9 @@ import static ca.carleton.poker.game.message.MessageUtil.message;
 import static org.apache.commons.collections.CollectionUtils.size;
 
 /**
- * Socket handler that will contain our blackjack controls.
- * <p/>
- * Created by Mike on 10/6/2015.
+ * Socket handler that will contain our Poker controls.
+ * created by Cheryl 
+ *  
  */
 @Component
 public class PokerSocketHandler extends TextWebSocketHandler {
@@ -59,29 +59,17 @@ public class PokerSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(final WebSocketSession session) throws Exception {
-        LOG.info("Opened new session for {}.", session.getId());
-
-        // For first one - disable after they join
-        if (this.acceptingConnections && size(this.game.getConnectedPlayers()) == 0) {
-            this.acceptingConnections = false;
-        } else if (!this.acceptingConnections) {
-            LOG.warn("Warning: Admin isn't accepting connections yet.");
-            this.sendMessage(session, message(Message.NOT_ACCEPTING).build());
-            this.sessionHandler.registerSessionForDisconnect(session);
-            // Check if we're in 0 state and need to re-open
-            if (size(this.game.getConnectedPlayers()) == 0) {
-                this.acceptingConnections = true;
-            }
-            return;
-        }
-
-        if (this.game.registerPlayer(session)) {
+        LOG.info("Opened new session for {}.", session.getId());        
+           
+       	if (this.acceptingConnections && this.game.registerPlayer(session)) {
             this.sendMessage(session, message(Message.PLAYER_CONNECTED, session.getId()).build());
             this.broadCastMessage(session, message(Message.OTHER_PLAYER_CONNECTED, session.getId()).build());
 
             if (this.game.getPlayerFor(session).isAdmin()) {
                 LOG.info("Sending admin message to player.");
                 this.sendMessage(session, message(Message.ADMIN_SET).build());
+                // have to wait for the admin to set admin and open the loby 
+                this.acceptingConnections = false;
             }
 
             if (this.game.readyToStart()) {
@@ -92,8 +80,10 @@ public class PokerSocketHandler extends TextWebSocketHandler {
             this.sendMessage(session, message(Message.NOT_ACCEPTING).build());
             this.sessionHandler.registerSessionForDisconnect(session);
             session.close(CloseStatus.NOT_ACCEPTABLE);
+            this.game.init();
+            this.acceptingConnections =true;
         }
-    }
+      }
     
     /**
      * Called after a session is closed via session.close()
@@ -107,7 +97,7 @@ public class PokerSocketHandler extends TextWebSocketHandler {
 
         if (this.game.getPlayerFor(session) != null) {
             if (this.game.getPlayerFor(session).isAdmin()) {
-            //    this.closeBecauseAdminLeft();
+                this.closeBecauseAdminLeft();
                 return;
             }
         }
@@ -146,6 +136,7 @@ public class PokerSocketHandler extends TextWebSocketHandler {
         GameOption option = null;
         Player player = null;
         // KEY_EXTRAVALUE1_EXTRAVALUE2
+   
         final String[] contents = message.getPayload().split("\\|");
        
         switch (contents[0]) {
@@ -166,6 +157,7 @@ public class PokerSocketHandler extends TextWebSocketHandler {
                 // Send each real player their cards.
                 this.updateCards();
                 // AI Plays first
+       
                 this.processAI();
                 this.processPlayers();
                                             
@@ -195,7 +187,6 @@ public class PokerSocketHandler extends TextWebSocketHandler {
             	this.game.setWaitingOnReal(false);
                 option = GameOption.valueOf(contents[0].split("_")[1]);
                 this.sendMessage(session, message(Message.IMPROVE_CARD).build());
-    	        
                  LOG.info("Get Card");
                 // need to get card;
               
@@ -203,26 +194,32 @@ public class PokerSocketHandler extends TextWebSocketHandler {
                	
             case "CARD_DONE":
             	 LOG.info("Get Card");
-            	 final String[] nums = contents[1].split("\\_"); 
-            		 List<Card> cards = new ArrayList<>();
+            	 final String[] nums = contents[1].split("\\_");
+            	int length = nums.length;
+            	if(nums.length > 5)length = 5; // There are only 5 cards, something must have been double clicked
+            
+            	List<Card> cards = new ArrayList<>();      
             	 player = this.game.getPlayerFor(session);
             	 // Get cards; 
-            	 for(int i = 1; i < nums.length; i ++){
-	            		 System.out.println(i +" " +nums[i]);
-	            		 int id = Integer.parseInt(nums[i])-1;
-	            		 cards.add(player.getHand().getCards().get(id));
+            	for(int i = 1; i < nums.length; i++){
+            		String[] split = nums[i].split(" ");
+            		int id = Integer.parseInt(split[0]);
+            		player.getHand().getCards().get(id).setCard(nums[i]); // This is needed for testing
+            		if(!cards.contains(player.getHand().getCards().get(id))) 
+            				cards.add(player.getHand().getCards().get(id));
             	 }
                  option = GameOption.HIT;
 
                  this.game.performOption(player, option, cards);
                  // Send to other than the player what their move was
+             
                  this.broadCastMessageFromServer(message(Message.MOVE_MADE, player.getuid(), player.getLastOption()).build());
                 
                  this.updateCards();
-                 Thread.sleep(1000);
-                 
+                 Thread.sleep(1000);  
                  this.processPlayers();
-                
+               
+            	 break;
             case "Leaving":
             	break;
             default:
@@ -248,16 +245,19 @@ private void processAI() {
                       next.getLastOption()).build());
           }
       }
+      
       LOG.info("All AI have done their turn.");
+      this.broadCastMessageFromServer(message(Message.PROCESSING_Player).build());
+      this.processPlayers();
 }
 private void processPlayers() {
-  
+	
 	    if(this.game.isResolved()){
          	this.game.resolveRound();
          	this.sendResults();
          	this.resetGame();
 	    }else{
-	    	 Player p = this.getNextPlayer();
+	    	 Player p = this.game.getNextPlayer();
 	   	     LOG.info("Process turn for {}", p.getuid());
 	    	 LOG.info("Sending YOUR_TURN to {}", p.getSession().getId());
 	         this.sendMessage(p.getSession(), message(Message.YOUR_TURN).build());
@@ -266,27 +266,6 @@ private void processPlayers() {
 	    }
 	  
 }
-
-/**
- * Get the next player to go.
- */
-private Player getNextPlayer() {
-    Player next = this.game.getNextPlayer();
-    LOG.info("getting next Player");
-    while (next.isReal()) {
-        if (next.getLastOption() == GameOption.STAY) {
-            LOG.info("Skipping {}'s turn because they STAYED.", next.getuid());
-            this.sendMessage(next.getSession(),
-                    message(Message.SKIPPING, next.getuid(), GameOption.STAY).build());
-        }else {
-            break;
-        }
-        next = this.game.getNextPlayer();
-    }
-     
-    return next;
-}
-
  
 
     private void closeBecauseAdminLeft() {

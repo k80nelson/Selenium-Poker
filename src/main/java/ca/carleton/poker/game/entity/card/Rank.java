@@ -8,7 +8,6 @@ import static org.apache.commons.lang3.StringUtils.capitalize;
  * Created by Mike on 10/27/2015.
  */
 public enum Rank {
-
     ACE_LOW(1, "a"),
     TWO(2, "2"),
     THREE(3, "3"),
@@ -45,4 +44,39 @@ public enum Rank {
     public String getHtml() {
         return this.html;
     }
+
+	public static Rank fromString(String r) {
+		switch(r){
+			case "1":
+				return Rank.ACE_LOW;
+			case "2":
+				return Rank.TWO;
+			case "3":
+				return Rank.THREE;
+			case "4":
+				return Rank.FOUR;
+			case "5":
+				return Rank.FIVE;
+			case "6":
+				return Rank.SIX;
+			case "7":
+				return Rank.SEVEN;
+			case "8":
+				return Rank.EIGHT;
+			case "9":
+				return Rank.NINE;
+			case "10":
+				return Rank.TEN;
+			case "j":
+				return Rank.JACK;
+			case "q":
+				return Rank.QUEEN;
+			case "k":
+				return Rank.KING;
+			case "a":
+				return Rank.ACE_HIGH;
+			default:
+				return null;				
+		}
+	}
 }

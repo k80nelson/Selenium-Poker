@@ -90,27 +90,27 @@ public class Hand {
 		List<Card> sortedCards = new ArrayList<>();
 		// clubs 
 		for(int i = 0; i < this.cards.size(); i++){
-			if(this.cards.get(i).getSuit()== Suit.CLUBS){
+			if(this.cards.get(i).getSuit()== Suit.DIAMONDS){
 				sortedCards.add(this.cards.get(i));
 			}
 		}
 		// spades 
 		for(int i = 0; i < this.cards.size(); i++){
-			if(this.cards.get(i).getSuit()== Suit.SPADES){
+			if(this.cards.get(i).getSuit()== Suit.CLUBS){
 				sortedCards.add(this.cards.get(i));
 			}
 		}
 		
 		// diamonds
 		for(int i = 0; i < this.cards.size(); i++){
-			if(this.cards.get(i).getSuit()== Suit.DIAMONDS){
+			if(this.cards.get(i).getSuit()== Suit.HEARTS){
 				sortedCards.add(this.cards.get(i));
 			}
 		}
 		
 		//hearts		
 		for(int i = 0; i < this.cards.size(); i++){
-			if(this.cards.get(i).getSuit()== Suit.HEARTS){
+			if(this.cards.get(i).getSuit()== Suit.SPADES){
 				sortedCards.add(this.cards.get(i));
 			}
 		}
@@ -344,6 +344,7 @@ public class Hand {
 	
 		return result;
 	}
+	
 
 
 

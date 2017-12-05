@@ -27,5 +27,21 @@ public enum Suit {
     public String toString() {
         return capitalize(this.name().toLowerCase());
     }
+
+	public static Suit fromString(String s) {
+		switch(s){
+		case "hearts": 
+			return Suit.HEARTS;
+		case "diams":
+			return Suit.DIAMONDS;
+		case "spades":
+			return Suit.SPADES;
+		case "clubs":
+			return Suit.CLUBS;
+		default:
+			return null;
+			
+		}
+	}
     
 }

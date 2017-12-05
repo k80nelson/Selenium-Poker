@@ -2,14 +2,16 @@ package config;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
 
 /**
- * Create a user
- * Created by Cheryl.
+ * Mock a user (aka a second browser).
+ * <p/>
+ * Created by Mike on 11/8/2015.
  */
 @Service
 public class MockUserFactory {
@@ -22,11 +24,9 @@ public class MockUserFactory {
         final DesiredCapabilities capabilities = DesiredCapabilities.chrome();
         capabilities.setJavascriptEnabled(true);
 
-        final WebDriver chromeDriver = new ChromeDriver(capabilities);
-        chromeDriver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-        chromeDriver.get(location);
-        
-        
-        return chromeDriver;
+        final ChromeDriver chrome = new ChromeDriver(capabilities);
+        chrome.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+        chrome.get(location);
+        return chrome;
     }
 }
