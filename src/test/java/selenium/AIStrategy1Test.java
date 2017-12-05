@@ -32,8 +32,7 @@ public class AIStrategy1Test extends AbstractSeleniumTest{
 	    
 	    @Before
 		public void setup(){
-	    	this.indexPage.chrome.get("http://localhost:8080");
-	    	System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
+	    	webDriver.get("http://localhost:8080");
 	      	this.indexPage.connect.click();
 	    	this.indexPage.open.click(); // defaults is 1 player
 	    	this.indexPage.start.click();

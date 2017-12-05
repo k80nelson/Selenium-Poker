@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class MockUserFactory {
 
-    public WebDriver getSecondUser(final String location) {
-        return this.buildNewUser(location);
+    public ChromeDriver getAnotherUser(final String location) {
+        return (ChromeDriver) this.buildNewUser(location);
     }
 
     private WebDriver buildNewUser(final String location) {

@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -14,6 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.not;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Parent test for all selenium classes so we can wait for links.
@@ -48,14 +51,14 @@ public abstract class AbstractSeleniumTest {
      *
      * @return the user.
      */
-    public WebDriver quickConnectSecondUser() {
+    public ChromeDriver quickConnectAnotherUser() {
         // Lets connect a second player
-        final WebDriver second = this.mockUserFactory.getSecondUser("http://localhost:8080");
-        second.findElement(By.id("connect")).click();
-        return second;
+        final ChromeDriver user = this.mockUserFactory.getAnotherUser("http://localhost:8080");
+        user.findElement(By.id("connect")).click();
+        return user;
     }
 
-    public void disconnectSecondUser(final WebDriver user) {
+    public void disconnectSecondUser(final ChromeDriver user) {
         user.findElement(By.id("disconnect")).click();
         user.quit();
     }
@@ -88,4 +91,10 @@ public abstract class AbstractSeleniumTest {
     public void waitForHidden(final WebElement element) {
         new WebDriverWait(this.webDriver, 3).until(not(visibilityOf(element)));
     }
+    
+    
+    public void waitFor(int i) {
+    	this.webDriver.manage().timeouts().implicitlyWait(i, TimeUnit.SECONDS);
+		
+	}
 }

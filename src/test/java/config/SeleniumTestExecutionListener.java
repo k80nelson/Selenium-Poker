@@ -55,11 +55,6 @@ public class SeleniumTestExecutionListener extends AbstractTestExecutionListener
             this.webDriver.get(annotation.baseUrl());
         }
     }
-
-    @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
-    @Override
-    public void afterTestMethod(final TestContext testContext) throws Exception {
-       this.webDriver.quit();
-    }
+  
 
 }

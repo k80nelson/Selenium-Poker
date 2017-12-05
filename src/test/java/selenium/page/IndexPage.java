@@ -1,13 +1,9 @@
 package selenium.page;
-import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -17,16 +13,11 @@ import ca.carleton.poker.game.entity.card.Hand;
 
 import org.apache.commons.lang3.StringUtils;
 import selenium.page.IndexPage;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.openqa.selenium.support.ui.ExpectedConditions.not;
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * The page for the main game.
- * Created by Mike on 11/8/2015.
+ *
  */
 @Lazy
 @Component
@@ -36,7 +27,7 @@ public class IndexPage extends  AbstractPage<IndexPage> {
 	@Autowired
 	public PokerGame game; 
 	 
-    public ChromeDriver chrome;
+  //  public ChromeDriver chrome;
     
     @FindBy(id = "connect")
     public WebElement connect;
@@ -109,7 +100,7 @@ public class IndexPage extends  AbstractPage<IndexPage> {
      * @return the list of 'li' elements.
      */
     public List<WebElement> getAllCardsFor(final WebElement cardList) {
-    	return this.chrome.findElements(By.xpath(String.format("//ul[@id='%s']/li", cardList.getAttribute("id"))));
+    	return this.webDriver.findElements(By.xpath(String.format("//ul[@id='%s']/li", cardList.getAttribute("id"))));
    }
     
 
@@ -148,19 +139,19 @@ public class IndexPage extends  AbstractPage<IndexPage> {
      * @param number the number of players.
      */
     public void setNumberPlayers(final int number) {
-        this.chrome.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-        if (this.chrome instanceof JavascriptExecutor) {
-            ((JavascriptExecutor) this.chrome).executeScript(
+        this.webDriver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+        if (this.webDriver instanceof JavascriptExecutor) {
+            ((JavascriptExecutor) this.webDriver).executeScript(
                     String.format("document.getElementById('numberPlayers').setAttribute('value', '%s')", number));
         }
-        this.chrome.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+        this.webDriver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
     }
     
     
     public void setInnerHTML(String[] s, WebElement e){
     	List<WebElement> li = e.findElements(By.tagName("li"));
     	for (int i = 0; i < s.length; i++) {
-    	((JavascriptExecutor)this.chrome).executeScript(
+    	((JavascriptExecutor)this.webDriver).executeScript(
     			"arguments[0].innerHTML = arguments[1];", li.get(i), s[i]);
 
     	}
@@ -197,33 +188,10 @@ public class IndexPage extends  AbstractPage<IndexPage> {
 			form = this.otherPlayer3Cards;
 		}
 		
-		((JavascriptExecutor)this.chrome).executeScript(
+		((JavascriptExecutor)this.webDriver).executeScript(
     			"arguments[0].setAttribute('submit', sendOtherCards(argument[1])", form, String.valueOf(i));
 		
 	}
 	
-	/**
-     * Wait for an element to become displayed (max 3 seconds).
-     */
-    public WebElement waitForDisplayed(final String id) {
-        return new WebDriverWait(this.chrome, 3).until(visibilityOf(this.chrome.findElement(By.id(id))));
-    }
 
-    /**
-     * Wait for an element to become displayed (max 3 seconds).
-     */
-    public WebElement waitForDisplayed(final WebElement element) {
-        return new WebDriverWait(this.chrome, 3).until(visibilityOf(element));
-    }
-    
-    /**
-     * Check whether or not the web driver can find the given text.
-     *
-     * @param searchKey the text.
-     * @return true if yes.
-     */
-    public boolean hasText(final String searchKey) {
-        final List<WebElement> result = this.chrome.findElements(By.xpath("//*[contains(text(),'" + searchKey + "')]"));
-        return result != null && result.size() > 0;
-    }
 }
