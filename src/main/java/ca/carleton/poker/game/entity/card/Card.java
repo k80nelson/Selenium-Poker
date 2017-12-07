@@ -79,14 +79,12 @@ public class Card {
     }
 
 	public void setCard(String string) {
-		System.out.println(string);
 		String[] sub = string.split(" ");
-		String r = sub[1].replaceAll("rank-", "");
-		String s = sub[2];
-		System.out.println(r);
+		String r = sub[0].replaceAll("rank-", "");
+		String s = sub[1];
 		this.rank = Rank.fromString(r); 
-		System.out.println(s);
 		this.suit = Suit.fromString(s);
+		this.hidden = true;
 		
 	}
 

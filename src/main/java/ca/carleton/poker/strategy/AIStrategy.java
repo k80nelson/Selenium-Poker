@@ -34,6 +34,7 @@ public interface AIStrategy {
 		  }
 		  
 		 
+		
 		  /*
 			  * if player is not the first to player and another user has a visible 3 of a kind
 			  * use strategy2

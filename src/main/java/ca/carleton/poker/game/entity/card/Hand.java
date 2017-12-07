@@ -14,23 +14,20 @@ import org.seleniumhq.jetty7.util.log.Log;
  */
 public class Hand {
 
-    private final List<Card> cards = new ArrayList<>();
+    private List<Card> cards = new ArrayList<>();
 
     private HandStatus handStatus;
     private PokerHand value;
 
-
-
     public void addCard(final Card card) {
         this.cards.add(card);
-
     }
     public void removecard(final Card card) {
         this.cards.remove(card);
-
     }
 
     public List<Card> getCards() {
+   
         return this.cards;
     }
 
@@ -55,14 +52,16 @@ public class Hand {
     }
 
 	public void setPokerValue() {
-		if( this.isFlush()) { this.value = PokerHand.ROYAL_FLUSH;}
-		else if (this.isStraight()) {this.value =  PokerHand.STRAIGHT;}
-    	else if (this.isFourOfAKind()){this.value = PokerHand.FOUR_OF_A_KIND;	}
-    	else if (this.isFullHouse()) {this.value =  PokerHand.FULL_HOUSE;}
-    	else if (this.isThreeOfAKind()) {this.value = PokerHand.THREE_OF_A_KIND;}
-    	else if (this.isTwoPair()){this.value = PokerHand.TWO_PAIR;}
-    	else if (this.isOnePair()) {this.value =  PokerHand.ONE_PAIR;}
-    	else{this.value =  PokerHand.HighCard;}
+		if( this.isRFlush()) { this.value = PokerHand.ROYAL_FLUSH; return;}
+		else if (this.isStraightFlush()) {this.value =  PokerHand.STRAIGHT_FLUSH; return;}
+    	else if (this.isFourOfAKind()){this.value = PokerHand.FOUR_OF_A_KIND; return;}
+    	else if (this.isFullHouse()) {this.value =  PokerHand.FULL_HOUSE; return;}
+    	else if (this.isFlush()){this.value = PokerHand.FLUSH; return;}
+    	else if (this.isStraight()){this.value = PokerHand.STRAIGHT; return;}
+    	else if (this.isThreeOfAKind()) {this.value = PokerHand.THREE_OF_A_KIND; return;}
+    	else if (this.isTwoPair()){this.value = PokerHand.TWO_PAIR; return;}
+    	else if (this.isOnePair()) {this.value =  PokerHand.ONE_PAIR; return;}
+    	else{this.value =  PokerHand.HIGH_CARD;return;}
 	}
 	public PokerHand getPokerValue(){
 		return this.value;
@@ -144,12 +143,11 @@ public class Hand {
 	/* Checks for a Royal flush
 	 *  - a poker hand that is ranked highest, A, K, Q, J, 10 of hearts
 	 */
-	public boolean isFlush(){
+	public boolean isRFlush(){
 		boolean result = true;
 		List<Card> cards = sortSuit();// sorts all cards 
 		for(int i =0; i < cards.size(); i++){
 			if(cards.get(i).getSuit() != Suit.HEARTS){
-			
 				result = false;
 				break;
 			}
@@ -166,25 +164,15 @@ public class Hand {
 		return result;
 	}
 	
-	/* Checks for a straight
-	 *  - a poker hand that  has 5 cards ranked in a row i.e. 3,4,5,6,7
-	 *  - suit doesn't matter
-	 */
-	
-	public boolean isStraight(){
-		boolean result = false;
-		List<Card> cards = sortRank();// sorts all cards 
-		// because they are sorted by rank the missing card has to be the first or the last
-		int init = cards.get(0).getRank().getValue();
-		if(cards.get(1).getRank().getValue() == init+ 1 
-				&& cards.get(1).getRank().getValue() == init+2 
-				&& cards.get(1).getRank().getValue() == init+3 
-				&& cards.get(1).getRank().getValue() == init+4 
-				&& cards.get(1).getRank().getValue() == init+5)
-			result = true;
 
-		return result;
+	
+	/* Checks for a Striaght flush
+	 *  - a poker hand that has five cards in a sequence all in the smae suit
+	 */
+	public boolean isStraightFlush(){
+		return this.isFlush() && this.isStraight();
 	}
+	
 	
 	/* Checks for a four of a kind
 	 *  - checks that the rank of 4 cards is the same
@@ -228,23 +216,61 @@ public class Hand {
 	}
 	
 	
+	/* Checks for a flush
+	 *  - a poker hand that  has 5 cards of the same suit, sequence doesn't matter
+	 */
+	
+	public boolean isFlush(){
+		List<Card> cards = sortSuit();// sorts all cards 
+		// because they are sorted by rank the missing card has to be the first or the last
+				
+		// check suits are all the same
+		return (cards.get(0).getSuit() ==  cards.get(1).getSuit() && 
+				cards.get(1).getSuit() == cards.get(2).getSuit()&& 
+				cards.get(2).getSuit() == cards.get(3).getSuit() &&  
+				cards.get(3).getSuit() == cards.get(4).getSuit());  
+	
+	}
+	
+	
+	/* Checks for a straight
+	 *  - a poker hand that  has 5 cards ranked in a row i.e. 3,4,5,6,7
+	 *  - suit doesn't matter
+	 */
+	public boolean isStraight(){
+		boolean result = false;
+		List<Card> cards = sortRank();// sorts all cards 
+		// because they are sorted by rank the missing card has to be the first or the last
+				
+		if(cards.get(0).getRank().getValue()+1 == cards.get(1).getRank().getValue()
+				&& cards.get(1).getRank().getValue()+1 == cards.get(2).getRank().getValue()
+				&& cards.get(2).getRank().getValue()+1 == cards.get(3).getRank().getValue()
+				&& cards.get(3).getRank().getValue()+1 == cards.get(4).getRank().getValue())
+			result = true;
+
+		return result;
+	}
+	
+	
 	/* Checks for a three of a kind
 	 *  - checks that the rank of 3 cards is the same
 	 */
 	public boolean isThreeOfAKind(){
-		boolean result = false;
 		List<Card> cards = sortRank();// sorts all cards
+		if(cards.size() == 3){
+			return (cards.get(0).getRank()  == cards.get(1).getRank() 
+					&& cards.get(1).getRank() == cards.get(2).getRank());
+		}
 		if(cards.size() <3)return false;
 		
-		for(int i = 0; i < 2; i++){
+		// because they are sorted by rank the missing card has to be the first or the last
+		for(int i = 0; i < 3; i++){
 			if(cards.get(i).getRank() == cards.get(i+1).getRank() 
 					&& cards.get(i+1).getRank()== cards.get(i+2).getRank()){
-				result = true;
-				break;
+					return true;
+				}
 			}
-		}
-	
-		return result;
+			return false;
 	}
 	
 	
@@ -252,14 +278,14 @@ public class Hand {
 	 * Checks for a 2 different pairs 
 	 */
 	public boolean isTwoPair(){
-		boolean result = false;
+	
 		List<Card> cards = sortRank();// sorts all cards 
 
 	      /* --------------------------------
 	         Checking: a a  b b x
 		 -------------------------------- */                       
 	      boolean a1 = cards.get(0).getRank() == cards.get(1).getRank() &&
-	    		  cards.get(3).getRank() ==  cards.get(4).getRank() ;
+	    		  cards.get(2).getRank() ==  cards.get(3).getRank() ;
 
 	      /* ------------------------------
 	         Checking: a a x  b b
@@ -301,7 +327,7 @@ public class Hand {
      /* ------------------------------
      Checking: x x x a a
 	 ------------------------------ */
-     boolean a4 =cards.get(3).getRank() == cards.get(4).getRank();
+     boolean a4 = cards.get(3).getRank() == cards.get(4).getRank();
 
      return( a1 || a2 || a3 || a4 );
 	
@@ -328,22 +354,7 @@ public class Hand {
 		return temp;
 	}
 	
-	// check if 3 or more cards are the same suit. 
-	public boolean isThreeOfASuit() {
-		boolean result = false;
-		List<Card> cards = sortSuit();// sorts all cards
-		if(cards.size() <3)return false;
-		
-		for(int i = 0; i < 2; i++){
-			if(cards.get(i).getSuit()== cards.get(i+1).getSuit() 
-					&& cards.get(i+1).getSuit() == cards.get(i+2).getSuit() ){
-				result = true;
-				break;
-			}
-		}
 	
-		return result;
-	}
 	
 
 

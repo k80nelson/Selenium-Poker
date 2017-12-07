@@ -23,12 +23,13 @@ public class GameTest extends AbstractSeleniumTest {
     @Autowired
     private IndexPage indexPage;
     
-    /*
+ 
 
     @Test
     public void processAI(){
     	//connect
     	this.indexPage.connect.click();
+    	this.waitForDisplayed(this.indexPage.open).isEnabled();
     	this.indexPage.open.click();
     	this.indexPage.start.click();
     
@@ -41,47 +42,50 @@ public class GameTest extends AbstractSeleniumTest {
  
     
 
- */
+ 
 	@Test
     public void canUseStayOption(){
-    	//connect
+		//connect
     	this.indexPage.connect.click();
+    	this.waitForDisplayed(this.indexPage.open).isEnabled();
     	this.indexPage.open.click();
     	this.indexPage.start.click();
-    	
+    
     	// checks that the use can choose to stay
-        this.waitForDisplayed(this.indexPage.stay).isEnabled();
+    	this.waitForDisplayed(this.indexPage.stay).isEnabled();
         this.indexPage.stay.click();
-        this.waitFor(5);
         assertThat(this.indexPage.hasText("You decided to STAY"), is(true));
         
       //disconnect
      	this.indexPage.disconnect.click();
     }
 
-	
+
     @Test
     public void canUseHitOption() {
     	//connect
     	this.indexPage.connect.click();
+    	this.waitForDisplayed(this.indexPage.open).isEnabled();
     	this.indexPage.open.click();
     	this.indexPage.start.click();
     	
-    	// checks that the use can choose to stay
-        this.waitForDisplayed(this.indexPage.hit).isEnabled();
+    	// checks that the use can choose to hit
+    	this.waitForDisplayed(this.indexPage.hit).isEnabled();
         this.indexPage.hit.click();
-        this.waitForDisplayed(this.indexPage.done).isEnabled();
         assertThat(this.indexPage.hasText("You decided to HIT"), is(true));
+    
+        
         //disconnect
        this.indexPage.disconnect.click();
     }
     
     
-  
+ 
     @Test
     public void canImproveCards(){
     	//connect
     	this.indexPage.connect.click();
+    	this.waitForDisplayed(this.indexPage.open).isEnabled();
     	this.indexPage.open.click();
     	this.indexPage.start.click();
     	// checks that the use can choose to stay
@@ -99,6 +103,8 @@ public class GameTest extends AbstractSeleniumTest {
         this.indexPage.disconnect.click();
     }
     
+    
+   
   
     
     

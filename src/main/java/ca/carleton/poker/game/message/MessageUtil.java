@@ -20,27 +20,29 @@ public class MessageUtil {
         NOT_ACCEPTING("|NOT+ACCEPTING|The game isn't accepting connections. You will be disconnected."),
         STARTING_GAME("|GAME+START|The game has started! Please wait for your turn."),
         DEALING_CARDS("|DEALING+CARDS|Updated cards."),
-        ADD_PLAYER_CARD("|ADD+PLAYER+CARD|%s"),
-        ADD_DEALER_CARD("|ADD+DEALER+CARD|%s"),
+        ADD_PLAYER_CARD("|ADD+PLAYER+CARD|%s|%s"),
+        ADD_DEALER_CARD("|ADD+DEALER+CARD|%s|%s"),
         // Send index 0 or 1 so we know which one to fill out, as well as their ID to set.
         ADD_OTHER_PLAYER_CARD("|ADD+OTHER+PLAYER+CARD|%s|%s|%s"),
         PLAYER_VALUE("|PLAYER+VALUE|%s"),
-        DEALER_VALUE("|DEALER+VALUE|%s"),
           // index, value
         OTHER_VALUE("|OTHER+VALUE|%s|%s"),
         READY_TO_START("|READY+TO+START|The game is now ready to begin. Press start when ready."),
         OTHER_READY_TO_START("|OTHER+READY+TO+START|The game is now ready to begin. Waiting on admin to start."),
         YOUR_TURN("|YOUR+TURN|It is your turn, please select one of the two available game options."),
         IMPROVE_CARD("|IMPROVE+CARD|Select all cards you want to discard.  Press done to finish turn"),
-        SKIPPING("|SKIP|Skipping %s's turn because they are : %s."),
+        SKIPPING("|SKIP|%s made their turn and %s."),
         MOVE_MADE("|OTHER+MOVE|%s made their turn and %s."),
         PROCESSING_AI("|AI+TURN|Processing all AI decisions"),
         PROCESSING_Player("|AI+TURN|All AI players have made their choices. Now processing Real Player decisions."),
-        WINNER("|WINNER|%s won with a score of %s!"),
-        LOSER("|LOSER|%s lost, better luck next time!"),
+        WINNER("|WINNER|%s won with a score of  %s!"),
+        LOSER("|LOSER|%s lost with a score of  %s!"),
         RESET("|RESET|Please wait for the administrator to start the next round."),
         RESET_ADMIN("|RESET+ADMIN|To start another round, press the start button."),
-        ALL_QUIT("|ALL+QUIT|The administrator has left. Current sessions will be disconnected.");
+        ALL_QUIT("|ALL+QUIT|The administrator has left. Current sessions will be disconnected."), 
+        GET_CARDS("|GET+CARDS| %s Updating all cards"), 
+        STARTING_RIGGED_GAME("|RIGGED+GAME|");
+    	
         private final String content;
 
         Message(final String content) {

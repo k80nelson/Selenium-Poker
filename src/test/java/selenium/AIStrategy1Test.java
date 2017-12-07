@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.*;
+import static org.testng.Assert.assertFalse;
 
 import ca.carleton.poker.game.Player.*;
 import ca.carleton.poker.game.entity.card.Card;
@@ -32,13 +33,7 @@ public class AIStrategy1Test extends AbstractSeleniumTest{
 	    
 	    @Before
 		public void setup(){
-	    	webDriver.get("http://localhost:8080");
-	      	this.indexPage.connect.click();
-	    	this.indexPage.open.click(); // defaults is 1 player
-	    	this.indexPage.start.click();
-	    	
-	    	this.indexPage.game.getConnectedPlayers();
-	    	
+	      	
 	    }
 	    
 	    @After
@@ -47,8 +42,14 @@ public class AIStrategy1Test extends AbstractSeleniumTest{
 	    }
 	    
 	    @Test
-	    public void FirstAIPlayer_Straight(ArrayList<Paper> players){
-	    	/******************* set first  AI Player with a flush *******************/
+	    public void FirstAIPlayer_Straight() throws Exception{    
+	    	this.indexPage.connect.click();
+	    	this.waitForDisplayed(this.indexPage.open).isEnabled();
+	    	this.indexPage.open.click(); // defaults is 1 player
+	    	
+	    	waitFor(5);
+	    	assertThat(this.indexPage.hasText("The game is now ready to begin"), is(true));
+	    	/******************* set first  AI Player with a Royal flush *******************/
 	    	  Hand h = new Hand();
 	    	  Card c1 = new Card(Rank.TEN, Suit.HEARTS, false);
 	    	  Card c2 = new Card(Rank.JACK, Suit.HEARTS, false);
@@ -60,14 +61,12 @@ public class AIStrategy1Test extends AbstractSeleniumTest{
 	    	  h.addCard(c3);
 	    	  h.addCard(c4);
 	    	  h.addCard(c5);
-	    
-	    	  String[] cards = {c1.toHTMLString(), c2.toHTMLString(), c3.toHTMLString(), c4.toHTMLString(), c5.toHTMLString()};
-	    	  //Set card
+	    	//Set card
+	    	  String[] cards = {c1.toFormHTML(), c2.toFormHTML(), c3.toFormHTML(), c4.toFormHTML(), c5.toFormHTML()};
 	    	  this.indexPage.setInnerHTML(cards, this.indexPage.otherPlayer1Cards);
-	    	  assertTrue(this.indexPage.checkCards(cards, this.indexPage.otherPlayer1Cards));
-		          
-	          
-	    	  /******************* set second  AI Player with a 3  of a kind *******************/
+	    	  waitFor(5);
+	    	  
+	    	    /******************* set second  AI Player with a 3  of a kind *******************/
 	    	  c1 = new Card(Rank.EIGHT, Suit.SPADES, false);
 	    	  c2 = new Card(Rank.EIGHT, Suit.CLUBS, false);
 	    	  c3 = new Card(Rank.EIGHT, Suit.DIAMONDS, false);
@@ -78,13 +77,13 @@ public class AIStrategy1Test extends AbstractSeleniumTest{
 	    	  h.addCard(c3);
 	    	  h.addCard(c4);
 	    	  h.addCard(c5);
-	    	  this.indexPage.updateCards(h, 1);
-	    	  String[] cards1 = {c1.toHTMLString(), c2.toHTMLString(), c3.toHTMLString(), c4.toHTMLString(), c5.toHTMLString()};
-	    	  //Set cards
+	    
+	    	  String[] cards1 = {c1.toFormHTML(), c2.toFormHTML(), c3.toFormHTML(), c4.toFormHTML(), c5.toFormHTML()};
+	    	   //Set cards
 	    	  this.indexPage.setInnerHTML(cards1, this.indexPage.otherPlayer2Cards);
-	    	  assertTrue(this.indexPage.checkCards(cards1, this.indexPage.otherPlayer2Cards));
-	    	
+	    	  waitFor(5);
 	    	  /******************* set third  AI Player with a pair *******************/
+	    	  
 	    	  c1 = new Card(Rank.JACK, Suit.SPADES, false);
 	    	  c2 = new Card(Rank.JACK, Suit.CLUBS, false);
 	    	  c3 = new Card(Rank.FIVE, Suit.DIAMONDS, false);
@@ -96,12 +95,13 @@ public class AIStrategy1Test extends AbstractSeleniumTest{
 	    	  h.addCard(c4);
 	    	  h.addCard(c5);
 	    
-	    	  String[] cards2 = {c1.toHTMLString(), c2.toHTMLString(), c3.toHTMLString(), c4.toHTMLString(), c5.toHTMLString()};
-	    	  //Set cards
+	    	  String[] cards2 = {c1.toFormHTML(), c2.toFormHTML(), c3.toFormHTML(), c4.toFormHTML(), c5.toFormHTML()};
+	    	   //Set cards
 	    	  this.indexPage.setInnerHTML(cards2, this.indexPage.otherPlayer3Cards);
-	    	  assertTrue(this.indexPage.checkCards(cards2, this.indexPage.otherPlayer3Cards));
-
+	    	  waitFor(5);
+	    	 
 	    	  /******************* set Player with random cards *******************/
+	    	
 	    	  c1 = new Card(Rank.TWO, Suit.HEARTS, false);
 	    	  c2 = new Card(Rank.FOUR, Suit.CLUBS, false);
 	    	  c3 = new Card(Rank.NINE, Suit.CLUBS, false);
@@ -113,22 +113,35 @@ public class AIStrategy1Test extends AbstractSeleniumTest{
 	    	  h.addCard(c4);
 	    	  h.addCard(c5);
 	   
-	    	  String[] cards3 = {c1.toHTMLString(), c2.toHTMLString(), c3.toHTMLString(), c4.toHTMLString(), c5.toHTMLString()};
-	    	  //Set cards
-	    	  this.indexPage.setInnerHTML(cards3, this.indexPage.playerHandCards);
-	    	  assertTrue(this.indexPage.checkCards(cards3, this.indexPage.playerHandCards));
-
-	    	  
-	    	  
+	    	  String[] cards3 ={c1.toFormHTML(), c2.toFormHTML(), c3.toFormHTML(), c4.toFormHTML(), c5.toFormHTML()};
+	    	   //Set cards
+	    	  this.indexPage.setInnerHTML(cards3, this.indexPage.playerHandCards);   	  
+	    	  waitFor(5);
 	    	  /****************************************************************/
-	    	  // wait for all AI to have played 
-	          assertThat(this.indexPage.hasText("All AI players have made their choices"), is(true));
-	   
-	    	  // check that AI1 Stayed
-	    	  assertThat(this.indexPage.hasText(""), is(true));
-	    	  // Check that AI2 discarded 2 cards that were not the 3 of a kind
-	    	  // check that AI4 discarded 3 cards that were not the pair
+	    	 
+	    	
+	    	  this.indexPage.updateCards();
+	    	  this.indexPage.start.click();
 	    	  
+	    	  assertThat(this.indexPage.hasText("AI-1243513 made their turn and STAY."), is(true));
+	    	  assertThat(this.indexPage.hasText("AI-1243514 made their turn and HIT"), is(true));
+	    	  assertThat(this.indexPage.hasText("AI-1243515 made their turn and HIT"), is(true));
+	    	  assertThat(this.indexPage.hasText("All AI players have made their choices"), is(true));  
+	    	  
+	    	  
+	    	// Check Rankings
+	    	  this.waitForDisplayed(indexPage.hit).isEnabled();
+	    	  this.indexPage.hit.click();
+	    	  this.indexPage.card1.click();
+	    	  this.indexPage.card5.click();
+	    	  this.indexPage.done.click();
+	    	  this.waitForDisplayed(indexPage.start).isEnabled();
+	    	  String[] ids = this.indexPage.getUsetTexts();
+	   
+	    	  assertThat(ids[0], is("  AI-1243513 ~ Value: ROYAL_FLUSH"));
+	    	  assertThat(ids[1], is("  AI-1243514 ~ Value: THREE_OF_A_KIND"));
+	    	  assertThat(ids[2], is("  AI-1243515 ~ Value: ONE_PAIR"));	    	  
+	    	
 	    }
 	    
 }

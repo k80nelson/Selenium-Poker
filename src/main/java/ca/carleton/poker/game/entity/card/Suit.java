@@ -7,10 +7,10 @@ import static org.apache.commons.lang3.StringUtils.capitalize;
  * <p/>
  * Created by Mike on 10/27/2015.
  */
-public enum Suit {
-    HEARTS("hearts"),
-    CLUBS("clubs"),
+public enum Suit {  
     DIAMONDS("diams"),
+    CLUBS("clubs"),
+    HEARTS("hearts"),
     SPADES("spades");
 
     private final String html;

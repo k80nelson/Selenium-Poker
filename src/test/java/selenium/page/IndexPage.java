@@ -40,6 +40,9 @@ public class IndexPage extends  AbstractPage<IndexPage> {
 
     @FindBy(id = "open")
     public WebElement open;
+    
+    @FindBy(id = "rig")
+    public WebElement rig;
 
     @FindBy(id = "start")
     public WebElement start;
@@ -55,33 +58,75 @@ public class IndexPage extends  AbstractPage<IndexPage> {
 
     @FindBy(id = "consoleText")
     public WebElement consoleText;
-
-    @FindBy(id = "PlayerCard1")
-    public WebElement card1;
-    
-    @FindBy(id = "PlayerCard2")
-    public WebElement card2;
-    
-    @FindBy(id = "PlayerCard3")
-    public WebElement card3;
-    
-    @FindBy(id = "PlayerCard4")
-    public WebElement card4;
-    
-    @FindBy(id = "PlayerCard5")
-    public WebElement card5;
     
     @FindBy(id = "playerHandCards")
     public WebElement playerHandCards;
     
+    @FindBy(id = "PlayerCard1")
+    public WebElement card1;
+    @FindBy(id = "PlayerCard2")
+    public WebElement card2;
+    @FindBy(id = "PlayerCard3")
+    public WebElement card3;
+    @FindBy(id = "PlayerCard4")
+    public WebElement card4;
+    @FindBy(id = "PlayerCard5")
+    public WebElement card5;
+    
+    
     @FindBy(id = "otherHandCards1")
     public WebElement otherPlayer1Cards;
-
+    
+    @FindBy(id = "otherHand1Card0")
+    public WebElement otherHand1Card0;
+    
+    @FindBy(id = "otherHand1Card1")
+    public WebElement otherHand1Card1;
+    
+    @FindBy(id = "otherHand1Card2")
+    public WebElement otherHand1Card2;
+    
+    @FindBy(id = "otherHand1Card3")
+    public WebElement otherHand1Card3;
+    
+    @FindBy(id = "otherHand1Card4")
+    public WebElement otherHand1Card4;
+    
     @FindBy(id = "otherHandCards2")
     public WebElement otherPlayer2Cards;
     
+    @FindBy(id = "otherHand2Card0")
+    public WebElement otherHand2Card0;
+    
+    @FindBy(id = "otherHand2Card1")
+    public WebElement otherHand2Card1;
+    
+    @FindBy(id = "otherHand2Card2")
+    public WebElement otherHand2Card2;
+    
+    @FindBy(id = "otherHand2Card3")
+    public WebElement otherHand2Card3;
+    
+    @FindBy(id = "otherHand2Card4")
+    public WebElement otherHand2Card4;
+    
     @FindBy(id = "otherHandCards3")
     public WebElement otherPlayer3Cards;
+    
+    @FindBy(id = "otherHand3Card0")
+    public WebElement otherHand3Card0;
+    
+    @FindBy(id = "otherHand3Card1")
+    public WebElement otherHand3Card1;
+    
+    @FindBy(id = "otherHand3Card2")
+    public WebElement otherHand3Card2;
+    
+    @FindBy(id = "otherHand3Card3")
+    public WebElement otherHand3Card3;
+    
+    @FindBy(id = "otherHand3Card4")
+    public WebElement otherHand3Card4;
 
     @FindBy(id = "console")
     public WebElement console;
@@ -126,12 +171,14 @@ public class IndexPage extends  AbstractPage<IndexPage> {
      *
      * @return the UID.
      */
-    public String[] getOthersUID() {
-    	String[] ids = new String[3];
-    	ids[0] = this.otherPlayer1Cards.getText().replace("Other Player's Hand", " ");
-    	ids[1] = this.otherPlayer2Cards.getText().replace("Other Player's Hand", " ");
-    	ids[2] = this.otherPlayer3Cards.getText().replace("Other Player's Hand", " ");
-       return ids;
+    public String[] getUsetTexts() {
+    	String[] ids = new String[4];
+    	ids[0] = this.webDriver.findElement(By.id("otherHandText1")).getText().replace("Other Player's Hand", " ").replaceAll("[\\(\\)]", "");
+    	ids[1] = this.webDriver.findElement(By.id("otherHandText2")).getText().replace("Other Player's Hand", " ").replaceAll("[\\(\\)]", "");
+    	ids[2] = this.webDriver.findElement(By.id("otherHandText3")).getText().replace("Other Player's Hand", " ").replaceAll("[\\(\\)]", "");
+    	ids[3] = this.webDriver.findElement(By.id("yourHandText")).getText().replace("Your Hand", " ").replaceAll("[\\(\\)]", "");
+        
+    	return ids;
    }
     /**
      * Set the number of players.
@@ -149,13 +196,22 @@ public class IndexPage extends  AbstractPage<IndexPage> {
     
     
     public void setInnerHTML(String[] s, WebElement e){
-    	List<WebElement> li = e.findElements(By.tagName("li"));
+    	String results = "";
     	for (int i = 0; i < s.length; i++) {
-    	((JavascriptExecutor)this.webDriver).executeScript(
-    			"arguments[0].innerHTML = arguments[1];", li.get(i), s[i]);
-
+    		results += s[i];
     	}
+    
+    		
+    	// add results to values
+    	((JavascriptExecutor)this.webDriver).executeScript(
+   			 "arguments[0].innerHTML = arguments[1];", e, results);
+    	// add results to values
+    	((JavascriptExecutor)this.webDriver).executeScript(
+   			 "arguments[0].innerHTML = arguments[1];", e, results);
+    	
+    				
     }
+    	
 
 
 
@@ -164,34 +220,39 @@ public class IndexPage extends  AbstractPage<IndexPage> {
     }
 
 	public boolean checkCards(String[] cards, WebElement e) {
-		List<WebElement> li = e.findElements(By.tagName("li"));
+		String results = "";
     	for (int i = 0; i < cards.length; i++) {
-    		
+    		results += cards[i];
+    	}
+		//System.out.println(e.getAttribute("innerHTML"));
+		return results.equals(e.getAttribute("innerHTML"));
+    /*	for (int i = 0; i < cards.length; i++) {
     		String s = li.get(i).getAttribute("innerHTML").replace("♥", "&hearts;").
     				replace("♣", "&clubs;").
     				replace("♠", "&spades;").
     				replace("♦", "&diams;");
 
     		if(!s.equals(cards[i])) return false;
-    		
-    	}
-		return true;
+    	
+    	}*/
+    	
 	}
 
-	public void updateCards(Hand h, int i) {
-		WebElement form = null; 
-		if(i == 1){
-			form = this.otherPlayer1Cards; 
-		}else if(i ==2 ){
-			form = this.otherPlayer2Cards;
-		}else if (i == 3){
-			form = this.otherPlayer3Cards;
-		}
-		
-		((JavascriptExecutor)this.webDriver).executeScript(
-    			"arguments[0].setAttribute('submit', sendOtherCards(argument[1])", form, String.valueOf(i));
-		
+	public void updateCards() {
+		WebElement e = this.otherPlayer1Cards;
+	
+		// add submit button 
+    	((JavascriptExecutor)this.webDriver).executeScript(
+    			"arguments[0].onclick = sendAllCards();",  e);
+    
+    	// submit form 
+    	
+    	((JavascriptExecutor)this.webDriver).executeScript(
+    			"arguments[0].click();", e);
 	}
+
+
+
 	
 
 }

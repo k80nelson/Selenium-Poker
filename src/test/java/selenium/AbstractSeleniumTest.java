@@ -4,9 +4,11 @@ import ca.carleton.poker.PokerApplication;
 import config.MockUserFactory;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -97,4 +99,14 @@ public abstract class AbstractSeleniumTest {
     	this.webDriver.manage().timeouts().implicitlyWait(i, TimeUnit.SECONDS);
 		
 	}
+
+
+	public void waitForAlert() {
+		new WebDriverWait(this.webDriver,20).until(ExpectedConditions.alertIsPresent());
+
+	}
+
+
 }
+
+

@@ -9,13 +9,15 @@ import java.util.List;
  * Created by Cheryl on 11/13/2017.
  */
 public enum PokerHand{
-	HighCard,
+	HIGH_CARD,
 	ONE_PAIR,
 	TWO_PAIR,
 	THREE_OF_A_KIND,
+	STRAIGHT,
+	FLUSH,
 	FULL_HOUSE,
 	FOUR_OF_A_KIND,
-	STRAIGHT,
+	STRAIGHT_FLUSH,
 	ROYAL_FLUSH
 }
 	

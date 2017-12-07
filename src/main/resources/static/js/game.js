@@ -1,6 +1,7 @@
 var ws = null;
 var playerId = null;
 var cards = "";
+var rigged = false;
 
 function setConnected(connected) {
     document.getElementById('connect').disabled = connected;
@@ -11,7 +12,6 @@ function setGameOptionsEnabled(enabled) {
     document.getElementById('stay').disabled = !enabled;
     document.getElementById('hit').disabled = !enabled;
     document.getElementById('done').disabled = true;
-    document.getElementsByTagName('input').disabled=true;
 }
 
 function setAdmin(enabled) {
@@ -22,6 +22,7 @@ function setAdmin(enabled) {
 
 function enableStart(enabled) {
     document.getElementById('start').disabled = !enabled;
+    document.getElementById('rig').disabled =!enabled;
 }
 
 function setUID(uid) {
@@ -111,14 +112,21 @@ function dispatch(message) {
         case 'GAME+START':
             log(logMessage);
             break;
+        case 'IMPROVE+CARD':
+            log(logMessage);
+            getCard();
+            break;
         case 'OTHER+MOVE':
+            if(rigged){
+                returnCards(split[2], split[3]);
+            }
             log(logMessage);
             break;
         case 'SKIP':
             log(logMessage);
             break;
         case 'ADD+PLAYER+CARD':
-            addCardForPlayer(split[2]);
+            addCardForPlayer(split[2],split[3]);
             break;
         case 'ADD+OTHER+PLAYER+CARD':
             addCardForOther(split[2], split[3], split[4]);
@@ -140,11 +148,7 @@ function dispatch(message) {
         case 'YOUR+TURN':
             setGameOptionsEnabled(true);
             log(logMessage);
-            break;
-        case 'IMPROVE+CARD':
-            log(logMessage);
-            getCard();
-            break;
+            break;   
         case 'AI+TURN':
             log(logMessage);
             break;
@@ -175,6 +179,97 @@ function dispatch(message) {
     }
 }
 
+
+
+function rig_game(){
+   var jsonCards = {}
+   rigged = true;
+   // get player ranks
+    var hands = prompt("This prompt allows you to rig cards\n"
+        +"Set rank using its rank-?:  ? is numerical number or, a, j,q,k (ace, jack, queen, king)\n"
+        +"Set suit using, hearts, diams, clubs, or spades\n"
+        +"Please enter 5 cards for Player: ");
+    var cards =  hands.split(",");
+    var id =  document.getElementById("yourHandText").innerHTML.match(/\(.+?\)/g);
+    
+    if (cards.length < 5 ) {
+        txt = "Invalid cards";
+    } else{
+        jsonCards.player ={id, cards};
+    }
+
+    // get user 1
+    var hands = prompt("This prompt allows you to rig cards\n"
+        +"Set rank using its rank-?: ? is numerical number or, a, j,q,k (ace, jack, queen, king)\n"
+        +"Set suit using, hearts, diams, clubs, or spades\n"
+        +"Please enter 5 cards for other Hand 1");
+    var cards =  hands.split(",");
+    var id =  document.getElementById("otherHandText1").innerHTML.match(/\(.+?\)/g);
+    if (cards.length < 5 ) {
+       alert("Invalid cards");
+         return;
+    } else{
+        jsonCards.other1 = {id, cards};
+    }
+
+
+    // get user 2
+    var hands = prompt("This prompt allows you to rig cards\n"
+        +"Set rank using its rank-?: ? is numerical number or, a, j,q,k (ace, jack, queen, king)\n"
+        +"Set suit using, hearts, diams, clubs, or spades\n"
+        +"Please enter 5 cards for other Hand 2");
+    var cards =  hands.split(",");
+     var id =  document.getElementById("otherHandText2").innerHTML.match(/\(.+?\)/g);
+  
+    if (cards.length < 5 ) {
+         alert("Invalid cards");
+         return;
+    } else{
+        jsonCards.other2 = {id, cards};
+    }
+
+
+    // get user 3 
+    var hands = prompt("This prompt allows you to rig the improved cards\n"
+        +"Set rank using its rank-?:  ? is numerical number or, a, j,q,k (ace, jack, queen, king)\n"
+        +"Set suit using, hearts, diams, clubs, or spades\n"
+        +"you must enter 5 combinations separated by commas\n"
+        +"i.e. rank-? suit, rank-? suit, rank-? suit, rank-? suit, rank-? suit \n"
+        +"Please enter 5 cards for other Hand 3");
+    var cards =  hands.split(",");
+    var id =  document.getElementById("otherHandText3").innerHTML.match(/\(.+?\)/g);
+    if (cards.length < 5 ) {
+       alert("Invalid cards");
+         return;
+    } else{
+        jsonCards.other3 = {id, cards};
+    }
+
+
+    // send message
+    ws.send('CARDS_UPDATED|'.concat(JSON.stringify(jsonCards)));
+    clientLog("Setting all cards" + JSON.stringify(jsonCards));
+}
+
+function returnCards(sessionID, move){
+   
+    var jsonCards;
+    clientLog(sessionID + move);
+    // get Improved cards
+    var hands = prompt("This prompt allows you to rig cards\n"
+        +"Set rank: using its rank-?:  where ? is numerical number or, a, j,q,k (ace, jack, queen, king)\n"
+        +"Set suit: using, hearts, diams, clubs, or spades\n"
+        +"you must enter combinations separated by commas\n"
+        +" please enter your improvements: ");
+    var cards =  hands.split(",");
+     
+    jsonCards = {sessionID, cards};
+    ws.send('CARDS_RETURNED|'.concat(JSON.stringify(jsonCards)));
+    clientLog("Improving cards: " + JSON.stringify(jsonCards));  
+
+}
+
+
 /**
  * Send option chosen back.
  */
@@ -200,6 +295,9 @@ function getCard(){
 * Send cards back to server
 */
 function sendCards(){
+    if(rigged){
+        returnCards();
+    }else{
     var eles = document.forms["playerHandCards"].getElementsByTagName("input");
     document.getElementById('done').disabled = true;
     
@@ -214,30 +312,59 @@ function sendCards(){
     ws.send('CARD_DONE|'.concat(cards));
     clientLog('You decided to improve card ' + cards + '. Sending to server - please wait for results.');
     cards ="";
+    }      
 }
 
 
 /*
 * Send cards back to server
-*/
-function sendOtherCards(id){
-    var eles = document.forms["playerHandCards"].getElementsByTagName("input");
-    document.getElementById('done').disabled = true;
-    
-    var cards = " ";
-   for(var i = 0; i< eles.length; i++){
-        if(eles[i].checked == true){
-            clientLog("selected "+ eles[i].value.replace("card ", "_"));
-            cards += eles[i].value.replace("card ", "_"+i+" ");
-        }
-    }
 
-    ws.send('CARD_DONE|'.concat(cards));
-    clientLog('You decided to improve card ' + cards + '. Sending to server - please wait for results.');
-    cards ="";
+function sendAllCards(){
+    var eles = null;
+    var jsonCards = {};
+    var cards =" ";
+    var id = " ";
+   
+
+    eles =  document.forms["playerHandCards"].getElementsByTagName("input");
+    id = document.getElementById("yourHandText").innerHTML.match(/\(.+?\)/g);
+     for(var i = 0; i< eles.length; i++){
+             cards += eles[i].value.replace("card ", "_");  
+    }
+    jsonCards.player = {id,cards};
+
+    cards =" ";
+    eles =  document.forms["otherHandCards1"].getElementsByTagName("input");
+    id = document.getElementById("otherHandText1").innerHTML.match(/\(.+?\)/g);
+    for(var i = 0; i< eles.length; i++){
+             cards += eles[i].value.replace("card ", "_");  
+    }
+   
+    jsonCards.other1 = {id,cards};
+   
+   cards =" ";
+    eles =  document.forms["otherHandCards2"].getElementsByTagName("input");
+    id =  document.getElementById("otherHandText2").innerHTML.match(/\(.+?\)/g);
+     for(var i = 0; i< eles.length; i++){
+             cards += eles[i].value.replace("card ", "_");  
+    }
+    jsonCards.other2 = {id,cards};
+   
+   cards =" ";
+    eles =  document.forms["otherHandCards3"].getElementsByTagName("input");
+    id = document.getElementById("otherHandText3").innerHTML.match(/\(.+?\)/g);
+    for(var i = 0; i< eles.length; i++){
+             cards += eles[i].value.replace("card ", "_");  
+    }
+    jsonCards.other3 = {id,cards};
+
+
+    ws.send('CARDS_UPDATED|'.concat(JSON.stringify(jsonCards)));
+    clientLog("Updating all Cards");
 }
 
 
+*/
 
 
 /**
@@ -251,38 +378,26 @@ function start() {
 
 /**
  * Add a new card to the player's list.
- 
-function addCardForPlayer(card) {
-    var id = document.getElementById('playerHandCards').childElementCount+1;
-    var li = document.createElement('li');
-    li.innerHTML = card;
-    li.id = li.getElementsByTagName("DIV").className;
-    document.getElementById('playerHandCards').appendChild(li);
-}
+
 */
 
-function addCardForPlayer(card) {
+function addCardForPlayer(card, sessionID) {
     var id = document.getElementById('playerHandCards').childElementCount+1;
     var input = document.createElement('div');
     input.innerHTML = card;
-    input.id=("PlayerCard"+id);
-
+    input.id  = ("PlayerCard"+id);
+    document.getElementById('yourHandText').innerHTML = "Your Hand (" + sessionID + ")";
     document.getElementById('playerHandCards').appendChild(input);
 }
 
 
 /**
  * Add a new card for another player.
-    var li = document.createElement('li');
-    li.innerHTML = card;
-    console.log('Trying to append to ' + 'otherHandCards'.concat(id));
-    document.getElementById('otherHandCards'.concat(id)).appendChild(li);
-    document.getElementById('otherHandText'.concat(id)).innerHTML = "Other Player's Hand (" + sessionID + ")";
- */
+   */
 function addCardForOther(card, id, sessionID) {
     var input = document.createElement('div');
     input.innerHTML = card;
-     input.id=("card"+id);
+    input.id=("otherHand"+id+ "Card" + document.getElementById('otherHandCards'.concat(id)).childElementCount);
     console.log('Trying to append to ' + 'otherHandCards'.concat(id));
     document.getElementById('otherHandCards'.concat(id)).appendChild(input);
     document.getElementById('otherHandText'.concat(id)).innerHTML = "Other Player's Hand (" + sessionID + ")";

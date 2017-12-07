@@ -7,7 +7,7 @@ import ca.carleton.poker.game.entity.card.Card;
 import ca.carleton.poker.game.message.MessageUtil;
 import ca.carleton.poker.session.SessionHandler;
 import ca.carleton.poker.strategy.AIService;
-
+import org.json.*;
 import org.apache.commons.lang3.NotImplementedException;
 import org.seleniumhq.jetty7.util.log.Log;
 import org.slf4j.Logger;
@@ -22,8 +22,10 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static ca.carleton.poker.game.message.MessageUtil.Message;
 import static ca.carleton.poker.game.message.MessageUtil.message;
@@ -147,20 +149,25 @@ public class PokerSocketHandler extends TextWebSocketHandler {
 
                 // Case where we're playing with 1 person - need to start right away.
                 if (this.game.readyToStart()) {
+                
                     this.doReadyToStart();
+                	this.game.initiateHands();
+                    this.updateCards();
+                   LOG.info("Game initiated");
                 }
                 break;
             case "START_GAME":
                 LOG.info("Starting the game.");
+                
                 this.broadCastMessageFromServer(message(Message.STARTING_GAME).build());
+                LOG.info("We have all cards");
+               // Send each real player their cards.
+                this.resetGame();
                 this.game.initiateHands();
-                // Send each real player their cards.
                 this.updateCards();
                 // AI Plays first
-       
                 this.processAI();
-                this.processPlayers();
-                                            
+                              
                 break;
             case "GAME_STAY":
             	this.game.setWaitingOnReal(false);
@@ -191,10 +198,10 @@ public class PokerSocketHandler extends TextWebSocketHandler {
                 // need to get card;
               
                break;
-               	
+ 
             case "CARD_DONE":
-            	 LOG.info("Get Card");
-            	 final String[] nums = contents[1].split("\\_");
+            	LOG.info("Get Card");
+            	final String[] nums = contents[1].split("\\_");
             	int length = nums.length;
             	if(nums.length > 5)length = 5; // There are only 5 cards, something must have been double clicked
             
@@ -214,12 +221,68 @@ public class PokerSocketHandler extends TextWebSocketHandler {
                  // Send to other than the player what their move was
              
                  this.broadCastMessageFromServer(message(Message.MOVE_MADE, player.getuid(), player.getLastOption()).build());
-                
-                 this.updateCards();
-                 Thread.sleep(1000);  
+                 this.updateCards(); 
                  this.processPlayers();
                
             	 break;
+            case "CARDS_UPDATED":
+            	// update cards if changed by selenium
+            	
+            	LOG.info("Updating  All Cards ");
+            	// Users are split between 
+            	Player p = null;
+            	JSONObject obj = new JSONObject(contents[1]);
+            	System.out.println(obj.toString());
+            	 // Get cards; 
+            	 Iterator keys = obj.keys();
+            	 while(keys.hasNext()) {
+            	    	String key = (String)keys.next();
+            	    	String id = obj.getJSONObject(key).get("id").toString();
+            	    	id = id.substring(id.indexOf("(")+1, id.indexOf(")"));
+            	    	String[] newCards =  obj.getJSONObject(key).get("cards").toString().split(",");
+            	    	p = this.game.getPlayerFor(id);
+            	    
+	            		for(int j = 0; j <5; j++){
+	            			System.out.println(newCards[j]);
+	            			//		p.getHand().getCards().get(j).setCard(newCards[j+1]); // This is needed for testing
+	            		}
+	            		LOG.info(p.getuid() + " "+ p.getHand().toString());
+		            	this.updateCards();
+            	 }
+            	 
+            	 
+            	this.broadCastMessageFromServer(message(Message.STARTING_RIGGED_GAME).build());
+            	this.processAI();
+            	break;
+            	
+            	
+            case "CARDS_RETURNED":
+            	// update cards if changed by selenium
+            
+            	LOG.info("Get returned cards");
+            	// Users are split between 
+            	/*Player p = null;
+            	this.game.resetPlayers();
+            	JSONObject obj = new JSONObject(contents[1]);
+            	System.out.println(obj.toString());
+            	 // Get cards; 
+            	 Iterator keys = obj.keys();
+            	 while(keys.hasNext()) {
+            	    	String key = (String)keys.next();
+            	    	String id = obj.getJSONObject(key).get("id").toString();
+            	    	id = id.substring(id.indexOf("(")+1, id.indexOf(")"));
+            	    	String[] newCards =  obj.getJSONObject(key).get("cards").toString().split("_");
+            	    	p = this.game.getPlayerFor(id);
+            	    	System.out.println(p);
+	            		for(int j = 0; j <5; j++){
+	            			p.getHand().getCards().get(j).setCard(newCards[j+1]); // This is needed for testing
+	            		}
+	            		LOG.info(p.getuid() + " "+ p.getHand().toString());
+		            	this.updateCards();
+            	 }
+            	 */
+            	break;
+            	
             case "Leaving":
             	break;
             default:
@@ -229,7 +292,13 @@ public class PokerSocketHandler extends TextWebSocketHandler {
 private void processAI() {
 	  LOG.info("Processing AI.");
       this.broadCastMessageFromServer(message(Message.PROCESSING_AI).build());
-      for(AIPlayer next : this.game.getConnectedAIPlayers()) {
+      AIPlayer next = this.game.getNextAI();
+      if(next == null){
+    	  LOG.info("All AI have done their turn.");
+    	  this.broadCastMessageFromServer(message(Message.PROCESSING_Player).build());
+    	  this.processPlayers();
+      }else{
+      //  for(AIPlayer next : this.game.getConnectedAIPlayers()) {
     	  LOG.info("Processing for {}", next.getuid());
     	  next.getHand().setPokerValue();  // Set the poker value to current hand;
     	  this.game.doAITurn(next);
@@ -242,16 +311,13 @@ private void processAI() {
               this.updateCards();
               this.broadCastMessageFromServer(message(Message.MOVE_MADE,
             		  next.getuid(),
-                      next.getLastOption()).build());
+                      GameOption.HIT).build());
           }
+          processAI();
       }
-      
-      LOG.info("All AI have done their turn.");
-      this.broadCastMessageFromServer(message(Message.PROCESSING_Player).build());
-      this.processPlayers();
+        
 }
 private void processPlayers() {
-	
 	    if(this.game.isResolved()){
          	this.game.resolveRound();
          	this.sendResults();
@@ -299,9 +365,20 @@ private void processPlayers() {
             this.game.revealCards(player);
         }
         this.updateCards();
-        
+        // Set Hand Values
+        for(Player p: this.game.getConnectedRealPlayers()){
+        	this.broadCastMessageFromServer(message(Message.PLAYER_VALUE,
+                    p.getHand().getPokerValue().toString()).build());
+        }
+        // SET AI Hand Values
+        for(int i = 0; i <this.game.getConnectedAIPlayers().size(); i++){
+        	this.broadCastMessageFromServer(message(Message.OTHER_VALUE,
+        			i+1,
+                    this.game.getConnectedAIPlayers().get(i).getHand().getPokerValue().toString()).build());
+        }
+       
         for (final Player result : this.game.getConnectedPlayers()) {
-            switch (result.getHand().getHandStatus()) {
+           switch (result.getHand().getHandStatus()) {
                
                 case WINNER:
                     this.broadCastMessageFromServer(message(Message.WINNER,
@@ -314,6 +391,7 @@ private void processPlayers() {
                     break;
                 default:
                     throw new IllegalStateException("Only winners or losers here!");
+                    
             }
         }
     }
@@ -329,6 +407,7 @@ private void processPlayers() {
     private void updateCards() {
         // Send each real player their cards.
     	LOG.info("Updating cards");
+    	
         final Map<Player, List<TextMessage>> cardMessages = this.game.buildHandMessages();
        
         cardMessages.forEach((player, messages) ->

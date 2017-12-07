@@ -7,10 +7,11 @@ import ca.carleton.poker.game.entity.card.Hand;
 
 public abstract class Player {
 	private Hand hand;
-	private final WebSocketSession session;
-	private final String uid;
+	private WebSocketSession session;
+	private String uid;
 	private GameOption lastOption;
 	
+		public Player(){}
 	   public Player(final WebSocketSession session, String id) {
 	        this.session = session;
 	        this.hand = new Hand();

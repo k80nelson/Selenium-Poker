@@ -37,24 +37,11 @@ public class AIStrategy1 implements AIStrategy {
         
         
         
-        //  If royal flush we do not improve any cards
-		  if(handvalue.equals(PokerHand.ROYAL_FLUSH)){
-	        	LOG.info("AI Staying for Royal Flush ");
-	        	
-	        	return improve;
-		  }
-		  // if straight we do not improve cards
-	      else if(handvalue.equals(PokerHand.STRAIGHT)){
-	        	LOG.info("AI Staying for Straight ");
-	        	return improve;
-	      }
-		  
-        // if we have a full house we do not improve 
-	      else if(handvalue.equals(PokerHand.FULL_HOUSE)   ){
-        	LOG.info("AI FUll House ");
-        	return improve;	
-        }
-      
+        // check if use has greater than Straight and stay. 
+		  if(handvalue.compareTo(PokerHand.STRAIGHT) >= 0 ){
+			  return improve;
+	
+		  }	  
         /* if its a three of a kind, 
          * keep three of a kind 
         */

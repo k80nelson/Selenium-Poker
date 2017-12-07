@@ -247,7 +247,7 @@ public class PokerGame {
     	LOG.info("Get AI Choice", player.getuid());
     	
     	List<Card> choice = this.aiService.getCardOption(player, this.getConnectedAIPlayers());
-    	LOG.info("{} beeeing processed!", player.getuid());
+    	LOG.info("{} beeing processed!", player.getuid());
         
     	GameOption option ;
     	
@@ -411,7 +411,7 @@ public class PokerGame {
 
         // We only need to do this for real players.
         for (final Player player : this.getConnectedRealPlayers()) {
-
+        	player.getHand().sortRank();
             messages.putIfAbsent(player, new ArrayList<>());
             final List<TextMessage> playerMessages = messages.get(player);
 
@@ -426,11 +426,13 @@ public class PokerGame {
                         if (card.isHidden()) {
                             card.setHidden(false);
                             playerMessages.add(message(MessageUtil.Message.ADD_PLAYER_CARD,
-                                    card.toFormHTML()).build());
+                                    card.toFormHTML(),
+                                    player.getSession().getId()).build());
                             card.setHidden(true);
                         } else {
                             playerMessages.add(message(MessageUtil.Message.ADD_PLAYER_CARD,
-                                    card.toFormHTML()).build());
+                                    card.toFormHTML(),
+                                    player.getSession().getId()).build());
                         }
                     });
      
@@ -460,26 +462,33 @@ public class PokerGame {
      */
     public void resolveRound() {
     	// Get highest value poker hand 
-    	  PokerHand maxValue = PokerHand.HighCard;
+    	  PokerHand maxValue = PokerHand.HIGH_CARD;
     	  
     	  // get max Poker hand value
     	  for(Player p : this.getConnectedPlayers()){
     		  p.getHand().setPokerValue();
     		  LOG.info("player value {}, {}", p.getuid(), p.getHand().getPokerValue());
-    		  if(p.getHand().getPokerValue().compareTo(maxValue) > 0){
+    		  // if we have the same hands we get the highest ranking card
+    		  if(p.getHand().getPokerValue().compareTo(maxValue) == 0){
     			  maxValue = p.getHand().getPokerValue();
     			  LOG.info("max value {}, {}", p.getuid(), p.getHand().getPokerValue());
-    	    		
+    		  }
+    		  
+    		  // this hand is greater than the current ranked best hand 
+    		  else   if(p.getHand().getPokerValue().compareTo(maxValue) > 0){
+    			  maxValue = p.getHand().getPokerValue();
+    			  LOG.info("max value {}, {}", p.getuid(), p.getHand().getPokerValue());
     		  }
     	  }
     	  
+    	  Card maxCard = null;
     	  // get winner with highest poker hand value
-    	  if (!maxValue.equals(PokerHand.HighCard)) {
+    	  if (!maxValue.equals(PokerHand.HIGH_CARD)) {
     		  LOG.info("Setting Winner");
-      		
     		  for (final Player player : this.getConnectedPlayers()) {
 		          // Players with least cards and highest value is winner
 		          if (player.getHand().getPokerValue().equals(maxValue)) {
+		        	  
 		              player.getHand().setHandStatus(HandStatus.WINNER);
 		        	  LOG.info("Winner value {}, {}", player.getuid(), player.getHand().getPokerValue());
 		    	    	
@@ -541,8 +550,8 @@ public class PokerGame {
      */
     public void resetRound() {
         for (final Player player : this.getConnectedPlayers()) {
-            player.getHand().clearHand();
             player.getHand().setHandStatus(null);
+            player.getHand().clearHand();
             player.setLastOption(null);
         }
         this.setGameState(State.WAITING_FOR_PLAYERS);
@@ -563,6 +572,36 @@ public class PokerGame {
 				return false;
 		}
 		return true;
+	}
+
+
+	public Player getPlayerFor(String id) {
+		Player curr = null;
+		for(Player p: this.players){
+			if(p.getuid().equals(id)){
+				curr = p;
+				break;
+			}
+		}
+		return curr;
+	}
+
+
+	public void resetPlayers() {
+		for (final Player player : this.getConnectedPlayers()) {
+            player.getHand().setHandStatus(null);
+            player.setLastOption(null);
+        }
+        this.setGameState(State.WAITING_FOR_PLAYERS);
+	}
+
+
+	public AIPlayer getNextAI() {
+		for(AIPlayer p: this.getConnectedAIPlayers()){
+			if (p.getLastOption() == null)
+				return p;
+		}
+		return null;
 	}
 
 
