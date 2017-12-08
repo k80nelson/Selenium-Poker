@@ -260,6 +260,7 @@ public class PokerSocketHandler extends TextWebSocketHandler {
             	 }
             	Thread.sleep(1000);
             	this.updateCards();
+            	this.broadCastMessageFromServer(message(Message.RIG_READY).build());
             	Thread.sleep(1000);
             	if(this.game.isResolved()){
                   	this.game.resolveRound();

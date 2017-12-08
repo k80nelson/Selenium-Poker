@@ -115,7 +115,7 @@ Rigging the Game
    
   4. Once all the players have a card 
      * AI play first, if the AI chooses to hit the admin will be prompted to set which cards to improve
-     * Players have a choose to stay or hit, if they hit, they will be prompted to set which cards to improve
+     * Players have a choose to stay or hit, if they hit, press done and you the player will be prompted to set which cards to improve
      * Improving the cards
         * to improve the cards type (index:rank-? suit, )
         * index is the position of the card you want to replace (All cards are sorted by rank)

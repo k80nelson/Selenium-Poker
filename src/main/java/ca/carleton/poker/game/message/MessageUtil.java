@@ -43,7 +43,8 @@ public class MessageUtil {
         GET_CARDS("|GET+CARDS| %s Select cards to improve"), 
         STARTING_RIGGED_GAME("|RIGGED+GAME| Strating rigged game"), 
         RIG_AI("|RIG+AI|%s |%s"),
-        YOUR_TURN_RIG("|RIG+AI|%s |%s");
+        YOUR_TURN_RIG("|RIG+AI|%s |%s"), 
+        RIG_READY("|RIG+READY|");
         		
     	
         private final String content;

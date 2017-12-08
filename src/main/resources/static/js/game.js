@@ -119,6 +119,10 @@ function dispatch(message) {
             rig_game()
             log(logMessage);
             break;
+        case 'RIG+READY':
+            rig_ready();
+            log(logMessage);
+            break;
         case 'IMPROVE+CARD':
             log(logMessage);
             getCard();
@@ -194,12 +198,17 @@ function dispatch(message) {
 
 function start_rigged(){
     rigged = true;
-    var e = document.createElement("div");
-    e.innerHTML = "RIGGED";
-    e.id = "rigged";
-    document.getElementById('connect-container').appendChild(e);
+
     ws.send('START_RIGGED|');
     clientLog("starting Rigged Game");
+}
+
+function rig_ready(){
+        var e = document.createElement("div");
+    e.innerHTML = "RIGGED";
+    rigged = true;
+    e.id = "rigged";
+    document.getElementById('connect-container').appendChild(e);
 }
 function rig_game(){
    var jsonCards = {}
@@ -320,12 +329,8 @@ function sendCards(){
         document.getElementById('done').disabled = true; 
         var cards = " ";
         var sessionID =  document.getElementById("yourHandText").innerHTML.match(/\(.+?\)/g);
-        console.log(document.getElementById("rigged"));
-        var rigged = document.getElementById("rigged");
-        clientLog("Game is" +rigged);
-        console.log("Game is "+rigged);
 
-        if(rigged !=  null){
+        if(rigged){
             var hands= prompt("This prompt allows you to rig cards\n"
             +"set card number ( 0->5)"
             +"Set rank: using its rank-?:  where ? is numerical number or, a, j,q,k (ace, jack, queen, king)\n"
