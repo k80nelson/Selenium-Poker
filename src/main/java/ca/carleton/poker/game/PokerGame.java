@@ -243,7 +243,7 @@ public class PokerGame {
      *
      * @param ai the ai.
      */
-    public void doAITurn(final AIPlayer player){ 
+    public void doAITurn(final AIPlayer player, boolean rigged){ 
     	LOG.info("Get AI Choice", player.getuid());
     	
     	List<Card> choice = this.aiService.getCardOption(player, this.getConnectedAIPlayers());
@@ -257,12 +257,14 @@ public class PokerGame {
     	}else{
     		option= GameOption.HIT;
     	}
-    
+
     	player.setLastOption(option);
-    	LOG.info("{} will be using option {}!, discards {} ", player.getuid(), option, choice);
-       
-    	this.performOption(player, option, choice);
- 
+    	
+    	if(!rigged){ // If the game is not rigged automate this 
+    		LOG.info("{} will be using option {}!, discards {} ", player.getuid(), option, choice);
+    	       
+    		this.performOption(player, option, choice);
+    	}
         
     }
 
@@ -500,7 +502,7 @@ public class PokerGame {
     		  }
     	  }
     	  // if everyone has nothing, winner has highest card
-    	  else{
+    	 /* else{
     		  LOG.info("Highest card");
 		    	
     		  // get highest card
@@ -527,7 +529,7 @@ public class PokerGame {
 				    	
 		          }
     		  }
-    	  } 
+    	  } */
     }
     	  
 

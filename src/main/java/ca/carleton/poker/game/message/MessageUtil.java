@@ -30,18 +30,19 @@ public class MessageUtil {
         READY_TO_START("|READY+TO+START|The game is now ready to begin. Press start when ready."),
         OTHER_READY_TO_START("|OTHER+READY+TO+START|The game is now ready to begin. Waiting on admin to start."),
         YOUR_TURN("|YOUR+TURN|It is your turn, please select one of the two available game options."),
-        IMPROVE_CARD("|IMPROVE+CARD|Select all cards you want to discard.  Press done to finish turn"),
+        IMPROVE_CARD("|IMPROVE+CARD| %s| Select all cards you want to discard.  Press done to finish turn"),
         SKIPPING("|SKIP|%s made their turn and %s."),
-        MOVE_MADE("|OTHER+MOVE|%s made their turn and %s."),
+        MOVE_MADE("|OTHER+MOVE|%s|%s"),
         PROCESSING_AI("|AI+TURN|Processing all AI decisions"),
         PROCESSING_Player("|AI+TURN|All AI players have made their choices. Now processing Real Player decisions."),
-        WINNER("|WINNER|%s won with a score of  %s!"),
-        LOSER("|LOSER|%s lost with a score of  %s!"),
+        WINNER("|WINNER|%s won with a score of %s!"),
+        LOSER("|LOSER|%s lost with a score of %s!"),
         RESET("|RESET|Please wait for the administrator to start the next round."),
         RESET_ADMIN("|RESET+ADMIN|To start another round, press the start button."),
         ALL_QUIT("|ALL+QUIT|The administrator has left. Current sessions will be disconnected."), 
-        GET_CARDS("|GET+CARDS| %s Updating all cards"), 
-        STARTING_RIGGED_GAME("|RIGGED+GAME|");
+        GET_CARDS("|GET+CARDS| %s Select cards to improve"), 
+        STARTING_RIGGED_GAME("|RIGGED+GAME| Set up rigged Hands");
+        		
     	
         private final String content;
 

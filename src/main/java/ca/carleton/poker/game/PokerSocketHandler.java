@@ -158,9 +158,7 @@ public class PokerSocketHandler extends TextWebSocketHandler {
                 break;
             case "START_GAME":
                 LOG.info("Starting the game.");
-                
                 this.broadCastMessageFromServer(message(Message.STARTING_GAME).build());
-                LOG.info("We have all cards");
                // Send each real player their cards.
                 this.resetGame();
                 this.game.initiateHands();
@@ -168,6 +166,12 @@ public class PokerSocketHandler extends TextWebSocketHandler {
                 // AI Plays first
                 this.processAI();
                               
+                break;
+            case "START_RIGGED":
+                LOG.info("Starting the rigged game.");
+             //   this.resetGame();
+                this.broadCastMessageFromServer(message(Message.STARTING_RIGGED_GAME).build());
+                this.updateCards();
                 break;
             case "GAME_STAY":
             	this.game.setWaitingOnReal(false);
@@ -177,7 +181,6 @@ public class PokerSocketHandler extends TextWebSocketHandler {
                 this.game.performOption(player, option, null);
                 //  LOG.info("Player, option {}, {}", player.getuid(), player.getLastOption() );
                   // Send to other than the player what their move was.
-
                   this.broadCastMessageFromServer(message(Message.MOVE_MADE, player.getuid(), player.getLastOption()).build());
                   this.updateCards();
                   if(this.game.isResolved()){
@@ -191,9 +194,10 @@ public class PokerSocketHandler extends TextWebSocketHandler {
             	
             case "GAME_HIT":
             	LOG.info("Player is hitting");
+            	player = this.game.getPlayerFor(session);
             	this.game.setWaitingOnReal(false);
                 option = GameOption.valueOf(contents[0].split("_")[1]);
-                this.sendMessage(session, message(Message.IMPROVE_CARD).build());
+                this.sendMessage(session, message(Message.IMPROVE_CARD, player.getuid()).build());
                  LOG.info("Get Card");
                 // need to get card;
               
@@ -201,7 +205,7 @@ public class PokerSocketHandler extends TextWebSocketHandler {
  
             case "CARD_DONE":
             	LOG.info("Get Card");
-            	final String[] nums = contents[1].split("\\_");
+            	final String[] nums = contents[1].split(",");
             	int length = nums.length;
             	if(nums.length > 5)length = 5; // There are only 5 cards, something must have been double clicked
             
@@ -222,15 +226,17 @@ public class PokerSocketHandler extends TextWebSocketHandler {
              
                  this.broadCastMessageFromServer(message(Message.MOVE_MADE, player.getuid(), player.getLastOption()).build());
                  this.updateCards(); 
-                 this.processPlayers();
-               
+                 if(this.game.isResolved()){
+                   	this.game.resolveRound();
+                   	this.sendResults();
+                   	this.resetGame();
+                   }else{
+                 	  this.processPlayers();
+                   }
             	 break;
-            case "CARDS_UPDATED":
-            	// update cards if changed by selenium
-            	
-            	LOG.info("Updating  All Cards ");
+            case "CARDS_UPDATED": 	
+            	LOG.info("Getting initial cads of the rigged game");
             	// Users are split between 
-            	Player p = null;
             	JSONObject obj = new JSONObject(contents[1]);
             	System.out.println(obj.toString());
             	 // Get cards; 
@@ -239,20 +245,24 @@ public class PokerSocketHandler extends TextWebSocketHandler {
             	    	String key = (String)keys.next();
             	    	String id = obj.getJSONObject(key).get("id").toString();
             	    	id = id.substring(id.indexOf("(")+1, id.indexOf(")"));
-            	    	String[] newCards =  obj.getJSONObject(key).get("cards").toString().split(",");
-            	    	p = this.game.getPlayerFor(id);
-            	    
+            	    	String[] newCards =  obj.getJSONObject(key).get("hands").toString().split(",");
+            	    	player = this.game.getPlayerFor(id);
+
 	            		for(int j = 0; j <5; j++){
-	            			System.out.println(newCards[j]);
-	            			//		p.getHand().getCards().get(j).setCard(newCards[j+1]); // This is needed for testing
+	            			player.getHand().getCards().get(j).setCard(newCards[j].trim()); // This is needed for testing
 	            		}
-	            		LOG.info(p.getuid() + " "+ p.getHand().toString());
-		            	this.updateCards();
+	            		System.out.println(key + " " + player +" " + player.getHand().toString());
             	 }
-            	 
-            	 
-            	this.broadCastMessageFromServer(message(Message.STARTING_RIGGED_GAME).build());
-            	this.processAI();
+            	Thread.sleep(1000);
+            	this.updateCards();
+            	Thread.sleep(1000);
+            	if(this.game.isResolved()){
+                  	this.game.resolveRound();
+                  	this.sendResults();
+                  	this.resetGame();
+                  }else{
+                	  this.rigAiInput();
+                  }
             	break;
             	
             	
@@ -261,26 +271,35 @@ public class PokerSocketHandler extends TextWebSocketHandler {
             
             	LOG.info("Get returned cards");
             	// Users are split between 
-            	/*Player p = null;
-            	this.game.resetPlayers();
-            	JSONObject obj = new JSONObject(contents[1]);
-            	System.out.println(obj.toString());
-            	 // Get cards; 
-            	 Iterator keys = obj.keys();
-            	 while(keys.hasNext()) {
-            	    	String key = (String)keys.next();
-            	    	String id = obj.getJSONObject(key).get("id").toString();
-            	    	id = id.substring(id.indexOf("(")+1, id.indexOf(")"));
-            	    	String[] newCards =  obj.getJSONObject(key).get("cards").toString().split("_");
-            	    	p = this.game.getPlayerFor(id);
-            	    	System.out.println(p);
-	            		for(int j = 0; j <5; j++){
-	            			p.getHand().getCards().get(j).setCard(newCards[j+1]); // This is needed for testing
-	            		}
-	            		LOG.info(p.getuid() + " "+ p.getHand().toString());
-		            	this.updateCards();
-            	 }
-            	 */
+            	player = null;
+	            if (!contents[1].equals("null")){ // checks the player has hit and actually selected a card
+	            	obj = new JSONObject(contents[1]);
+	            	System.out.println(obj.toString());
+	            	 // Get cards; 
+	            	String id = obj.get("sessionID").toString();
+	            	if(id.contains("("))
+	            		id = id.substring(id.indexOf("(")+1, id.indexOf(")"));
+	            	String[] newCards =  obj.get("hands").toString().split(",");
+	            	System.out.println(newCards.length +" " + id);
+	            	player = this.game.getPlayerFor(id);
+	            	player.setLastOption(GameOption.HIT);
+		            for(int j = 0; j< newCards.length; j++){
+			            String[] index = newCards[j].split(":");
+			            player.getHand().getCards().get(Integer.parseInt(index[0].trim())).setCard(index[1].trim(), false); // This is needed for testing
+		            }	
+		            System.out.println(player +" " + player.getHand().toString());
+	            }
+	            
+	            Thread.sleep(1000);
+	            this.updateCards();
+	            Thread.sleep(1000);
+	            if(this.game.isResolved()){
+                  	this.game.resolveRound();
+                  	this.sendResults();
+                  	this.resetGame();
+                  }else{
+                	  this.rigAiInput();
+                  }
             	break;
             	
             case "Leaving":
@@ -290,7 +309,6 @@ public class PokerSocketHandler extends TextWebSocketHandler {
         }
     }
 private void processAI() {
-	  LOG.info("Processing AI.");
       this.broadCastMessageFromServer(message(Message.PROCESSING_AI).build());
       AIPlayer next = this.game.getNextAI();
       if(next == null){
@@ -301,7 +319,7 @@ private void processAI() {
       //  for(AIPlayer next : this.game.getConnectedAIPlayers()) {
     	  LOG.info("Processing for {}", next.getuid());
     	  next.getHand().setPokerValue();  // Set the poker value to current hand;
-    	  this.game.doAITurn(next);
+    	  this.game.doAITurn(next, false);
           if (next.getLastOption() == GameOption.STAY) {
               LOG.info("Skipping {}'s turn because they STAYED.",  next.getuid());
               this.broadCastMessageFromServer(message(Message.SKIPPING,
@@ -314,8 +332,34 @@ private void processAI() {
                       GameOption.HIT).build());
           }
           processAI();
-      }
-        
+      }  
+}
+
+
+private void rigAiInput() {
+    this.broadCastMessageFromServer(message(Message.PROCESSING_AI).build());
+    AIPlayer next = this.game.getNextAI();
+    if(next == null){
+  	  LOG.info("All AI have done their turn.");
+  	  this.broadCastMessageFromServer(message(Message.PROCESSING_Player).build());
+  	  this.processPlayers();
+    }else{
+    //  for(AIPlayer next : this.game.getConnectedAIPlayers()) {
+  	  LOG.info("Processing for {}", next.getuid());
+  	  next.getHand().setPokerValue();  // Set the poker value to current hand;
+  	  this.game.doAITurn(next, true);
+        if (next.getLastOption() == GameOption.STAY) {
+            LOG.info("Skipping {}'s turn because they STAYED.",  next.getuid());
+            this.broadCastMessageFromServer(message(Message.MOVE_MADE,
+          		  next.getuid(),
+                    GameOption.STAY).build());
+        } else if(next.getLastOption()== GameOption.HIT) {
+            this.broadCastMessageFromServer(message(Message.MOVE_MADE,
+          		  next.getuid(),
+                    GameOption.HIT).build());
+        }
+        //rigAiInput();
+    }  
 }
 private void processPlayers() {
 	    if(this.game.isResolved()){
@@ -407,9 +451,7 @@ private void processPlayers() {
     private void updateCards() {
         // Send each real player their cards.
     	LOG.info("Updating cards");
-    	
         final Map<Player, List<TextMessage>> cardMessages = this.game.buildHandMessages();
-       
         cardMessages.forEach((player, messages) ->
                 messages.forEach(toSend -> this.sendMessage(player.getSession(), toSend)));
     }

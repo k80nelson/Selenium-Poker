@@ -173,10 +173,10 @@ public class IndexPage extends  AbstractPage<IndexPage> {
      */
     public String[] getUsetTexts() {
     	String[] ids = new String[4];
-    	ids[0] = this.webDriver.findElement(By.id("otherHandText1")).getText().replace("Other Player's Hand", " ").replaceAll("[\\(\\)]", "");
-    	ids[1] = this.webDriver.findElement(By.id("otherHandText2")).getText().replace("Other Player's Hand", " ").replaceAll("[\\(\\)]", "");
-    	ids[2] = this.webDriver.findElement(By.id("otherHandText3")).getText().replace("Other Player's Hand", " ").replaceAll("[\\(\\)]", "");
-    	ids[3] = this.webDriver.findElement(By.id("yourHandText")).getText().replace("Your Hand", " ").replaceAll("[\\(\\)]", "");
+    	ids[0] = this.webDriver.findElement(By.id("otherHandText1")).getText().replace("Other Player's Hand", "").replaceAll("[\\(\\)]", "");
+    	ids[1] = this.webDriver.findElement(By.id("otherHandText2")).getText().replace("Other Player's Hand", "").replaceAll("[\\(\\)]", "");
+    	ids[2] = this.webDriver.findElement(By.id("otherHandText3")).getText().replace("Other Player's Hand", "").replaceAll("[\\(\\)]", "");
+    	ids[3] = this.webDriver.findElement(By.id("yourHandText")).getText().replace("Your Hand", "").replaceAll("[\\(\\)]", "");
         
     	return ids;
    }
@@ -219,24 +219,7 @@ public class IndexPage extends  AbstractPage<IndexPage> {
        return StringUtils.EMPTY;
     }
 
-	public boolean checkCards(String[] cards, WebElement e) {
-		String results = "";
-    	for (int i = 0; i < cards.length; i++) {
-    		results += cards[i];
-    	}
-		//System.out.println(e.getAttribute("innerHTML"));
-		return results.equals(e.getAttribute("innerHTML"));
-    /*	for (int i = 0; i < cards.length; i++) {
-    		String s = li.get(i).getAttribute("innerHTML").replace("♥", "&hearts;").
-    				replace("♣", "&clubs;").
-    				replace("♠", "&spades;").
-    				replace("♦", "&diams;");
 
-    		if(!s.equals(cards[i])) return false;
-    	
-    	}*/
-    	
-	}
 
 	public void updateCards() {
 		WebElement e = this.otherPlayer1Cards;
