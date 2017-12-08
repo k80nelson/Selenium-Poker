@@ -83,14 +83,14 @@ How To Play the Game
 ---------------------
 
   1. Connect to the game
-     -> if you are the first person to connect you will be assigned as admin
-     -> As admin you can set the number of players and open the loby 
+     * if you are the first person to connect you will be assigned as admin
+     * As admin you can set the number of players and open the loby 
   2. Once enough people have connected you can start the game
   3. All UI Players will play first
   4. When it is your turn the game option buttons will be enabled and you can decide to stay or hit. 
-     -> If you hit you need to click on cards to improve them.
-     -> When you have clicked all cards you want to imrpove click done.
-     -> Note:  Once you click a card you cannot unselect it.
+     * If you hit you need to click on cards to improve them.
+     * When you have clicked all cards you want to imrpove click done.
+     * Note:  Once you click a card you cannot unselect it.
   5. Once Each player has had one turn the system will display the winner and you can disconnect or start the game again.
 
 
@@ -99,27 +99,27 @@ Rigging the Game
   1. Connect to the game 
   2. once enough people are connected press rigged_game
   3. the admin will  receive 5 prompts to set all the hands
-     -> to set a hand type (rank-? suit, rank-? suit, rank-? suit, rank-? suit). 
+     * to set a hand type (rank-? suit, rank-? suit, rank-? suit, rank-? suit)
+     * each card must be separated by comma
         * the ? represents the rank value where:
            * a = ace
            * k = king
            * q = queen
            * j = jack
            * everything else is its number
-
         * suits can be:
           * hearts
           * diams
           * spades
           * clubs
-      -> each card must be separated by comma
+   
   4. Once all the players have a card 
-      -> AI play first, if the AI chooses to hit the admin will be prompted to set which cards to improve
-      -> Players have a choose to stay or hit, if they hit, they will be prompted to set which cards to improve
-      -> Improving the cards
-         * to improve the cards type (index:rank-? suit, )
-         * index is the position of the card you want to replace (All cards are sorted by rank)
-         * rank and suit are the same as setting the hand;
-         * each card must be separated by a comma
+     * AI play first, if the AI chooses to hit the admin will be prompted to set which cards to improve
+     * Players have a choose to stay or hit, if they hit, they will be prompted to set which cards to improve
+     * Improving the cards
+        * to improve the cards type (index:rank-? suit, )
+        * index is the position of the card you want to replace (All cards are sorted by rank)
+        * rank and suit are the same as setting the hand;
+        * each card must be separated by a comma
   5. once all players have played the results will be displayed
 
