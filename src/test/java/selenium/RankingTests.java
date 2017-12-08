@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.After;
 import org.junit.Test;
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -39,12 +40,11 @@ public class RankingTests extends AbstractSeleniumTest {
     	 *  - p: HighCard
     	 */
     	
-    	this.indexPage.connect.click();
+     	this.indexPage.connect.click();
     	this.waitForDisplayed(this.indexPage.open).isEnabled();
     	this.indexPage.open.click(); // defaults is 1 player
     	this.waitForDisplayed(this.indexPage.rig).isEnabled();
     	this.indexPage.rig.click();
-    	
     	/************************* Set inital hands ************************/
     	// Player  highcard 
     	this.waitForAlert();
@@ -74,26 +74,32 @@ public class RankingTests extends AbstractSeleniumTest {
     	assertThat(this.indexPage.hasText("Setting all cards"), is(true));     
     	/****************************** check user options ************************/
     	
-    	String[] ids = this.indexPage.getUsetTexts();
-    	// user 1 will stay 
-    	String result = ids[0] + "choose to STAY";
-    	System.out.println(this.indexPage.hasText(result));
-    	assertThat(this.indexPage.hasText(result), is(true));
     	
-    	//user 2 has hit
-    	//Handle prompt to improve user 2 
+      	//Handle prompt to improve user 2 
     	this.waitForAlert();
     	a = this.webDriver.switchTo().alert();
     	a.sendKeys("0:rank-a clubs");
     	a.accept();
     	
-    	this.delay(5);
-    	result = ids[1] + "choose to HIT";
+    	String[] ids = this.indexPage.getUsetTexts();
+    	// user 1 will stay 
+    	this.delay(1);
+    	String result = ids[0] + " choose to STAY";
+    	System.out.println(this.indexPage.hasText(result));
     	assertThat(this.indexPage.hasText(result), is(true));
+    	
+    	//user 2 has hit   	
+    	this.delay(5);
+     
+    	result = ids[1] + " choose to HIT";
+    	assertThat(this.indexPage.hasText(result), is(true));
+ 
+    	
+    	
     	
     	// user 3 will Stay
     	this.delay(1);
-    	result = ids[2] + "choose to STAY";
+    	result = ids[2] + " choose to STAY";
     	assertThat(this.indexPage.hasText(result), is(true));
     	    	
     	// Player will hit
@@ -130,8 +136,7 @@ public class RankingTests extends AbstractSeleniumTest {
     	// Player looses
     	result = ids[3] + " lost with a score of HIGH_CARD";
     	assertThat(this.indexPage.hasText(result), is(true));
-    
-    	
+
     	this.indexPage.disconnect.click();
     
     }
@@ -191,19 +196,19 @@ public class RankingTests extends AbstractSeleniumTest {
     	
     	String[] ids = this.indexPage.getUsetTexts();
     	// user 1 will stay 
-    	String result = ids[0] + "choose to STAY";
+    	String result = ids[0] + " choose to STAY";
     	System.out.println(this.indexPage.hasText(result));
     	assertThat(this.indexPage.hasText(result), is(true));
     	
     	//user 2 has stay
     	this.delay(1);
-    	result = ids[1] + "choose to STAY";
+    	result = ids[1] + " choose to STAY";
     	assertThat(this.indexPage.hasText(result), is(true));
     	
     	// user 3 will hit
     	
     	this.delay(1);
-    	result = ids[2] + "choose to HIT";
+    	result = ids[2] + " choose to HIT";
     	assertThat(this.indexPage.hasText(result), is(true));
     	    	
     	// Player will stay
@@ -288,27 +293,30 @@ public class RankingTests extends AbstractSeleniumTest {
     	a.sendKeys("0:rank-7 clubs,1:rank-j clubs,4:rank-5 diams");
     	a.accept();
     	
+        
+    	
+       	//Handle prompt to improve user 2
+       	this.waitForAlert();
+       	a = this.webDriver.switchTo().alert();
+       	a.sendKeys("0:rank-4 spades,1:rank-a clubs");
+       	a.accept();
+       	
+    	
     	String[] ids = this.indexPage.getUsetTexts();
     	// user 1 will hit 
-    	String result = ids[0] + "choose to HIT";
+    	String result = ids[0] + " choose to HIT";
     	System.out.println(this.indexPage.hasText(result));
     	assertThat(this.indexPage.hasText(result), is(true));
-         
-    	
-    	//Handle prompt to improve user 2
-    	this.waitForAlert();
-    	a = this.webDriver.switchTo().alert();
-    	a.sendKeys("0:rank-4 spades,1:rank-a clubs");
-    	a.accept();
+    
     	
     	//user 2 will it
     	this.delay(5);
-    	result = ids[1] + "choose to HIT";
+    	result = ids[1] + " choose to HIT";
     	assertThat(this.indexPage.hasText(result), is(true));
     	
     	// user 3 will STAY
     	this.delay(5);
-    	result = ids[2] + "choose to STAY";
+    	result = ids[2] + " choose to STAY";
     	assertThat(this.indexPage.hasText(result), is(true));
     	    	
     	// Player High Card

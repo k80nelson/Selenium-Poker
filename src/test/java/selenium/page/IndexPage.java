@@ -2,6 +2,7 @@ package selenium.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.FindBy;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -233,6 +234,12 @@ public class IndexPage extends  AbstractPage<IndexPage> {
     	((JavascriptExecutor)this.webDriver).executeScript(
     			"arguments[0].click();", e);
 	}
+	
+	
+    public void getWindow(ChromeDriver window){
+    	((JavascriptExecutor) window).executeScript("window.focus();");
+
+    }
 
 
 

@@ -27,9 +27,9 @@ public class RealPlayer extends Player {
 		return false;
 	}
 	
-	 public boolean isAdmin() {
-	        return this.isAdmin;
-	    }
+	public boolean isAdmin() {
+		return this.isAdmin;
+	}
 
 	    public void setAdmin(final boolean isAdmin) {
 	        this.isAdmin = isAdmin;

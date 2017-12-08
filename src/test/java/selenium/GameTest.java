@@ -93,7 +93,6 @@ public class GameTest extends AbstractSeleniumTest {
     	this.waitForDisplayed(this.indexPage.hit).isEnabled();
         this.indexPage.hit.click();
         this.waitForDisplayed(this.indexPage.done).isEnabled();
-        assertThat(this.indexPage.hasText("Select all cards you want to discard."), is(true));
         this.indexPage.card1.click();
         this.indexPage.card3.click();
         this.indexPage.done.click();

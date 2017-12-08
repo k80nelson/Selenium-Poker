@@ -93,7 +93,4 @@ public class Card {
 		this.hidden = hidden;
 		System.out.println(this.toString());	
 	}
-	
-
-
 }

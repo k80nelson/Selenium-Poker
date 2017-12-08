@@ -3,6 +3,7 @@ package selenium.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +64,8 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
     public String getUrl() {
         return this.webDriver.getCurrentUrl();
     }
+    
+
 
     /**
      * Check whether or not the web driver can find the given text.

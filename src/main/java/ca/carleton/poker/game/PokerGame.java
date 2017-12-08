@@ -144,7 +144,7 @@ public class PokerGame {
     	// Set to admin if they are the first conneciton
         LOG.info("Player is trying to connect {}, {}", player.getuid(), player.getSession());
         if (this.players.isEmpty()) {
-            LOG.info("Setting first player as admin.");
+            LOG.info("Setting first player as admin:{}.", player.getuid());
             player.setAdmin(true);
     	}
         // Check that the player doesn't exist and add them
@@ -372,6 +372,7 @@ public class PokerGame {
 
 	public Player getAdmin() {
 		for(RealPlayer p: this.getConnectedRealPlayers()){
+			System.out.println(p.getuid()+" " +p.isAdmin());
 			if(p.isAdmin()) return p;
 		}
 		return null;
@@ -490,7 +491,6 @@ public class PokerGame {
     		  for (final Player player : this.getConnectedPlayers()) {
 		          // Players with least cards and highest value is winner
 		          if (player.getHand().getPokerValue().equals(maxValue)) {
-		        	  
 		              player.getHand().setHandStatus(HandStatus.WINNER);
 		        	  LOG.info("Winner value {}, {}", player.getuid(), player.getHand().getPokerValue());
 		    	    	
@@ -501,35 +501,39 @@ public class PokerGame {
 		          }
     		  }
     	  }
-    	  // if everyone has nothing, winner has highest card
-    	 /* else{
-    		  LOG.info("Highest card");
-		    	
-    		  // get highest card
-    		  Card max = this.getConnectedPlayers().get(0).getHand().getCards().get(0); 
-    		  for (int i = 0; i < this.getConnectedPlayers().size(); i++) {
-    			 for(int j  = 1; j < this.getConnectedPlayers().size(); j++){
-    				  Card cc = this.players.get(j).getHand().getHighCard();
-    				  if(cc.getRank().compareTo(max.getRank()) > 0){
-    					 max = cc;
-       				  }
-    			  }  
+    	  // get the highest hand when two hands have the same value. 
+    	  for(Player player :this.getConnectedPlayers()){
+    		  if(player.getHand().getHandStatus() == HandStatus.WINNER){
+    			  for(Player other :this.getConnectedPlayers()){
+    				
+    				  if(other.getHand().getHandStatus() == HandStatus.WINNER && other != player){
+    					  System.out.println(other.getHand().getHighCard() +" " +other.getHand().getPokerValue());
+        				  System.out.println(player.getHand().getHighCard() +" " +player.getHand().getPokerValue());
+    					  // check if they have the same rank
+    					  if (player.getHand().getHighCard().getRank().getValue() == other.getHand().getHighCard().getRank().getValue()){
+    						  // take higest suit
+    						  if(player.getHand().getHighCard().getSuit().compareTo(other.getHand().getHighCard().getSuit()) > 0){
+    							  other.getHand().setHandStatus(HandStatus.LOSER);
+    							  System.out.println("other highest suit");
+    						  }else{
+    							  player.getHand().setHandStatus(HandStatus.LOSER);
+    							  System.out.println("player highest suit");
+    						  }
+    						  System.out.println("same rank");
+    					  }// if they are not the same rank, take the higest rank
+    					  else if (player.getHand().getHighCard().getRank().getValue() > other.getHand().getHighCard().getRank().getValue()){
+    						  other.getHand().setHandStatus(HandStatus.LOSER);
+    						  System.out.println("other highest rank");
+    					  }else{
+    						  player.getHand().setHandStatus(HandStatus.LOSER);
+							  System.out.println("player highest rank");
+    					  }
+    				  }
+    			  }
     		  }
-     	 
-    		  // set players with highest card
-    		  for (final Player player : this.getConnectedPlayers()) {
-		          // Players with least cards and highest value is winner
-		          if (player.getHand().getCards().contains(max)) {
-		              player.getHand().setHandStatus(HandStatus.WINNER);
-		        	  LOG.info("Winner value {}, {}", player.getuid(), player.getHand().getPokerValue());
-				    	
-		          } else {
-		              player.getHand().setHandStatus(HandStatus.LOSER);
-		        	  LOG.info("Loser value {}, {}", player.getuid(), player.getHand().getPokerValue());
-				    	
-		          }
-    		  }
-    	  } */
+    		  
+    	  }
+    	 
     }
     	  
 
@@ -580,9 +584,9 @@ public class PokerGame {
 	public Player getPlayerFor(String id) {
 		Player curr = null;
 		for(Player p: this.players){
-			if(p.getuid().equals(id)){
-				curr = p;
-				break;
+			System.out.print(p.getuid() +" "+id.trim());
+			if(p.getuid().equals(id.trim())){
+				return p;
 			}
 		}
 		return curr;

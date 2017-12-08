@@ -41,7 +41,9 @@ public class MessageUtil {
         RESET_ADMIN("|RESET+ADMIN|To start another round, press the start button."),
         ALL_QUIT("|ALL+QUIT|The administrator has left. Current sessions will be disconnected."), 
         GET_CARDS("|GET+CARDS| %s Select cards to improve"), 
-        STARTING_RIGGED_GAME("|RIGGED+GAME| Set up rigged Hands");
+        STARTING_RIGGED_GAME("|RIGGED+GAME| Strating rigged game"), 
+        RIG_AI("|RIG+AI|%s |%s"),
+        YOUR_TURN_RIG("|RIG+AI|%s |%s");
         		
     	
         private final String content;

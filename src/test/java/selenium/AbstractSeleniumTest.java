@@ -109,6 +109,8 @@ public abstract class AbstractSeleniumTest {
 	public void waitForText(String searchKey) {
 		new WebDriverWait(this.webDriver,5).until(visibilityOf(this.webDriver.findElement(By.xpath("//*[contains(text(),'" + searchKey + "')]"))));
 	}
+	
+	
 
 }
 

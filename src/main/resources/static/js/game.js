@@ -15,6 +15,7 @@ function setGameOptionsEnabled(enabled) {
 }
 
 function setAdmin(enabled) {
+    admin = true;
     document.getElementById('open').disabled = !enabled;
     document.getElementById('shutdown').disabled = !enabled;
     document.getElementById('numberPlayers').disabled = !enabled;
@@ -123,10 +124,11 @@ function dispatch(message) {
             getCard();
             break;
         case 'OTHER+MOVE':
-            if(rigged){
-                returnCards(split[2], split[3]);
-            }
             log(logMessage);
+            break;
+                  break;
+        case 'RIG+AI':
+            returnCards(split[2], split[3]);
             break;
         case 'SKIP':
             log(logMessage);
@@ -154,6 +156,10 @@ function dispatch(message) {
         case 'YOUR+TURN':
             setGameOptionsEnabled(true);
             log(logMessage);
+            break; 
+        case 'YOUR+TURN+RIG':
+            setGameOptionsEnabled(true);
+            returnCards(split[2], split[3]);
             break;   
         case 'AI+TURN':
             log(logMessage);
@@ -187,75 +193,81 @@ function dispatch(message) {
 
 
 function start_rigged(){
-       rigged = true;
-     ws.send('START_RIGGED|');
-     clientLog("starting Rigged Game");
+    rigged = true;
+    var e = document.createElement("div");
+    e.innerHTML = "RIGGED";
+    e.id = "rigged";
+    document.getElementById('connect-container').appendChild(e);
+    ws.send('START_RIGGED|');
+    clientLog("starting Rigged Game");
 }
 function rig_game(){
    var jsonCards = {}
-   clientLog("Setting all cards");
-   // get player ranks
-    var hands = prompt("This prompt allows you to rig cards\n"
-        +"Set rank using its rank-?:  ? is numerical number or, a, j,q,k (ace, jack, queen, king)\n"
-        +"Set suit using, hearts, diams, clubs, or spades\n\n"
-        +"Please enter 5 cards for Player: ");
-    var cards =  hands.split(",");
-    var id =  document.getElementById("yourHandText").innerHTML.match(/\(.+?\)/g);
-    
-    if (cards.length < 5 ) {
-        txt = "Invalid cards";
-    } else{
-        jsonCards.player ={id, hands};
-    }
+   if(admin){
+       clientLog("Setting all cards");
+       // get player ranks
+        var hands = prompt("This prompt allows you to rig cards\n"
+            +"Set rank using its rank-?:  ? is numerical number or, a, j,q,k (ace, jack, queen, king)\n"
+            +"Set suit using, hearts, diams, clubs, or spades\n\n"
+            +"Please enter 5 cards for Player: ");
+        var cards =  hands.split(",");
+        var id =  document.getElementById("yourHandText").innerHTML.match(/\(.+?\)/g);
+        
+        if (cards.length < 5 ) {
+            txt = "Invalid cards";
+        } else{
+            jsonCards.player ={id, hands};
+        }
 
-    // get user 1
-    hands = prompt("This prompt allows you to rig cards\n"
-        +"Set rank using its rank-?: ? is numerical number or, a, j,q,k (ace, jack, queen, king)\n"
-        +"Set suit using, hearts, diams, clubs, or spades\n\n"
-        +"Please enter 5 cards for other Hand 1");
-    cards =  hands.split(",");
-    id =  document.getElementById("otherHandText1").innerHTML.match(/\(.+?\)/g);
-    if (cards.length < 5 ) {
-       alert("Invalid cards");
-         return;
-    } else{
-        jsonCards.other1 = {id, hands};
-    }
-
-
-    // get user 2
-    hands = prompt("This prompt allows you to rig cards\n"
-        +"Set rank using its rank-?: ? is numerical number or, a, j,q,k (ace, jack, queen, king)\n"
-        +"Set suit using, hearts, diams, clubs, or spades\n\n"
-        +"Please enter 5 cards for other Hand 2");
-    cards =  hands.split(",");
-    id =  document.getElementById("otherHandText2").innerHTML.match(/\(.+?\)/g);
-  
-    if (cards.length < 5 ) {
-         alert("Invalid cards");
-         return;
-    } else{
-        jsonCards.other2 = {id, hands};
-    }
+        // get user 1
+        hands = prompt("This prompt allows you to rig cards\n"
+            +"Set rank using its rank-?: ? is numerical number or, a, j,q,k (ace, jack, queen, king)\n"
+            +"Set suit using, hearts, diams, clubs, or spades\n\n"
+            +"Please enter 5 cards for other Hand 1");
+        cards =  hands.split(",");
+        id =  document.getElementById("otherHandText1").innerHTML.match(/\(.+?\)/g);
+        if (cards.length < 5 ) {
+           alert("Invalid cards");
+             return;
+        } else{
+            jsonCards.other1 = {id, hands};
+        }
 
 
-    // get user 3 
-    var hands = prompt("This prompt allows you to rig cards\n"
-        +"Set rank using its rank-?: ? is numerical number or, a, j,q,k (ace, jack, queen, king)\n"
-        +"Set suit using, hearts, diams, clubs, or spades\n\n"
-        +"Please enter 5 cards for other Hand 3");
-    var cards =  hands.split(",");
-    var id =  document.getElementById("otherHandText3").innerHTML.match(/\(.+?\)/g);
-    if (cards.length < 5 ) {
-       alert("Invalid cards");
-         return;
-    } else{
-        jsonCards.other3 = {id, hands};
-    }
+        // get user 2
+        hands = prompt("This prompt allows you to rig cards\n"
+            +"Set rank using its rank-?: ? is numerical number or, a, j,q,k (ace, jack, queen, king)\n"
+            +"Set suit using, hearts, diams, clubs, or spades\n\n"
+            +"Please enter 5 cards for other Hand 2");
+        cards =  hands.split(",");
+        id =  document.getElementById("otherHandText2").innerHTML.match(/\(.+?\)/g);
+      
+        if (cards.length < 5 ) {
+             alert("Invalid cards");
+             return;
+        } else{
+            jsonCards.other2 = {id, hands};
+        }
 
 
-    // send message
-    ws.send('CARDS_UPDATED|'.concat(JSON.stringify(jsonCards)));
+        // get user 3 
+        var hands = prompt("This prompt allows you to rig cards\n"
+            +"Set rank using its rank-?: ? is numerical number or, a, j,q,k (ace, jack, queen, king)\n"
+            +"Set suit using, hearts, diams, clubs, or spades\n\n"
+            +"Please enter 5 cards for other Hand 3");
+        var cards =  hands.split(",");
+        var id =  document.getElementById("otherHandText3").innerHTML.match(/\(.+?\)/g);
+        if (cards.length < 5 ) {
+           alert("Invalid cards");
+             return;
+        } else{
+            jsonCards.other3 = {id, hands};
+        }
+
+
+        // send message
+        ws.send('CARDS_UPDATED|'.concat(JSON.stringify(jsonCards)));
+     }
     
 }
 
@@ -263,7 +275,6 @@ function returnCards(sessionID, move){
    clientLog(sessionID+ "choose to "+ move);
     var jsonCards = null;
     if(move == "HIT"){
-
         // get Improved cards
         var hands = prompt("This prompt allows you to rig cards\n"
             +"set card number ( 0->5)"
@@ -304,13 +315,17 @@ function getCard(){
 * Send cards back to server
 */
 function sendCards(){
+        window.focus();
         var eles = document.forms["playerHandCards"].getElementsByTagName("input");
         document.getElementById('done').disabled = true; 
         var cards = " ";
         var sessionID =  document.getElementById("yourHandText").innerHTML.match(/\(.+?\)/g);
+        console.log(document.getElementById("rigged"));
+        var rigged = document.getElementById("rigged");
+        clientLog("Game is" +rigged);
+        console.log("Game is "+rigged);
 
-        if(rigged){
-            clientLog("rigged" + rigged);
+        if(rigged !=  null){
             var hands= prompt("This prompt allows you to rig cards\n"
             +"set card number ( 0->5)"
             +"Set rank: using its rank-?:  where ? is numerical number or, a, j,q,k (ace, jack, queen, king)\n"
@@ -343,6 +358,9 @@ function start() {
     ws.send('START_GAME');
     enableStart(false);
     removeCards();
+    var r =     document.getElementById('rigged');
+    document.getElementById("connect-container").removeChild(r);
+
 }
 
 /**

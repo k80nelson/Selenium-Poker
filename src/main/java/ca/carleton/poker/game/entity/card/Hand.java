@@ -144,24 +144,19 @@ public class Hand {
 	 *  - a poker hand that is ranked highest, A, K, Q, J, 10 of hearts
 	 */
 	public boolean isRFlush(){
-		boolean result = true;
+		boolean result = false;
 		List<Card> cards = sortSuit();// sorts all cards 
-		for(int i =0; i < cards.size(); i++){
-			if(cards.get(i).getSuit() != Suit.HEARTS){
-				result = false;
-				break;
-			}
-			
-		}
+		boolean flush = this.isFlush() && cards.get(0).getSuit() == Suit.HEARTS; 
+		
 		cards = sortRank();// sorts all cards  lowest to highest
-		if (cards.get(0).getRank()!= Rank.TEN 
-				&& cards.get(1).getRank() != Rank.JACK 
-				&& cards.get(2).getRank() != Rank.QUEEN 
-				&& cards.get(3).getRank()!= Rank.KING  
-				&& cards.get(4).getRank()!= Rank.ACE_HIGH)  
-			result = false;
+		if (cards.get(0).getRank()== Rank.TEN 
+				&& cards.get(1).getRank() == Rank.JACK 
+				&& cards.get(2).getRank() == Rank.QUEEN 
+				&& cards.get(3).getRank()== Rank.KING  
+				&& cards.get(4).getRank()== Rank.ACE_HIGH)  
+			return true && flush;
 	
-		return result;
+		return false;
 	}
 	
 

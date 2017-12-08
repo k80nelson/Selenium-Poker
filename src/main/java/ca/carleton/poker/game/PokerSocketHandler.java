@@ -160,7 +160,7 @@ public class PokerSocketHandler extends TextWebSocketHandler {
                 LOG.info("Starting the game.");
                 this.broadCastMessageFromServer(message(Message.STARTING_GAME).build());
                // Send each real player their cards.
-                this.resetGame();
+                this.game.resetRound();
                 this.game.initiateHands();
                 this.updateCards();
                 // AI Plays first
@@ -169,9 +169,14 @@ public class PokerSocketHandler extends TextWebSocketHandler {
                 break;
             case "START_RIGGED":
                 LOG.info("Starting the rigged game.");
-             //   this.resetGame();
-                this.broadCastMessageFromServer(message(Message.STARTING_RIGGED_GAME).build());
+                this.game.resetRound();
+                this.broadCastMessageFromServer(message(Message.STARTING_GAME).build());
+                this.game.initiateHands();
                 this.updateCards();
+              //  Thread.sleep(1000);
+                Player admin = this.game.getAdmin();
+                this.sendMessage(admin.getSession(), message(Message.STARTING_RIGGED_GAME).build());
+               
                 break;
             case "GAME_STAY":
             	this.game.setWaitingOnReal(false);
@@ -223,7 +228,7 @@ public class PokerSocketHandler extends TextWebSocketHandler {
 
                  this.game.performOption(player, option, cards);
                  // Send to other than the player what their move was
-             
+                 
                  this.broadCastMessageFromServer(message(Message.MOVE_MADE, player.getuid(), player.getLastOption()).build());
                  this.updateCards(); 
                  if(this.game.isResolved()){
@@ -280,9 +285,9 @@ public class PokerSocketHandler extends TextWebSocketHandler {
 	            	if(id.contains("("))
 	            		id = id.substring(id.indexOf("(")+1, id.indexOf(")"));
 	            	String[] newCards =  obj.get("hands").toString().split(",");
-	            	System.out.println(newCards.length +" " + id);
 	            	player = this.game.getPlayerFor(id);
 	            	player.setLastOption(GameOption.HIT);
+	            	
 		            for(int j = 0; j< newCards.length; j++){
 			            String[] index = newCards[j].split(":");
 			            player.getHand().getCards().get(Integer.parseInt(index[0].trim())).setCard(index[1].trim(), false); // This is needed for testing
@@ -328,8 +333,9 @@ private void processAI() {
           } else if(next.getLastOption()== GameOption.HIT) {
               this.updateCards();
               this.broadCastMessageFromServer(message(Message.MOVE_MADE,
-            		  next.getuid(),
-                      GameOption.HIT).build());
+              		  next.getuid(),
+                        GameOption.HIT).build());
+        
           }
           processAI();
       }  
@@ -350,13 +356,14 @@ private void rigAiInput() {
   	  this.game.doAITurn(next, true);
         if (next.getLastOption() == GameOption.STAY) {
             LOG.info("Skipping {}'s turn because they STAYED.",  next.getuid());
-            this.broadCastMessageFromServer(message(Message.MOVE_MADE,
+            this.broadCastMessageFromServer(message(Message.RIG_AI,
           		  next.getuid(),
-                    GameOption.STAY).build());
+                   GameOption.STAY).build());
         } else if(next.getLastOption()== GameOption.HIT) {
-            this.broadCastMessageFromServer(message(Message.MOVE_MADE,
+            Player admin = this.game.getAdmin();
+            this.sendMessage(admin.getSession(), message(Message.RIG_AI,
           		  next.getuid(),
-                    GameOption.HIT).build());
+                  GameOption.HIT).build());
         }
         //rigAiInput();
     }  
@@ -378,7 +385,7 @@ private void processPlayers() {
 }
  
 
-    private void closeBecauseAdminLeft() {
+ private void closeBecauseAdminLeft() {
         LOG.info("Disabling all accounts because the admin left.");
         this.broadCastMessageFromServer(message(Message.ALL_QUIT).build());
         this.game.getConnectedPlayerSessions()
