@@ -114,12 +114,12 @@ Rigging the Game
           * clubs
       -> each card must be separated by comma
   4. Once all the players have a card 
-     -> AI play first, if the AI chooses to hit the admin will be prompted to set which cards to improve
-     -> Players have a choose to stay or hit, if they hit, they will be prompted to set which cards to improve
-     -> Improving the cards
-        * to improve the cards type (index:rank-? suit, )
-        * index is the position of the card you want to replace (All cards are sorted by rank)
-        * rank and suit are the same as setting the hand;
-        * each card must be separated by a comma
+      -> AI play first, if the AI chooses to hit the admin will be prompted to set which cards to improve
+      -> Players have a choose to stay or hit, if they hit, they will be prompted to set which cards to improve
+      -> Improving the cards
+         * to improve the cards type (index:rank-? suit, )
+         * index is the position of the card you want to replace (All cards are sorted by rank)
+         * rank and suit are the same as setting the hand;
+         * each card must be separated by a comma
   5. once all players have played the results will be displayed
-  
+
