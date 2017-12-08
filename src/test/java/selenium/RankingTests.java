@@ -29,346 +29,6 @@ public class RankingTests extends AbstractSeleniumTest {
     @Autowired
     private IndexPage indexPage;
     
-
-
-    /*@Test
-    public void Rig1(){
-    	 This had is rigged with :
-    	 * 	- O1: Royal Flush
-    	 *  - O2: two pair
-    	 *  - 03: straight
-    	 *  - p: HighCard
-    	 
-    	this.indexPage.connect.click();
-    	this.waitForDisplayed(this.indexPage.open).isEnabled();
-    	this.indexPage.open.click(); // defaults is 1 player
-    	
-    	waitFor(5);
-    	assertThat(this.indexPage.hasText("The game is now ready to begin"), is(true));
-    	*//******************* set first  AI Player with a flush *******************//*
-    	  Hand h = new Hand();
-    	  Card c1 = new Card(Rank.TEN, Suit.HEARTS, false);
-    	  Card c2 = new Card(Rank.JACK, Suit.HEARTS, false);
-    	  Card c3 = new Card(Rank.QUEEN, Suit.HEARTS, false);
-    	  Card c4 = new Card(Rank.KING, Suit.HEARTS, false);
-    	  Card c5 = new Card(Rank.ACE_HIGH, Suit.HEARTS, false);
-    	  h.addCard(c1);
-    	  h.addCard(c2);
-    	  h.addCard(c3);
-    	  h.addCard(c4);
-    	  h.addCard(c5);
-    	//Set card
-    	  String[] cards = {c1.toFormHTML(), c2.toFormHTML(), c3.toFormHTML(), c4.toFormHTML(), c5.toFormHTML()};
-    	  this.indexPage.setInnerHTML(cards, this.indexPage.otherPlayer1Cards);
-    	  waitFor(5);
-    	  
-    	    *//******************* set second  AI Player with a 2  pair *******************//*
-    	  c1 = new Card(Rank.EIGHT, Suit.SPADES, false);
-    	  c2 = new Card(Rank.EIGHT, Suit.CLUBS, false);
-    	  c3 = new Card(Rank.SIX, Suit.DIAMONDS, false);
-    	  c4 = new Card(Rank.SIX, Suit.HEARTS, false);
-    	  c5 = new Card(Rank.TWO, Suit.SPADES, false);
-    	  h.addCard(c1);
-    	  h.addCard(c2);
-    	  h.addCard(c3);
-    	  h.addCard(c4);
-    	  h.addCard(c5);
-    
-    	  String[] cards1 = {c1.toFormHTML(), c2.toFormHTML(), c3.toFormHTML(), c4.toFormHTML(), c5.toFormHTML()};
-    	   //Set cards
-    	  this.indexPage.setInnerHTML(cards1, this.indexPage.otherPlayer2Cards);
-    	  waitFor(5);
-    	  *//******************* set third  AI Player with a straight *******************//*
-    	  
-    	  c1 = new Card(Rank.FIVE, Suit.SPADES, false);
-    	  c2 = new Card(Rank.SIX, Suit.CLUBS, false);
-    	  c3 = new Card(Rank.SEVEN, Suit.DIAMONDS, false);
-    	  c4 = new Card(Rank.EIGHT, Suit.HEARTS, false);
-    	  c5 = new Card(Rank.NINE, Suit.SPADES, false);
-    	  h.addCard(c1);
-    	  h.addCard(c2);
-    	  h.addCard(c3);
-    	  h.addCard(c4);
-    	  h.addCard(c5);
-    
-    	  String[] cards2 = {c1.toFormHTML(), c2.toFormHTML(), c3.toFormHTML(), c4.toFormHTML(), c5.toFormHTML()};
-    	   //Set cards
-    	  this.indexPage.setInnerHTML(cards2, this.indexPage.otherPlayer3Cards);
-    	  waitFor(5);
-    	 
-    	  *//******************* set Player with a High Card *******************//*
-    	
-    	  c1 = new Card(Rank.JACK, Suit.DIAMONDS, false);
-    	  c2 = new Card(Rank.FOUR, Suit.CLUBS, false);
-    	  c3 = new Card(Rank.SIX, Suit.CLUBS, false);
-    	  c4 = new Card(Rank.NINE, Suit.SPADES, false);
-    	  c5 = new Card(Rank.ACE_HIGH, Suit.DIAMONDS, false);
-    	  h.addCard(c1);
-    	  h.addCard(c2);
-    	  h.addCard(c3);
-    	  h.addCard(c4);
-    	  h.addCard(c5);
-   
-    	  String[] cards3 ={c1.toFormHTML(), c2.toFormHTML(), c3.toFormHTML(), c4.toFormHTML(), c5.toFormHTML()};
-    	   //Set cards
-    	  this.indexPage.setInnerHTML(cards3, this.indexPage.playerHandCards);   	  
-    	  waitFor(5);
-    	  *//****************************************************************//*
-    	 
-    	
-    	  this.indexPage.updateCards();
-    	  this.indexPage.start.click();
-    	  
-    	 
-    	  // Check Rankings
-    	  this.waitForDisplayed(indexPage.stay).isEnabled();
-    	  this.indexPage.stay.click();
-    	  this.waitForDisplayed(indexPage.start).isEnabled();
-    	  String playerID = this.indexPage.getPlayerUID();
-    	  String[] ids = this.indexPage.getUsetTexts();
-   
-    	  assertThat(ids[0], is("  AI-1243513 ~ Value: ROYAL_FLUSH"));
-    	  assertThat(ids[1], is("  AI-1243514 ~ Value: TWO_PAIR"));
-    	  assertThat(ids[2], is("  AI-1243515 ~ Value: STRAIGHT"));
-    	  assertThat(ids[3], is("  "+ playerID + (" ~ Value: HIGH_CARD")));
-    	
-    	   
-    	  assertThat(this.indexPage.hasText("  won with a score of  ROYAL_FLUSH"), is(true));
-    	  assertThat(this.indexPage.hasText("  lost with a score of  TWO_PAIR"), is(true));
-    	  assertThat(this.indexPage.hasText("  lost with a score of  STRAIGHT"), is(true));
-    	  assertThat(this.indexPage.hasText("  lost with a score of  HIGH_CARD"), is(true));
-      	
-        //disconnect
-        this.indexPage.disconnect.click();        
-    }
- 
-    
-    @Test
-    public void Rig2(){
-    	 This had is rigged with :
-    	 * 	- O1: Four of a Kind
-    	 *  - O2: Full House
-    	 *  - 03: One pair
-    	 *  - p:  flush
-    	 
-    	this.indexPage.connect.click();
-    	this.waitForDisplayed(this.indexPage.open).isEnabled();
-    	this.indexPage.open.click(); // defaults is 1 player
-    	
-    	waitFor(5);
-    	assertThat(this.indexPage.hasText("The game is now ready to begin"), is(true));
-    	*//******************* set first  AI Player with a Four of a kind *******************//*
-    	  Hand h = new Hand();
-    	  Card c1 = new Card(Rank.TEN, Suit.HEARTS, false);
-    	  Card c2 = new Card(Rank.TEN, Suit.CLUBS, false);
-    	  Card c3 = new Card(Rank.TEN, Suit.DIAMONDS, false);
-    	  Card c4 = new Card(Rank.TEN, Suit.SPADES, false);
-    	  Card c5 = new Card(Rank.EIGHT, Suit.HEARTS, false);
-    	  h.addCard(c1);
-    	  h.addCard(c2);
-    	  h.addCard(c3);
-    	  h.addCard(c4);
-    	  h.addCard(c5);
-    	//Set card
-    	  String[] cards = {c1.toFormHTML(), c2.toFormHTML(), c3.toFormHTML(), c4.toFormHTML(), c5.toFormHTML()};
-    	  this.indexPage.setInnerHTML(cards, this.indexPage.otherPlayer1Cards);
-    	  waitFor(5);
-    	  
-    	    *//******************* set second  AI Player with a full house *******************//*
-    	  c1 = new Card(Rank.EIGHT, Suit.SPADES, false);
-    	  c2 = new Card(Rank.EIGHT, Suit.CLUBS, false);
-    	  c3 = new Card(Rank.EIGHT, Suit.DIAMONDS, false);
-    	  c4 = new Card(Rank.SIX, Suit.HEARTS, false);
-    	  c5 = new Card(Rank.SIX, Suit.SPADES, false);
-    	  h.addCard(c1);
-    	  h.addCard(c2);
-    	  h.addCard(c3);
-    	  h.addCard(c4);
-    	  h.addCard(c5);
-    
-    	  String[] cards1 = {c1.toFormHTML(), c2.toFormHTML(), c3.toFormHTML(), c4.toFormHTML(), c5.toFormHTML()};
-    	   //Set cards
-    	  this.indexPage.setInnerHTML(cards1, this.indexPage.otherPlayer2Cards);
-    	  waitFor(5);
-    	  *//******************* set third  AI Player with a pair *******************//*
-    	  
-    	  c1 = new Card(Rank.JACK, Suit.SPADES, false);
-    	  c2 = new Card(Rank.JACK, Suit.CLUBS, false);
-    	  c3 = new Card(Rank.THREE, Suit.DIAMONDS, false);
-    	  c4 = new Card(Rank.FIVE, Suit.HEARTS, false);
-    	  c5 = new Card(Rank.QUEEN, Suit.CLUBS, false);
-    	  h.addCard(c1);
-    	  h.addCard(c2);
-    	  h.addCard(c3);
-    	  h.addCard(c4);
-    	  h.addCard(c5);
-    
-    	  String[] cards2 = {c1.toFormHTML(), c2.toFormHTML(), c3.toFormHTML(), c4.toFormHTML(), c5.toFormHTML()};
-    	   //Set cards
-    	  this.indexPage.setInnerHTML(cards2, this.indexPage.otherPlayer3Cards);
-    	  waitFor(5);
-    	 
-    	  *//******************* set Player with a flush *******************//*
-    	
-    	  c1 = new Card(Rank.TWO, Suit.CLUBS, false);
-    	  c2 = new Card(Rank.FOUR, Suit.CLUBS, false);
-    	  c3 = new Card(Rank.NINE, Suit.CLUBS, false);
-    	  c4 = new Card(Rank.THREE, Suit.CLUBS, false);
-    	  c5 = new Card(Rank.ACE_HIGH, Suit.CLUBS, false);
-    	  h.addCard(c1);
-    	  h.addCard(c2);
-    	  h.addCard(c3);
-    	  h.addCard(c4);
-    	  h.addCard(c5);
-   
-    	  String[] cards3 ={c1.toFormHTML(), c2.toFormHTML(), c3.toFormHTML(), c4.toFormHTML(), c5.toFormHTML()};
-    	   //Set cards
-    	  this.indexPage.setInnerHTML(cards3, this.indexPage.playerHandCards);   	  
-    	  waitFor(5);
-    	  *//****************************************************************//*
-    	 
-    	
-    	  this.indexPage.updateCards();
-    	  this.indexPage.start.click();
-    	  
-    	 // Check Rankings
-    	  this.waitForDisplayed(indexPage.stay).isEnabled();
-    	  this.indexPage.stay.click();
-    	  this.waitForDisplayed(indexPage.start).isEnabled();
-    	  
-    	  String playerID = this.indexPage.getPlayerUID();
-    	  String[] ids = this.indexPage.getUsetTexts();
-   
-    	  assertThat(ids[0], is("  AI-1243516 ~ Value: FOUR_OF_A_KIND"));
-    	  assertThat(ids[1], is("  AI-1243517 ~ Value: FULL_HOUSE"));
-    	  assertThat(ids[2], is("  AI-1243518 ~ Value: ONE_PAIR"));
-    	  assertThat(ids[3], is("  "+ playerID + (" ~ Value: FLUSH")));
-    	  
-    	  
-    	  assertThat(this.indexPage.hasText("AI-1243513 won with a score of FOUR_OF_A_KIND"), is(true));
-    	  assertThat(this.indexPage.hasText("AI-1243514 lost with a score of FULL_HOUSE"), is(true));
-    	  assertThat(this.indexPage.hasText("AI-1243515 lost with a score of ONE_PAIR"), is(true));
-    	  assertThat(this.indexPage.hasText(playerID +"lost with a score of FLUSH"), is(true));
-      	
-        //disconnect
-        this.indexPage.disconnect.click();        
-    }
-    
-    
-    
-    @Test
-    public void Rig3(){
-    	 This had is rigged with :
-    	 * 	- O1: straight flush
-    	 *  - O2: 3 of a kind
-    	 *  - 03: One pair
-    	 *  - p:  high card
-    	 
-    	this.indexPage.connect.click();
-    	this.waitForDisplayed(this.indexPage.open).isEnabled();
-    	this.indexPage.open.click(); // defaults is 1 player
-    	
-    	waitFor(5);
-    	assertThat(this.indexPage.hasText("The game is now ready to begin"), is(true));
-    	*//******************* set first  AI Player with a straight flush *******************//*
-    	  Hand h = new Hand();
-    	  Card c1 = new Card(Rank.THREE, Suit.CLUBS, false);
-    	  Card c2 = new Card(Rank.FOUR, Suit.CLUBS, false);
-    	  Card c3 = new Card(Rank.FIVE, Suit.CLUBS, false);
-    	  Card c4 = new Card(Rank.SIX, Suit.CLUBS, false);
-    	  Card c5 = new Card(Rank.SEVEN, Suit.CLUBS, false);
-    	  h.addCard(c1);
-    	  h.addCard(c2);
-    	  h.addCard(c3);
-    	  h.addCard(c4);
-    	  h.addCard(c5);
-    	//Set card
-    	  String[] cards = {c1.toFormHTML(), c2.toFormHTML(), c3.toFormHTML(), c4.toFormHTML(), c5.toFormHTML()};
-    	  this.indexPage.setInnerHTML(cards, this.indexPage.otherPlayer1Cards);
-    	  waitFor(5);
-    	  
-    	    *//******************* set second  AI Player with a 3  of a kind *******************//*
-    	  c1 = new Card(Rank.EIGHT, Suit.SPADES, false);
-    	  c2 = new Card(Rank.EIGHT, Suit.CLUBS, false);
-    	  c3 = new Card(Rank.EIGHT, Suit.DIAMONDS, false);
-    	  c4 = new Card(Rank.NINE, Suit.HEARTS, false);
-    	  c5 = new Card(Rank.ACE_LOW, Suit.SPADES, false);
-    	  h.addCard(c1);
-    	  h.addCard(c2);
-    	  h.addCard(c3);
-    	  h.addCard(c4);
-    	  h.addCard(c5);
-    
-    	  String[] cards1 = {c1.toFormHTML(), c2.toFormHTML(), c3.toFormHTML(), c4.toFormHTML(), c5.toFormHTML()};
-    	   //Set cards
-    	  this.indexPage.setInnerHTML(cards1, this.indexPage.otherPlayer2Cards);
-    	  waitFor(5);
-    	  *//******************* set third  AI Player with a pair *******************//*
-    	  
-    	  c1 = new Card(Rank.TWO, Suit.SPADES, false);
-    	  c2 = new Card(Rank.TWO, Suit.DIAMONDS, false);
-    	  c3 = new Card(Rank.SIX, Suit.DIAMONDS, false);
-    	  c4 = new Card(Rank.NINE, Suit.HEARTS, false);
-    	  c5 = new Card(Rank.QUEEN, Suit.SPADES, false);
-    	  h.addCard(c1);
-    	  h.addCard(c2);
-    	  h.addCard(c3);
-    	  h.addCard(c4);
-    	  h.addCard(c5);
-    
-    	  String[] cards2 = {c1.toFormHTML(), c2.toFormHTML(), c3.toFormHTML(), c4.toFormHTML(), c5.toFormHTML()};
-    	   //Set cards
-    	  this.indexPage.setInnerHTML(cards2, this.indexPage.otherPlayer3Cards);
-    	  waitFor(5);
-    	 
-    	  *//******************* set Player with a high card *******************//*
-    	
-    	  c1 = new Card(Rank.TWO, Suit.HEARTS, false);
-    	  c2 = new Card(Rank.FOUR, Suit.DIAMONDS, false);
-    	  c3 = new Card(Rank.NINE, Suit.SPADES, false);
-    	  c4 = new Card(Rank.THREE, Suit.SPADES, false);
-    	  c5 = new Card(Rank.QUEEN, Suit.DIAMONDS, false);
-    	  h.addCard(c1);
-    	  h.addCard(c2);
-    	  h.addCard(c3);
-    	  h.addCard(c4);
-    	  h.addCard(c5);
-   
-    	  String[] cards3 ={c1.toFormHTML(), c2.toFormHTML(), c3.toFormHTML(), c4.toFormHTML(), c5.toFormHTML()};
-    	   //Set cards
-    	  this.indexPage.setInnerHTML(cards3, this.indexPage.playerHandCards);   	  
-    	  waitFor(5);
-    	  *//****************************************************************//*
-    	 
-    	
-    	  this.indexPage.updateCards();
-    	  this.indexPage.start.click();
-    	  
-    	  
-    	// Check Rankings
-    	  this.waitForDisplayed(indexPage.stay).isEnabled();
-    	  this.indexPage.stay.click();
-    	  this.waitForDisplayed(indexPage.start).isEnabled();
-    	 
-    	  String playerID = this.indexPage.getPlayerUID();
-    	  String[] ids = this.indexPage.getUsetTexts();
-   
-    	  assertThat(ids[0], is("  AI-1243519 ~ Value: STRAIGHT_FLUSH"));
-    	  assertThat(ids[1], is("  AI-1243520 ~ Value: THREE_OF_A_KIND"));
-    	  assertThat(ids[2], is("  AI-1243521 ~ Value: ONE_PAIR"));
-    	  assertThat(ids[3], is("  "+ playerID + (" ~ Value: HIGH_CARD")));
-    	  
-    	  assertThat(this.indexPage.hasText("AI-1243513 won with a score of STRAIGHT_FLUSH"), is(true));
-    	  assertThat(this.indexPage.hasText("AI-1243514 lost with a score of THREE_OF_A_KIND"), is(true));
-    	  assertThat(this.indexPage.hasText("AI-1243515 lost with a score of ONE_PAIR"), is(true));
-    	  assertThat(this.indexPage.hasText(playerID +"lost with a score of HIGH_CARD !"), is(true));
-    	  
-      	
-        //disconnect
-        this.indexPage.disconnect.click();        
-    }
- 
- */
     
     @Test
     public void Rig1(){
@@ -389,7 +49,7 @@ public class RankingTests extends AbstractSeleniumTest {
     	// Player  highcard 
     	this.waitForAlert();
     	Alert a = this.webDriver.switchTo().alert();
-    	a.sendKeys("rank-3 spades, rank-9 spades, rank-4 clubs, rank-k clubs, rank-2 hearts");
+    	a.sendKeys("rank-2 hearts, rank-3 spades, rank-4 clubs, rank-9 spades, rank-k clubs");
     	a.accept();
     	
     	// other 1 Royal Flush
@@ -398,10 +58,9 @@ public class RankingTests extends AbstractSeleniumTest {
     	a.accept();
     	
     	// other 2 Two Pair
-    
     	this.waitForAlert();
     	a =this.webDriver.switchTo().alert();
-    	a.sendKeys("rank-6 hearts, rank-6 clubs, rank-q spades, rank-k diams, rank-2 clubs");
+    	a.sendKeys("rank-2 clubs, rank-6 hearts, rank-6 clubs, rank-q spades, rank-q diams");
     	a.accept();
     	
     	
@@ -410,14 +69,11 @@ public class RankingTests extends AbstractSeleniumTest {
     	a = this.webDriver.switchTo().alert();
     	a.sendKeys("rank-2 diams, rank-3 diams, rank-4 diams, rank-5 diams, rank-6 diams");
     	a.accept();
-    	
- 
-  
+     
 
     	assertThat(this.indexPage.hasText("Setting all cards"), is(true));     
     	/****************************** check user options ************************/
     	
-    
     	String[] ids = this.indexPage.getUsetTexts();
     	// user 1 will stay 
     	String result = ids[0] + "choose to STAY";
@@ -428,7 +84,7 @@ public class RankingTests extends AbstractSeleniumTest {
     	//Handle prompt to improve user 2 
     	this.waitForAlert();
     	a = this.webDriver.switchTo().alert();
-    	a.sendKeys("2:rank-5 spades, 3:rank-8 spades,  4:rank-2 clubs");
+    	a.sendKeys("0:rank-a clubs");
     	a.accept();
     	
     	this.delay(5);
@@ -481,6 +137,219 @@ public class RankingTests extends AbstractSeleniumTest {
     }
 
 
+    @Test
+    public void Rig2(){
+    	/*This had is rigged with :
+       	 * 	- O1: Four of a Kind
+       	 *  - O2: Full House
+       	 *  - 03: One pair
+       	 *  - p:  flush
+       	 */
+    	
+    	this.indexPage.connect.click();
+    	this.waitForDisplayed(this.indexPage.open).isEnabled();
+    	this.indexPage.open.click(); // defaults is 1 player
+    	this.waitForDisplayed(this.indexPage.rig).isEnabled();
+    	this.indexPage.rig.click();
+    	
+    	/************************* Set inital hands ************************/
+    	// Player  flush 
+    	this.waitForAlert();
+    	Alert a = this.webDriver.switchTo().alert();
+    	a.sendKeys("rank-2 hearts, rank-4 hearts, rank-7 hearts, rank-9 hearts, rank-k hearts");
+    	a.accept();
+    	
+    	// other 1 Four of a kind
+    	a = this.webDriver.switchTo().alert();
+    	a.sendKeys("rank-10 hearts, rank-10 clubs, rank-10 diams, rank-10 spades, rank-a hearts");
+    	a.accept();
+    	
+    	// other 2 one full house
+    	this.waitForAlert();
+    	a =this.webDriver.switchTo().alert();
+    	a.sendKeys("rank-j clubs, rank-j spades, rank-3 clubs, rank-3 spades, rank-3 diams");
+    	a.accept();
+    	
+    	
+    	// other 3 one Pair
+    	this.waitForAlert();
+    	a = this.webDriver.switchTo().alert();
+    	a.sendKeys("rank-2 clubs, rank-2 spades, rank-6 clubs, rank-q spades, rank-q diams");
+    	a.accept();
+     
+
+    	assertThat(this.indexPage.hasText("Setting all cards"), is(true)); 
+    	this.delay(5);
+    	/****************************** check user options ************************/
+    	
+    	//Handle prompt to improve user 3
+    	this.waitForAlert();
+    	a = this.webDriver.switchTo().alert();
+    	a.sendKeys("2:rank-a clubs,3:rank-q spades,4:rank-5 spades");
+    	a.accept();
+    	
+    	
+    	String[] ids = this.indexPage.getUsetTexts();
+    	// user 1 will stay 
+    	String result = ids[0] + "choose to STAY";
+    	System.out.println(this.indexPage.hasText(result));
+    	assertThat(this.indexPage.hasText(result), is(true));
+    	
+    	//user 2 has stay
+    	this.delay(1);
+    	result = ids[1] + "choose to STAY";
+    	assertThat(this.indexPage.hasText(result), is(true));
+    	
+    	// user 3 will hit
+    	
+    	this.delay(1);
+    	result = ids[2] + "choose to HIT";
+    	assertThat(this.indexPage.hasText(result), is(true));
+    	    	
+    	// Player will stay
+    	this.delay(5);
+     	assertThat(this.waitForDisplayed(this.indexPage.stay).isEnabled(), is(true));
+    	this.indexPage.stay.click();
+
+    	assertThat(this.waitForDisplayed(this.indexPage.start).isEnabled(), is(true));
+    	/*****************  Check results ******************/
+    	// user 1 loses
+    	result = ids[0] + " won with a score of FOUR_OF_A_KIND";
+    	System.out.println(this.indexPage.hasText(result));
+    	assertThat(this.indexPage.hasText(result), is(true));
+    	
+    	//user 2 looses
+    	result = ids[1] + " lost with a score of FULL_HOUSE";
+    	assertThat(this.indexPage.hasText(result), is(true));
+    	
+    	// user 3 looses
+    	result = ids[2] + " lost with a score of ONE_PAIR";
+    	assertThat(this.indexPage.hasText(result), is(true));
+    	    	
+    	// Player looses
+    	result = ids[3] + " lost with a score of FLUSH";
+    	assertThat(this.indexPage.hasText(result), is(true));
+    
+    	
+    	this.indexPage.disconnect.click();
+    
+    }
+    
+    
+    
+    @Test
+    public void Rig3(){
+    	/* This had is rigged with :
+    	 * 	- O1: One pair
+    	 *  - O2: 3 of a kind
+    	 *  - 03: straight flush
+    	 *  - p:  high card
+       	 */
+    	this.indexPage.connect.click();
+    	this.waitForDisplayed(this.indexPage.open).isEnabled();
+    	this.indexPage.open.click(); // defaults is 1 player
+    	this.waitForDisplayed(this.indexPage.rig).isEnabled();
+    	this.indexPage.rig.click();
+    	
+    	/************************* Set inital hands ************************/
+    	// Player  High Card 
+    	this.waitForAlert();
+    	Alert a = this.webDriver.switchTo().alert();
+    	a.sendKeys("rank-2 hearts, rank-4 diams, rank-7 spades, rank-9 diams, rank-k hearts");
+    	a.accept();
+    	
+    	// other 1 one pair
+    	a = this.webDriver.switchTo().alert();
+    	a.sendKeys("rank-10 hearts, rank-10 clubs, rank-6 diams, rank-2 spades, rank-a hearts");
+    	a.accept();
+    	
+    	// other 2, 3 of a kind
+    	this.waitForAlert();
+    	a =this.webDriver.switchTo().alert();
+    	a.sendKeys("rank-j clubs, rank-j spades, rank-j spades, rank-3 diams, rank-8 spades");
+    	a.accept();
+    	
+    	
+    	// other 3 straight flush
+    	this.waitForAlert();
+    	a = this.webDriver.switchTo().alert();
+    	a.sendKeys("rank-2 clubs, rank-3 clubs, rank-4 clubs, rank-5 clubs, rank-6 clubs");
+    	a.accept();
+     
+
+    	assertThat(this.indexPage.hasText("Setting all cards"), is(true));     
+    	/****************************** check user options ************************/
+    	
+    
+   
+    	//Handle prompt to improve user 1
+    	this.waitForAlert();
+    	a = this.webDriver.switchTo().alert();
+    	a.sendKeys("0:rank-7 clubs,1:rank-j clubs,4:rank-5 diams");
+    	a.accept();
+    	
+    	String[] ids = this.indexPage.getUsetTexts();
+    	// user 1 will hit 
+    	String result = ids[0] + "choose to HIT";
+    	System.out.println(this.indexPage.hasText(result));
+    	assertThat(this.indexPage.hasText(result), is(true));
+         
+    	
+    	//Handle prompt to improve user 2
+    	this.waitForAlert();
+    	a = this.webDriver.switchTo().alert();
+    	a.sendKeys("0:rank-4 spades,1:rank-a clubs");
+    	a.accept();
+    	
+    	//user 2 will it
+    	this.delay(5);
+    	result = ids[1] + "choose to HIT";
+    	assertThat(this.indexPage.hasText(result), is(true));
+    	
+    	// user 3 will STAY
+    	this.delay(5);
+    	result = ids[2] + "choose to STAY";
+    	assertThat(this.indexPage.hasText(result), is(true));
+    	    	
+    	// Player High Card
+    	
+    	this.delay(5);
+     	assertThat(this.waitForDisplayed(this.indexPage.hit).isEnabled(), is(true));
+    	this.indexPage.hit.click();
+    	this.indexPage.card1.click();
+    	this.indexPage.card3.click();
+    	this.indexPage.done.click();
+    	
+    	this.waitForAlert();
+    	a = this.webDriver.switchTo().alert();
+    	a.sendKeys("0:rank-4 spades, 1:rank-7 clubs, 2:rank-a clubs,3:rank-q spades,4:rank-5 spades");
+    	a.accept();
+
+    	this.delay(5);
+    	assertThat(this.waitForDisplayed(this.indexPage.start).isEnabled(), is(true));
+    	/*****************  Check results ******************/
+    	// user 1 loses
+    	result = ids[0] + " lost with a score of ONE_PAIR";
+    	System.out.println(this.indexPage.hasText(result));
+    	assertThat(this.indexPage.hasText(result), is(true));
+    	
+    	//user 2 looses
+    	result = ids[1] + " lost with a score of THREE_OF_A_KIND";
+    	assertThat(this.indexPage.hasText(result), is(true));
+    	
+    	// user 3 looses
+    	result = ids[2] + " won with a score of STRAIGHT_FLUSH";
+    	assertThat(this.indexPage.hasText(result), is(true));
+    	    	
+    	// Player looses
+    	result = ids[3] + " lost with a score of HIGH_CARD";
+    	assertThat(this.indexPage.hasText(result), is(true));
+    
+    	this.delay(5);
+    	
+    	this.indexPage.disconnect.click();
+    
+    }
 
 
 

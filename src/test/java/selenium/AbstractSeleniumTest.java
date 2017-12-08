@@ -72,17 +72,17 @@ public abstract class AbstractSeleniumTest {
      * @return the element.
      */
     public WebElement waitForDisplayed(final String id) {
-        return new WebDriverWait(this.webDriver, 60).until(visibilityOf(this.webDriver.findElement(By.id(id))));
+        return new WebDriverWait(this.webDriver, 5).until(visibilityOf(this.webDriver.findElement(By.id(id))));
     }
 
     /**
-     * Wait for an element to become displayed (max 3 seconds).
+     * Wait for an element to become displayed (max 5 seconds).
      *
      * @param element the element
      * @return the element.
      */
     public WebElement waitForDisplayed(final WebElement element) {
-        return new WebDriverWait(this.webDriver, 60).until(visibilityOf(element));
+        return new WebDriverWait(this.webDriver, 5).until(visibilityOf(element));
     }
 
     /**
@@ -91,7 +91,7 @@ public abstract class AbstractSeleniumTest {
      * @param element the element
      */
     public void waitForHidden(final WebElement element) {
-        new WebDriverWait(this.webDriver, 60).until(not(visibilityOf(element)));
+        new WebDriverWait(this.webDriver, 5).until(not(visibilityOf(element)));
     }
     
     
@@ -102,12 +102,12 @@ public abstract class AbstractSeleniumTest {
 
 
 	public void waitForAlert() {
-		new WebDriverWait(this.webDriver,60).until(ExpectedConditions.alertIsPresent());
+		new WebDriverWait(this.webDriver,5).until(ExpectedConditions.alertIsPresent());
 
 	}
 
 	public void waitForText(String searchKey) {
-		new WebDriverWait(this.webDriver,60).until(visibilityOf(this.webDriver.findElement(By.xpath("//*[contains(text(),'" + searchKey + "')]"))));
+		new WebDriverWait(this.webDriver,5).until(visibilityOf(this.webDriver.findElement(By.xpath("//*[contains(text(),'" + searchKey + "')]"))));
 	}
 
 }
