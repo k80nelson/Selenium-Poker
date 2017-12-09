@@ -18,23 +18,6 @@ Building this project requires git (or download it manually), and maven.
   3. `mvn clean install`
   
 
-To run this project
--------------------
-
-Build the project as above to assemble the stand-alone jar.
-
-  1. `java -jar Poker-1.0-SNAPSHOT.jar`
-
-Allow the code to run until you see this message:
-  
-  `... c.c.poker.PokerApplication       : Started PokerApplication in 4.512 seconds`
-  
-After that, open a chrome browser and navigate to:
-
-  `http://localhost:8080/`
-
-
-
 IMPORTING AND RUNNING WITH ECLIPSE (Eclipse NEON)
 ----------------------
 
@@ -49,7 +32,7 @@ For the eclipse users, you can:
 Running the tests
 -----------------
 
-Tests can be found in /src/test/java/selenium and are as follows
+Tests can be found in /src/test/java/selenium, right click the pacakge and run as junit test, test are as follows
   1. Connections Based test -  tests that a user can connect to the game, open the lobby, start the game, disconnect
   2. Game test- tests that the use can all of the game options
   3. Ranking test - checking proper ranking of the possible hands: (1 human player):
