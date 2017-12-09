@@ -93,4 +93,8 @@ public class Card {
 		this.hidden = hidden;
 		System.out.println(this.toString());	
 	}
+
+	public int getValue() {
+		return this.getRank().getValue()+this.getSuit().getValue(this.getSuit()); 
+	}
 }

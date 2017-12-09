@@ -41,12 +41,13 @@ public class Strategy2Tests extends AbstractSeleniumTest {
     	
     	this.indexPage.connect.click();
     	this.waitForDisplayed(this.indexPage.open).isEnabled();
+    	this.delay(2);
     	this.indexPage.open.click(); // defaults is 1 player
     	this.waitForDisplayed(this.indexPage.rig).isEnabled();
     	this.indexPage.rig.click();
     	
     	/************************* Set inital hands ************************/
-    	// Player  two pair 
+    	// Player  straight
     	this.waitForAlert();
     	Alert a = this.webDriver.switchTo().alert();
     	a.sendKeys("rank-2 hearts, rank-2 spades, rank-4 clubs, rank-4 spades, rank-k clubs");
@@ -116,29 +117,29 @@ public class Strategy2Tests extends AbstractSeleniumTest {
      	assertThat(this.waitForDisplayed(this.indexPage.stay).isEnabled(), is(true));
     	this.indexPage.stay.click();
     	
-
-    	assertThat(this.waitForDisplayed(this.indexPage.start).isEnabled(), is(true));
-    	this.delay(10);
+    	this.waitForDisplayed(this.indexPage.start);
+    
     	/*****************  Check results ******************/
+    	delay(10);
     	// user 1 wins
-    	result = ids[0] + " lost with a score of ONE_PAIR";
-    	System.out.println(this.indexPage.hasText(result));
-    	assertThat(this.indexPage.hasText(result), is(true));
     	
+    	result = ids[0].trim() + " lost with a score of ONE_PAIR, ranked 4";
+    	assertThat(this.indexPage.hasText(result), is(true));
+    	this.delay(20);
     	//user 2 looses
-    	result = ids[1] + " lost with a score of FULL_HOUSE";
+    	result = ids[1].trim() + " lost with a score of FULL_HOUSE, ranked 1";
     	assertThat(this.indexPage.hasText(result), is(true));
-    	
+    	this.delay(20);
     
     	// user 3 looses
-    	result = ids[2] + " won with a score of FULL_HOUSE";
+    	result = ids[2].trim() + " won with a score of FULL_HOUSE, ranked 2";
     	assertThat(this.indexPage.hasText(result), is(true));
-    	    	
+    	this.delay(20);	
+    	
     	// Player looses
-    	result = ids[3] + " lost with a score of TWO_PAIR";
+    	result = ids[3].trim() + " lost with a score of TWO_PAIR, ranked 3";
     	assertThat(this.indexPage.hasText(result), is(true));
     
-    	
     	this.indexPage.disconnect.click();
     
     }
@@ -229,23 +230,25 @@ public class Strategy2Tests extends AbstractSeleniumTest {
      	assertThat(this.waitForDisplayed(this.indexPage.stay).isEnabled(), is(true));
     	this.indexPage.stay.click();
 
+    	this.delay(2);
     	assertThat(this.waitForDisplayed(this.indexPage.start).isEnabled(), is(true));
     	/*****************  Check results ******************/
+    	this.delay(5);
     	// user 1 loses
-    	result = ids[0] + " lost with a score of FULL_HOUSE";
+    	result = ids[0] + " lost with a score of FULL_HOUSE, Ranked 3";
     	System.out.println(this.indexPage.hasText(result));
     	assertThat(this.indexPage.hasText(result), is(true));
     	
     	//user 2 looses
-    	result = ids[1] + " won with a score of ROYAL_FLUSH";
+    	result = ids[1] + " won with a score of ROYAL_FLUSH, Ranked 1";
     	assertThat(this.indexPage.hasText(result), is(true));
     	
     	// user 3 looses
-    	result = ids[2] + " lost with a score of ONE_PAIR";
+    	result = ids[2] + " lost with a score of ONE_PAIR, Ranked 3";
     	assertThat(this.indexPage.hasText(result), is(true));
     	    	
     	// Player looses
-    	result = ids[3] + " lost with a score of STRAIGHT";
+    	result = ids[3] + " lost with a score of STRAIGHT, Ranked 2";
     	assertThat(this.indexPage.hasText(result), is(true));
     
     	this.delay(5);

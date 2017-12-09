@@ -120,22 +120,23 @@ public class Strategy1Tests extends AbstractSeleniumTest {
     	this.delay(5);
     	assertThat(this.waitForDisplayed(this.indexPage.start).isEnabled(), is(true));
     	/*****************  Check results ******************/
+    	this.delay(5);
     	// user 1 wins
-    	result = ids[0] + " won with a score of FLUSH";
+    	result = ids[0] + " won with a score of FLUSH, ranked 1";
     	System.out.println(this.indexPage.hasText(result));
     	assertThat(this.indexPage.hasText(result), is(true));
     	
     	//user 2 looses
-    	result = ids[1] + " lost with a score of THREE_OF_A_KIND";
+    	result = ids[1] + " lost with a score of THREE_OF_A_KIND, ranked 2";
     	assertThat(this.indexPage.hasText(result), is(true));
     	
     
     	// user 3 looses
-    	result = ids[2] + " lost with a score of ONE_PAIR";
+    	result = ids[2] + " lost with a score of ONE_PAIR, ranked 3";
     	assertThat(this.indexPage.hasText(result), is(true));
     	    	
     	// Player looses
-    	result = ids[3] + " lost with a score of HIGH_CARD";
+    	result = ids[3] + " lost with a score of HIGH_CARD, ranked 4";
     	assertThat(this.indexPage.hasText(result), is(true));
     
     	
@@ -160,6 +161,7 @@ public class Strategy1Tests extends AbstractSeleniumTest {
     	this.indexPage.rig.click();
     	
     	/************************* Set inital hands ************************/
+    	
     	// Player  1 pair
     	this.waitForAlert();
     	Alert a = this.webDriver.switchTo().alert();
@@ -232,23 +234,25 @@ public class Strategy1Tests extends AbstractSeleniumTest {
      	assertThat(this.waitForDisplayed(this.indexPage.stay).isEnabled(), is(true));
     	this.indexPage.stay.click();
 
+    	this.delay(2);
     	assertThat(this.waitForDisplayed(this.indexPage.start).isEnabled(), is(true));
     	/*****************  Check results ******************/
+    	this.delay(5);
     	// user 1 loses
-    	result = ids[0] + " lost with a score of FULL_HOUSE";
+    	result = ids[0] + " lost with a score of FULL_HOUSE, ranked 2";
     	System.out.println(this.indexPage.hasText(result));
     	assertThat(this.indexPage.hasText(result), is(true));
     	
     	//user 2 looses
-    	result = ids[1] + " lost with a score of TWO_PAIR";
+    	result = ids[1] + " lost with a score of TWO_PAIR, ranked 3";
     	assertThat(this.indexPage.hasText(result), is(true));
     	
     	// user 3 looses
-    	result = ids[2] + " won with a score of FULL_HOUSE";
+    	result = ids[2] + " won with a score of FULL_HOUSE, ranked 1";
     	assertThat(this.indexPage.hasText(result), is(true));
     	    	
     	// Player looses
-    	result = ids[3] + " lost with a score of ONE_PAIR";
+    	result = ids[3] + " lost with a score of ONE_PAIR, ranked 4";
     	assertThat(this.indexPage.hasText(result), is(true));
     
     	

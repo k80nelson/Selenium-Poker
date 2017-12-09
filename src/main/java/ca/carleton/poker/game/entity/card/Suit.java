@@ -43,5 +43,20 @@ public enum Suit {
 			
 		}
 	}
+	
+	public int getValue(Suit r){
+		switch(r){
+			case DIAMONDS:   
+				return 0;
+			case CLUBS:
+				return 13;
+			case HEARTS:
+				return 26;
+			case SPADES:
+				return 39;
+			default:
+				return -1;
+		}	
+	}
     
 }

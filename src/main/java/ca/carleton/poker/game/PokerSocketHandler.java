@@ -4,6 +4,7 @@ import ca.carleton.poker.game.Player.AIPlayer;
 import ca.carleton.poker.game.Player.Player;
 import ca.carleton.poker.game.Player.RealPlayer;
 import ca.carleton.poker.game.entity.card.Card;
+import ca.carleton.poker.game.entity.card.HandStatus;
 import ca.carleton.poker.game.message.MessageUtil;
 import ca.carleton.poker.session.SessionHandler;
 import ca.carleton.poker.strategy.AIService;
@@ -232,7 +233,6 @@ public class PokerSocketHandler extends TextWebSocketHandler {
                  this.broadCastMessageFromServer(message(Message.MOVE_MADE, player.getuid(), player.getLastOption()).build());
                  this.updateCards(); 
                  if(this.game.isResolved()){
-                   	this.game.resolveRound();
                    	this.sendResults();
                    	this.resetGame();
                    }else{
@@ -263,7 +263,6 @@ public class PokerSocketHandler extends TextWebSocketHandler {
             	this.broadCastMessageFromServer(message(Message.RIG_READY).build());
             	Thread.sleep(1000);
             	if(this.game.isResolved()){
-                  	this.game.resolveRound();
                   	this.sendResults();
                   	this.resetGame();
                   }else{
@@ -300,7 +299,6 @@ public class PokerSocketHandler extends TextWebSocketHandler {
 	            this.updateCards();
 	            Thread.sleep(1000);
 	            if(this.game.isResolved()){
-                  	this.game.resolveRound();
                   	this.sendResults();
                   	this.resetGame();
                   }else{
@@ -366,7 +364,6 @@ private void rigAiInput() {
           		  next.getuid(),
                   GameOption.HIT).build());
         }
-        //rigAiInput();
     }  
 }
 private void processPlayers() {
@@ -413,10 +410,14 @@ private void processPlayers() {
     private void sendResults() {
         // Send cards again but show them all just in case.
     	LOG.info("results");
+    	
+      	List<Player> order = this.game.resolveRound();
         for (final Player player : this.game.getConnectedPlayers()) {
             this.game.revealCards(player);
         }
         this.updateCards();
+        
+        
         // Set Hand Values
         for(Player p: this.game.getConnectedRealPlayers()){
         	this.broadCastMessageFromServer(message(Message.PLAYER_VALUE,
@@ -429,23 +430,27 @@ private void processPlayers() {
                     this.game.getConnectedAIPlayers().get(i).getHand().getPokerValue().toString()).build());
         }
        
-        for (final Player result : this.game.getConnectedPlayers()) {
-           switch (result.getHand().getHandStatus()) {
-               
-                case WINNER:
-                    this.broadCastMessageFromServer(message(Message.WINNER,
-                            result.getuid(),
-                            result.getHand().getPokerValue()).build());
-                    break;
-                case LOSER:
+        
+        
+        
+        // winner is in the last position 
+        int r = 1;
+        order.get(3).getHand().setHandStatus(HandStatus.WINNER);
+        this.broadCastMessageFromServer(message(Message.WINNER,
+     		   order.get(3).getuid(),
+     		   order.get(3).getHand().getPokerValue(), r).build());
+        
+     
+        for (int i = 2; i >=0; i--) {
+        	r++;
+        	Player result = order.get(i);
+        	   result.getHand().setHandStatus(HandStatus.LOSER);
                     this.broadCastMessageFromServer(message(Message.LOSER,
-                    		result.getuid(),result.getHand().getPokerValue()).build());
-                    break;
-                default:
-                    throw new IllegalStateException("Only winners or losers here!");
-                    
-            }
+                    		result.getuid(),result.getHand().getPokerValue(), r).build());                    
         }
+        
+
+     
     }
 
     

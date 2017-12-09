@@ -463,77 +463,47 @@ public class PokerGame {
     /**
      * Set the final statuses so we can send it out.
      */
-    public void resolveRound() {
+    public List<Player> resolveRound() {
     	// Get highest value poker hand 
     	  PokerHand maxValue = PokerHand.HIGH_CARD;
-    	  
-    	  // get max Poker hand value
-    	  for(Player p : this.getConnectedPlayers()){
-    		  p.getHand().setPokerValue();
-    		  LOG.info("player value {}, {}", p.getuid(), p.getHand().getPokerValue());
-    		  // if we have the same hands we get the highest ranking card
-    		  if(p.getHand().getPokerValue().compareTo(maxValue) == 0){
-    			  maxValue = p.getHand().getPokerValue();
-    			  LOG.info("max value {}, {}", p.getuid(), p.getHand().getPokerValue());
-    		  }
-    		  
-    		  // this hand is greater than the current ranked best hand 
-    		  else   if(p.getHand().getPokerValue().compareTo(maxValue) > 0){
-    			  maxValue = p.getHand().getPokerValue();
-    			  LOG.info("max value {}, {}", p.getuid(), p.getHand().getPokerValue());
-    		  }
-    	  }
-    	  
-    	  Card maxCard = null;
-    	  // get winner with highest poker hand value
-    	  if (!maxValue.equals(PokerHand.HIGH_CARD)) {
-    		  LOG.info("Setting Winner");
-    		  for (final Player player : this.getConnectedPlayers()) {
-		          // Players with least cards and highest value is winner
-		          if (player.getHand().getPokerValue().equals(maxValue)) {
-		              player.getHand().setHandStatus(HandStatus.WINNER);
-		        	  LOG.info("Winner value {}, {}", player.getuid(), player.getHand().getPokerValue());
-		    	    	
-		          } else {
-		              player.getHand().setHandStatus(HandStatus.LOSER);
-		        	  LOG.info("Loser value {}, {}", player.getuid(), player.getHand().getPokerValue());
-				    	
-		          }
-    		  }
-    	  }
-    	  // get the highest hand when two hands have the same value. 
-    	  for(Player player :this.getConnectedPlayers()){
-    		  if(player.getHand().getHandStatus() == HandStatus.WINNER){
-    			  for(Player other :this.getConnectedPlayers()){
-    				
-    				  if(other.getHand().getHandStatus() == HandStatus.WINNER && other != player){
-    					  System.out.println(other.getHand().getHighCard() +" " +other.getHand().getPokerValue());
-        				  System.out.println(player.getHand().getHighCard() +" " +player.getHand().getPokerValue());
-    					  // check if they have the same rank
-    					  if (player.getHand().getHighCard().getRank().getValue() == other.getHand().getHighCard().getRank().getValue()){
-    						  // take higest suit
-    						  if(player.getHand().getHighCard().getSuit().compareTo(other.getHand().getHighCard().getSuit()) > 0){
-    							  other.getHand().setHandStatus(HandStatus.LOSER);
-    							  System.out.println("other highest suit");
-    						  }else{
-    							  player.getHand().setHandStatus(HandStatus.LOSER);
-    							  System.out.println("player highest suit");
-    						  }
-    						  System.out.println("same rank");
-    					  }// if they are not the same rank, take the higest rank
-    					  else if (player.getHand().getHighCard().getRank().getValue() > other.getHand().getHighCard().getRank().getValue()){
-    						  other.getHand().setHandStatus(HandStatus.LOSER);
-    						  System.out.println("other highest rank");
-    					  }else{
-    						  player.getHand().setHandStatus(HandStatus.LOSER);
-							  System.out.println("player highest rank");
-    					  }
-    				  }
-    			  }
-    		  }
-    		  
-    	  }
     	 
+  		
+  		
+  		
+  		List<Player> order = this.players;
+		int i, j, min_j;
+		for ( i = 0 ; i < order.size(); i ++ ){
+			order.get(i).getHand().setPokerValue(); // makes sure its set
+	         min_j = i;
+	         for ( j = i+1 ; j < order.size() ; j++ ) {
+	        	 order.get(j).getHand().setPokerValue(); // makes sure its set
+	        	 //if they are the same hand
+	        	 System.out.println(order.get(j).getHand().getPokerValue());
+	        	 System.out.println(order.get(min_j).getHand().getPokerValue());
+	             if (order.get(j).getHand().getPokerValue().compareTo(order.get(min_j).getHand().getPokerValue()) == 0 ){
+	            	 // find lowest valued card
+	            	if(order.get(j).getHand().getHighCard().getValue() < order.get(min_j).getHand().getHighCard().getValue()){
+		               min_j = j;   
+	            	}
+		        }// not the same hand 
+	             else if (order.get(j).getHand().getPokerValue().compareTo(order.get(min_j).getHand().getPokerValue()) < 0 ){
+	               min_j = j;   
+	            }
+	         }
+	         //swap
+	         Player temp = order.get(i);
+	         order.set(i, order.get(min_j));
+	         order.set(min_j, temp);
+
+		}
+		
+		for(Player p: order){
+			System.out.println(p.getHand().getPokerValue());
+		}
+		
+
+		return order;
+
     }
     	  
 

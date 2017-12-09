@@ -52,16 +52,16 @@ public class Hand {
     }
 
 	public void setPokerValue() {
-		if( this.isRFlush()) { this.value = PokerHand.ROYAL_FLUSH; return;}
-		else if (this.isStraightFlush()) {this.value =  PokerHand.STRAIGHT_FLUSH; return;}
-    	else if (this.isFourOfAKind()){this.value = PokerHand.FOUR_OF_A_KIND; return;}
-    	else if (this.isFullHouse()) {this.value =  PokerHand.FULL_HOUSE; return;}
-    	else if (this.isFlush()){this.value = PokerHand.FLUSH; return;}
-    	else if (this.isStraight()){this.value = PokerHand.STRAIGHT; return;}
-    	else if (this.isThreeOfAKind()) {this.value = PokerHand.THREE_OF_A_KIND; return;}
-    	else if (this.isTwoPair()){this.value = PokerHand.TWO_PAIR; return;}
-    	else if (this.isOnePair()) {this.value =  PokerHand.ONE_PAIR; return;}
-    	else{this.value =  PokerHand.HIGH_CARD;return;}
+		if( this.isRFlush()) { this.value = PokerHand.ROYAL_FLUSH; }
+		else if (this.isStraightFlush()) {this.value =  PokerHand.STRAIGHT_FLUSH; }
+    	else if (this.isFourOfAKind()){this.value = PokerHand.FOUR_OF_A_KIND; }
+    	else if (this.isFullHouse()) {this.value =  PokerHand.FULL_HOUSE; }
+    	else if (this.isFlush()){this.value = PokerHand.FLUSH; }
+    	else if (this.isStraight()){this.value = PokerHand.STRAIGHT; }
+    	else if (this.isThreeOfAKind()) {this.value = PokerHand.THREE_OF_A_KIND; }
+    	else if (this.isTwoPair()){this.value = PokerHand.TWO_PAIR; }
+    	else if (this.isOnePair()) {this.value =  PokerHand.ONE_PAIR; }
+    	else{this.value =  PokerHand.HIGH_CARD;}
 	}
 	public PokerHand getPokerValue(){
 		return this.value;
@@ -123,10 +123,8 @@ public class Hand {
 		int i, j, min_j;
 		for ( i = 0 ; i < sortedCards.size(); i ++ ){
 	         min_j = i;
-	         for ( j = i+1 ; j < sortedCards.size() ; j++ )
-	         {
-	            if (sortedCards.get(j).getRank().compareTo(sortedCards.get(min_j).getRank()) < 0 )
-	            {
+	         for ( j = i+1 ; j < sortedCards.size() ; j++ ){
+	            if (sortedCards.get(j).getRank().compareTo(sortedCards.get(min_j).getRank()) < 0 ){
 	               min_j = j;   
 	            }
 	         }
