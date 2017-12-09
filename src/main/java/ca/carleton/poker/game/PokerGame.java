@@ -481,7 +481,7 @@ public class PokerGame {
 	
 	             if (order.get(j).getHand().getPokerValue().compareTo(order.get(min_j).getHand().getPokerValue()) == 0 ){
 	            	 // find lowest valued card
-	            	if(order.get(j).getHand().getHighCard().getValue() > order.get(min_j).getHand().getHighCard().getValue()){
+	            	if(order.get(j).getHand().getHighCard().getValue() < order.get(min_j).getHand().getHighCard().getValue()){
 		               
 	               	 System.out.println(order.get(j).getHand().getPokerValue() + "  " + order.get(j).getHand().getHighCard() + " " +order.get(j).getHand().getHighCard().getValue());
 		        	 System.out.println(order.get(min_j).getHand().getPokerValue() + "  " + order.get(j).getHand().getHighCard() + " " +order.get(min_j).getHand().getHighCard().getValue());

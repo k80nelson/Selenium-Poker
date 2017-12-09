@@ -326,6 +326,7 @@ public class Hand {
 	
 	}
 	public Card getHighCard() {
+		
 		Card highest = this.cards.get(0);
 		for (int counter = 0; counter < 5; counter++)
 		{
