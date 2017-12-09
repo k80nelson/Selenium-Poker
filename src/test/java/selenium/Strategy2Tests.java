@@ -120,7 +120,7 @@ public class Strategy2Tests extends AbstractSeleniumTest {
     	this.waitForDisplayed(this.indexPage.start);
     
     	/*****************  Check results ******************/
-    	delay(10);
+    	delay(1);
     	// user 1 wins
     	
     	result = ids[0].trim() + " lost with a score of ONE_PAIR, ranked 4";

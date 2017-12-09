@@ -69,7 +69,7 @@ public class RankingTests extends AbstractSeleniumTest {
     	// other 3 Straight
     	this.waitForAlert();
     	a = this.webDriver.switchTo().alert();
-    	a.sendKeys("rank-2 diams, rank-3 diams, rank-4 diams, rank-5 diams, rank-6 diams");
+    	a.sendKeys("rank-2 diams, rank-3 spades, rank-4 diams, rank-5 clubs, rank-6 diams");
     	a.accept();
      
 

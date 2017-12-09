@@ -211,7 +211,7 @@ public class PokerSocketHandler extends TextWebSocketHandler {
  
             case "CARD_DONE":
             	LOG.info("Get Card");
-            	final String[] nums = contents[1].split(",");
+            	final String[] nums = contents[1].split("_");
             	int length = nums.length;
             	if(nums.length > 5)length = 5; // There are only 5 cards, something must have been double clicked
             
@@ -229,9 +229,9 @@ public class PokerSocketHandler extends TextWebSocketHandler {
 
                  this.game.performOption(player, option, cards);
                  // Send to other than the player what their move was
-                 
-                 this.broadCastMessageFromServer(message(Message.MOVE_MADE, player.getuid(), player.getLastOption()).build());
                  this.updateCards(); 
+                 this.broadCastMessageFromServer(message(Message.MOVE_MADE, player.getuid(), player.getLastOption()).build());
+           
                  if(this.game.isResolved()){
                    	this.sendResults();
                    	this.resetGame();
@@ -243,7 +243,6 @@ public class PokerSocketHandler extends TextWebSocketHandler {
             	LOG.info("Getting initial cads of the rigged game");
             	// Users are split between 
             	JSONObject obj = new JSONObject(contents[1]);
-            	System.out.println(obj.toString());
             	 // Get cards; 
             	 Iterator keys = obj.keys();
             	 while(keys.hasNext()) {
@@ -256,8 +255,7 @@ public class PokerSocketHandler extends TextWebSocketHandler {
 	            		for(int j = 0; j <5; j++){
 	            			player.getHand().getCards().get(j).setCard(newCards[j].trim()); // This is needed for testing
 	            		}
-	            		System.out.println(key + " " + player +" " + player.getHand().toString());
-            	 }
+	              	 }
             	Thread.sleep(1000);
             	this.updateCards();
             	this.broadCastMessageFromServer(message(Message.RIG_READY).build());
@@ -279,7 +277,6 @@ public class PokerSocketHandler extends TextWebSocketHandler {
             	player = null;
 	            if (!contents[1].equals("null")){ // checks the player has hit and actually selected a card
 	            	obj = new JSONObject(contents[1]);
-	            	System.out.println(obj.toString());
 	            	 // Get cards; 
 	            	String id = obj.get("sessionID").toString();
 	            	if(id.contains("("))
@@ -292,8 +289,7 @@ public class PokerSocketHandler extends TextWebSocketHandler {
 			            String[] index = newCards[j].split(":");
 			            player.getHand().getCards().get(Integer.parseInt(index[0].trim())).setCard(index[1].trim(), false); // This is needed for testing
 		            }	
-		            System.out.println(player +" " + player.getHand().toString());
-	            }
+		           }
 	            
 	            Thread.sleep(1000);
 	            this.updateCards();
