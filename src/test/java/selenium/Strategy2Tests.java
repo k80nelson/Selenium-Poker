@@ -125,21 +125,20 @@ public class Strategy2Tests extends AbstractSeleniumTest {
     	
     	result = ids[0].trim() + " lost with a score of ONE_PAIR, ranked 4";
     	assertThat(this.indexPage.hasText(result), is(true));
-    	this.delay(20);
     	//user 2 looses
     	result = ids[1].trim() + " lost with a score of FULL_HOUSE, ranked 2";
     	assertThat(this.indexPage.hasText(result), is(true));
-    	this.delay(20);
     
     	// user 3 looses
     	result = ids[2].trim() + " won with a score of FULL_HOUSE, ranked 1";
     	assertThat(this.indexPage.hasText(result), is(true));
-    	this.delay(20);	
-    	
+    
     	// Player looses
     	result = ids[3].trim() + " lost with a score of TWO_PAIR, ranked 3";
     	assertThat(this.indexPage.hasText(result), is(true));
     
+    	
+    	this.delay(5);
     	this.indexPage.disconnect.click();
     
     }
@@ -252,7 +251,7 @@ public class Strategy2Tests extends AbstractSeleniumTest {
     	result = ids[3] + " lost with a score of STRAIGHT, ranked 3";
     	assertThat(this.indexPage.hasText(result), is(true));
     
-    	this.delay(1);
+    	this.delay(5);
     	
     	this.indexPage.disconnect.click();
     
