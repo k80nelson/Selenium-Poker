@@ -40,11 +40,13 @@ public class RankingTests extends AbstractSeleniumTest {
     	 *  - p: HighCard
     	 */
     	
-     	this.indexPage.connect.click();
+    	this.indexPage.connect.click();
     	this.waitForDisplayed(this.indexPage.open).isEnabled();
+    	this.delay(2);
     	this.indexPage.open.click(); // defaults is 1 player
     	this.waitForDisplayed(this.indexPage.rig).isEnabled();
     	this.indexPage.rig.click();
+    	
     	/************************* Set inital hands ************************/
     	// Player  highcard 
     	this.waitForAlert();
@@ -119,22 +121,23 @@ public class RankingTests extends AbstractSeleniumTest {
     	this.delay(5);
     	assertThat(this.waitForDisplayed(this.indexPage.start).isEnabled(), is(true));
     	/*****************  Check results ******************/
+    	this.delay(5);
     	// user 1 wins
-    	result = ids[0] + " won with a score of ROYAL_FLUSH 1";
+    	result = ids[0] + " won with a score of ROYAL_FLUSH, ranked 1";
     	System.out.println(this.indexPage.hasText(result));
     	assertThat(this.indexPage.hasText(result), is(true));
     	
     	//user 2 looses
-    	result = ids[1] + " lost with a score of TWO_PAIR Ranked 3";
+    	result = ids[1] + " lost with a score of TWO_PAIR, ranked 3";
     	assertThat(this.indexPage.hasText(result), is(true));
     	
     
     	// user 3 looses
-    	result = ids[2] + " lost with a score of STRAIGHT, Ranked 2";
+    	result = ids[2] + " lost with a score of STRAIGHT, ranked 2";
     	assertThat(this.indexPage.hasText(result), is(true));
     	    	
     	// Player looses
-    	result = ids[3] + " lost with a score of HIGH_CARD Ranked 4";
+    	result = ids[3] + " lost with a score of HIGH_CARD, ranked 4";
     	assertThat(this.indexPage.hasText(result), is(true));
 
     	this.indexPage.disconnect.click();
@@ -153,9 +156,11 @@ public class RankingTests extends AbstractSeleniumTest {
     	
     	this.indexPage.connect.click();
     	this.waitForDisplayed(this.indexPage.open).isEnabled();
+    	this.delay(2);
     	this.indexPage.open.click(); // defaults is 1 player
     	this.waitForDisplayed(this.indexPage.rig).isEnabled();
     	this.indexPage.rig.click();
+    	
     	
     	/************************* Set inital hands ************************/
     	// Player  flush 
@@ -219,20 +224,19 @@ public class RankingTests extends AbstractSeleniumTest {
     	assertThat(this.waitForDisplayed(this.indexPage.start).isEnabled(), is(true));
     	/*****************  Check results ******************/
     	// user 1 loses
-    	result = ids[0] + " won with a score of FOUR_OF_A_KIND, Ranked 1";
-    	System.out.println(this.indexPage.hasText(result));
+    	result = ids[0] + " won with a score of FOUR_OF_A_KIND, ranked 1";
     	assertThat(this.indexPage.hasText(result), is(true));
     	
     	//user 2 looses
-    	result = ids[1] + " lost with a score of FULL_HOUSE, Ranked 2";
+    	result = ids[1] + " lost with a score of FULL_HOUSE, ranked 2";
     	assertThat(this.indexPage.hasText(result), is(true));
     	
     	// user 3 looses
-    	result = ids[2] + " lost with a score of ONE_PAIR, Ranked 4";
+    	result = ids[2] + " lost with a score of ONE_PAIR, ranked 4";
     	assertThat(this.indexPage.hasText(result), is(true));
     	    	
     	// Player looses
-    	result = ids[3] + " lost with a score of FLUSH, Ranked 3";
+    	result = ids[3] + " lost with a score of FLUSH, ranked 3";
     	assertThat(this.indexPage.hasText(result), is(true));
     
     	
@@ -252,6 +256,7 @@ public class RankingTests extends AbstractSeleniumTest {
        	 */
     	this.indexPage.connect.click();
     	this.waitForDisplayed(this.indexPage.open).isEnabled();
+    	this.delay(2);
     	this.indexPage.open.click(); // defaults is 1 player
     	this.waitForDisplayed(this.indexPage.rig).isEnabled();
     	this.indexPage.rig.click();

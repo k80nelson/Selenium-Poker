@@ -127,12 +127,12 @@ public class Strategy2Tests extends AbstractSeleniumTest {
     	assertThat(this.indexPage.hasText(result), is(true));
     	this.delay(20);
     	//user 2 looses
-    	result = ids[1].trim() + " lost with a score of FULL_HOUSE, ranked 1";
+    	result = ids[1].trim() + " lost with a score of FULL_HOUSE, ranked 2";
     	assertThat(this.indexPage.hasText(result), is(true));
     	this.delay(20);
     
     	// user 3 looses
-    	result = ids[2].trim() + " won with a score of FULL_HOUSE, ranked 2";
+    	result = ids[2].trim() + " won with a score of FULL_HOUSE, ranked 1";
     	assertThat(this.indexPage.hasText(result), is(true));
     	this.delay(20);	
     	
@@ -156,10 +156,10 @@ public class Strategy2Tests extends AbstractSeleniumTest {
     	
     	this.indexPage.connect.click();
     	this.waitForDisplayed(this.indexPage.open).isEnabled();
+    	this.delay(2);
     	this.indexPage.open.click(); // defaults is 1 player
     	this.waitForDisplayed(this.indexPage.rig).isEnabled();
     	this.indexPage.rig.click();
-    	
     	/************************* Set inital hands ************************/
     	// Player  straight
     	this.waitForAlert();
@@ -209,6 +209,7 @@ public class Strategy2Tests extends AbstractSeleniumTest {
     	a = this.webDriver.switchTo().alert();
     	a.sendKeys("0:rank-10 hearts, 1:rank-j hearts, 2:rank-q hearts, 3:rank-k hearts, 4:rank-a hearts");
     	a.accept();
+    	
     	//user 2 has Hit
     	this.delay(1);
     	result = ids[1] + " choose to HIT";
@@ -235,23 +236,23 @@ public class Strategy2Tests extends AbstractSeleniumTest {
     	/*****************  Check results ******************/
     	this.delay(5);
     	// user 1 loses
-    	result = ids[0] + " lost with a score of FULL_HOUSE, Ranked 3";
+    	result = ids[0] + " lost with a score of FULL_HOUSE, ranked 2";
     	System.out.println(this.indexPage.hasText(result));
     	assertThat(this.indexPage.hasText(result), is(true));
     	
     	//user 2 looses
-    	result = ids[1] + " won with a score of ROYAL_FLUSH, Ranked 1";
+    	result = ids[1] + " won with a score of ROYAL_FLUSH, ranked 1";
     	assertThat(this.indexPage.hasText(result), is(true));
     	
     	// user 3 looses
-    	result = ids[2] + " lost with a score of ONE_PAIR, Ranked 3";
+    	result = ids[2] + " lost with a score of ONE_PAIR, ranked 4";
     	assertThat(this.indexPage.hasText(result), is(true));
     	    	
     	// Player looses
-    	result = ids[3] + " lost with a score of STRAIGHT, Ranked 2";
+    	result = ids[3] + " lost with a score of STRAIGHT, ranked 3";
     	assertThat(this.indexPage.hasText(result), is(true));
     
-    	this.delay(5);
+    	this.delay(1);
     	
     	this.indexPage.disconnect.click();
     

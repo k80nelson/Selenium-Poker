@@ -478,12 +478,14 @@ public class PokerGame {
 	         for ( j = i+1 ; j < order.size() ; j++ ) {
 	        	 order.get(j).getHand().setPokerValue(); // makes sure its set
 	        	 //if they are the same hand
-	        	 System.out.println(order.get(j).getHand().getPokerValue());
-	        	 System.out.println(order.get(min_j).getHand().getPokerValue());
+	
 	             if (order.get(j).getHand().getPokerValue().compareTo(order.get(min_j).getHand().getPokerValue()) == 0 ){
 	            	 // find lowest valued card
 	            	if(order.get(j).getHand().getHighCard().getValue() < order.get(min_j).getHand().getHighCard().getValue()){
-		               min_j = j;   
+		               
+	               	 System.out.println(order.get(j).getHand().getPokerValue() + "  " + order.get(j).getHand().getHighCard() + " " +order.get(j).getHand().getHighCard().getValue());
+		        	 System.out.println(order.get(min_j).getHand().getPokerValue() + "  " + order.get(j).getHand().getHighCard() + " " +order.get(min_j).getHand().getHighCard().getValue());
+	            		min_j = j;   
 	            	}
 		        }// not the same hand 
 	             else if (order.get(j).getHand().getPokerValue().compareTo(order.get(min_j).getHand().getPokerValue()) < 0 ){
@@ -496,11 +498,7 @@ public class PokerGame {
 	         order.set(min_j, temp);
 
 		}
-		
-		for(Player p: order){
-			System.out.println(p.getHand().getPokerValue());
-		}
-		
+	
 
 		return order;
 
