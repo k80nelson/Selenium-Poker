@@ -105,4 +105,23 @@ Rigging the Game
         * rank and suit are the same as setting the hand;
         * each card must be separated by a comma
   5. once all players have played the results will be displayed
+  
+  
+  
+  Winning the Game
+  ------------------
+  
+  Poker hand Ranks are as follows:
+   1. Royal Flush
+   2. Striaght Flush
+   3. Four of a kind
+   4. Full House
+   5. Flush
+   6. Straight
+   7. Three of a kind
+   8. Two Pair
+   9. One Pair
+   10. High Card
+   ** if two players have the same poker hand the player with the highest card in their whole hand wins
+   
 
