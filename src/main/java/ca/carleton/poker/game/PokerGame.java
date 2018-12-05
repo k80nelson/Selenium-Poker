@@ -38,7 +38,7 @@ import static org.springframework.util.CollectionUtils.containsAny;
 
 /**
  * Model the Poker Game
- * Created by Cheryl 11/25/2017
+ * 
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)

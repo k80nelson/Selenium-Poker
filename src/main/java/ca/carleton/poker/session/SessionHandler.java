@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  * <p/>
  * Taken from github as an example of dealing with websockets.
  * <p/>
- * Created by Mike on 10/7/2015.
+ * 
  */
 @Service
 public class SessionHandler {

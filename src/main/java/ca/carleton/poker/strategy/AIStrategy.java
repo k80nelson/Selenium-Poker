@@ -12,6 +12,12 @@ import ca.carleton.poker.game.Player.AIPlayer;
 import ca.carleton.poker.game.entity.card.Card;
 import ca.carleton.poker.game.entity.card.Hand;
 import ca.carleton.poker.game.entity.card.PokerHand;
+
+/**
+ * See two simplistic AI strategies
+ * 
+ *  
+ */
 @Service
 public interface AIStrategy {
 	

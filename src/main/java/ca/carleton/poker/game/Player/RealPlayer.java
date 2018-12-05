@@ -7,7 +7,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 /**
  * Represents a player.
- * Created by Cheryl on 11/25/2017.
+ * 
  */
 public class RealPlayer extends Player {
 	

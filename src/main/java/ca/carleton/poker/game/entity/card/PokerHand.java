@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Poker hands
  * <p/>
- * Created by Cheryl on 11/13/2017.
+ * 
  */
 public enum PokerHand{
 	HIGH_CARD,

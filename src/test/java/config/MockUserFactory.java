@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Mock a user (aka a second browser).
  * <p/>
- * Created by Mike on 11/8/2015.
+ * 
  */
 @Service
 public class MockUserFactory {

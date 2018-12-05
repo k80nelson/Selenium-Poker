@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * Created by Cheryl on 11/25/2017
- * - Class to handle AI operations
+ * 
+ * - strategy 1
  */
 
 public class AIStrategy1 implements AIStrategy {

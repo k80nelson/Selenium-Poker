@@ -7,6 +7,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
@@ -16,7 +17,7 @@ import ca.carleton.poker.game.PokerSocketHandler;
 /**
  * Main class - launch the application and register endpoint handlers.
  *
- * Created by Mike on 10/6/2015.
+ * 
  */
 @SuppressWarnings("SpringFacetCodeInspection")
 @Configuration
@@ -42,5 +43,7 @@ public class PokerApplication extends SpringBootServletInitializer implements We
     protected SpringApplicationBuilder configure(final SpringApplicationBuilder springApplicationBuilder) {
         return springApplicationBuilder.sources(PokerApplication.class);
     }
-
+    
+    
+    
 }

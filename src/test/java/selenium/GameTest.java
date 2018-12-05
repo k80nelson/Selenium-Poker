@@ -15,7 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by Cheryl 
+ * 
  */
 @SeleniumTest
 public class GameTest extends AbstractSeleniumTest {
@@ -28,16 +28,9 @@ public class GameTest extends AbstractSeleniumTest {
     @Test
     public void processAI(){
     	//connect
-    	this.indexPage.connect.click();
-    	this.waitForDisplayed(this.indexPage.open).isEnabled();
-    	this.indexPage.open.click();
-    	this.indexPage.start.click();
-    
-    	assertThat(this.waitForDisplayed(this.indexPage.stay).isEnabled(), is(true));
-        assertThat(this.indexPage.hasText("All AI players have made their choices"), is(true));
+    	//9: missing code  including check all AI players have made their choices   
  
-        //disconnect
-        this.indexPage.disconnect.click();        
+                  
     }
  
     
@@ -45,61 +38,20 @@ public class GameTest extends AbstractSeleniumTest {
  
 	@Test
     public void canUseStayOption(){
-		//connect
-    	this.indexPage.connect.click();
-    	this.waitForDisplayed(this.indexPage.open).isEnabled();
-    	this.indexPage.open.click();
-    	this.indexPage.start.click();
-    
-    	// checks that the use can choose to stay
-    	this.waitForDisplayed(this.indexPage.stay).isEnabled();
-        this.indexPage.stay.click();
-        assertThat(this.indexPage.hasText("You decided to STAY"), is(true));
-        
-      //disconnect
-     	this.indexPage.disconnect.click();
+	//10: missing code for connect then selecting stay then disconnect
     }
 
 
     @Test
     public void canUseHitOption() {
-    	//connect
-    	this.indexPage.connect.click();
-    	this.waitForDisplayed(this.indexPage.open).isEnabled();
-    	this.indexPage.open.click();
-    	this.indexPage.start.click();
-    	
-    	// checks that the use can choose to hit
-    	this.waitForDisplayed(this.indexPage.hit).isEnabled();
-        this.indexPage.hit.click();
-        assertThat(this.indexPage.hasText("You decided to HIT"), is(true));
-    
-        
-        //disconnect
-       this.indexPage.disconnect.click();
+    	//11: missing code similar to 11    
     }
     
     
  
     @Test
     public void canImproveCards(){
-    	//connect
-    	this.indexPage.connect.click();
-    	this.waitForDisplayed(this.indexPage.open).isEnabled();
-    	this.indexPage.open.click();
-    	this.indexPage.start.click();
-    	// checks that the use can choose to stay
-    	
-    	this.waitForDisplayed(this.indexPage.hit).isEnabled();
-        this.indexPage.hit.click();
-        this.waitForDisplayed(this.indexPage.done).isEnabled();
-        this.indexPage.card1.click();
-        this.indexPage.card3.click();
-        this.indexPage.done.click();
-        assertThat(this.indexPage.hasText("You decided to improve card"), is(true));
-        
-        //disconnect
-        this.indexPage.disconnect.click();
+    	//12: missing code for connect, improve and disconnect     
     }
     
     

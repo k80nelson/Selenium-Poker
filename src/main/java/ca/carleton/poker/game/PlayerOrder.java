@@ -16,8 +16,8 @@ import static java.util.Collections.shuffle;
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
 
 /**
- * Handle the odering of players
- * Created by Cheryl 11/25/2017
+ * Handle the ordering of players
+ * 
  */
 @Service
 public class PlayerOrder {

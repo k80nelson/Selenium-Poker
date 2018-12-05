@@ -8,6 +8,11 @@ import ca.carleton.poker.game.Player.*;
 import ca.carleton.poker.game.entity.card.Card;
 import ca.carleton.poker.game.entity.card.PokerHand;
 
+/**
+ * 
+ * - strategy 2
+ */
+
 public class AIStrategy2 implements AIStrategy{
 
 	AIPlayer player; 

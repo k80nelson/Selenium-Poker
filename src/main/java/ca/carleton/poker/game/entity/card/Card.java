@@ -3,7 +3,7 @@ package ca.carleton.poker.game.entity.card;
 /**
  * Represents a single playing card.
  * <p/>
- * Created by Mike on 10/27/2015.
+ * 
  */
 public class Card {
 

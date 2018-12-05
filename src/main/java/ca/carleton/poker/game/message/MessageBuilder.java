@@ -10,7 +10,7 @@ import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 /**
  * Helper to make a formatted message to send.
  * <p/>
- * Created by Mike on 10/7/2015.
+ * 
  */
 public class MessageBuilder {
 

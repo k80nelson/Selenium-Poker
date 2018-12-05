@@ -22,7 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by Cheryl 
+ * 
  */
 @SeleniumTest
 public class RankingTests extends AbstractSeleniumTest {
@@ -33,8 +33,8 @@ public class RankingTests extends AbstractSeleniumTest {
     
     @Test
     public void Rig1(){
-    	/* This had is rigged with :
-    	 * 	- O1: Royal Flush
+    	/* This hand is rigged with :
+    	 *  - O1: Royal Flush
     	 *  - O2: two pair
     	 *  - 03: straight
     	 *  - p: HighCard
@@ -47,7 +47,7 @@ public class RankingTests extends AbstractSeleniumTest {
     	this.waitForDisplayed(this.indexPage.rig).isEnabled();
     	this.indexPage.rig.click();
     	
-    	/************************* Set inital hands ************************/
+    	/************************* Set initial hands ************************/
     	// Player  highcard 
     	this.waitForAlert();
     	Alert a = this.webDriver.switchTo().alert();
@@ -77,70 +77,43 @@ public class RankingTests extends AbstractSeleniumTest {
     	/****************************** check user options ************************/
     	
     	
-      	//Handle prompt to improve user 2 
-    	this.waitForAlert();
-    	a = this.webDriver.switchTo().alert();
-    	a.sendKeys("0:rank-a clubs");
-    	a.accept();
+      	//Handle prompt to improve user 2 with "0:rank-a clubs"
+    	//13: missing code
+   
+    	// user 1 chooses to stay  
+    	//14: missing code     
     	
-    	String[] ids = this.indexPage.getUsetTexts();
-    	// user 1 will stay 
-    	this.delay(1);
-    	String result = ids[0] + " choose to STAY";
-    	System.out.println(this.indexPage.hasText(result));
-    	assertThat(this.indexPage.hasText(result), is(true));
+    	//user 2 chooses to hit   	
+    	//15: missing code  
     	
-    	//user 2 has hit   	
-    	this.delay(5);
-     
-    	result = ids[1] + " choose to HIT";
-    	assertThat(this.indexPage.hasText(result), is(true));
- 
-    	
-    	
-    	
-    	// user 3 will Stay
-    	this.delay(1);
-    	result = ids[2] + " choose to STAY";
-    	assertThat(this.indexPage.hasText(result), is(true));
+    	// user 3 chooses to Stay
+    	//16:missing code  
     	    	
-    	// Player will hit
-    	this.delay(1);
-     	assertThat(this.waitForDisplayed(this.indexPage.hit).isEnabled(), is(true));
+    	// Player hits and gets 
+	// “0:rank-q diams, 1:rank-j clubs, 2:rank-4 spades, 3:rank-8 clubs,  4:rank-2 clubs");
+	this.delay(1);
+	//17a: missing code
     	this.indexPage.hit.click();
     	this.indexPage.card1.click();
     	this.indexPage.card3.click();
     	this.indexPage.done.click();
-     	
     	this.waitForAlert();
-    	a = this.webDriver.switchTo().alert();
-    	a.sendKeys("0:rank-q diams, 1:rank-j clubs, 2:rank-4 spades, 3:rank-8 clubs,  4:rank-2 clubs");
-    	a.accept();
-    	
-   
-    	this.delay(5);
-    	assertThat(this.waitForDisplayed(this.indexPage.start).isEnabled(), is(true));
+    	//17b: missing code
+    
+    	 
     	/*****************  Check results ******************/
     	this.delay(5);
-    	// user 1 wins
-    	result = ids[0] + " won with a score of ROYAL_FLUSH, ranked 1";
-    	System.out.println(this.indexPage.hasText(result));
-    	assertThat(this.indexPage.hasText(result), is(true));
+    	// user 1 wins with a royal flush: ranked 1
+    	//18: missing code  
     	
-    	//user 2 looses
-    	result = ids[1] + " lost with a score of TWO_PAIR, ranked 3";
-    	assertThat(this.indexPage.hasText(result), is(true));
+    	//user 2 loses with two pairs, ranked 3
+    	//19: missing code  
     	
-    
-    	// user 3 looses
-    	result = ids[2] + " lost with a score of STRAIGHT, ranked 2";
-    	assertThat(this.indexPage.hasText(result), is(true));
+    	// user 3 loses with straight, ranked 2
+    	//20: missing code
     	    	
-    	// Player looses
-    	result = ids[3] + " lost with a score of HIGH_CARD, ranked 4";
-    	assertThat(this.indexPage.hasText(result), is(true));
-
-    	this.indexPage.disconnect.click();
+    	// Player loses with high card, ranked 4
+    	//21: missing code
     
     }
 
@@ -162,7 +135,7 @@ public class RankingTests extends AbstractSeleniumTest {
     	this.indexPage.rig.click();
     	
     	
-    	/************************* Set inital hands ************************/
+    	/************************* Set initial hands ************************/
     	// Player  flush 
     	this.waitForAlert();
     	Alert a = this.webDriver.switchTo().alert();
@@ -192,55 +165,15 @@ public class RankingTests extends AbstractSeleniumTest {
     	this.delay(5);
     	/****************************** check user options ************************/
     	
-    	//Handle prompt to improve user 3
-    	this.waitForAlert();
-    	a = this.webDriver.switchTo().alert();
-    	a.sendKeys("2:rank-a clubs,3:rank-q spades,4:rank-5 spades");
-    	a.accept();
+    	//Handle prompt to improve user 3 with "2:rank-a clubs,3:rank-q spades,4:rank-5 spades"
+    	//22: missing code  
     	
+	//user 1 stays, user 2 stays, user 3 hits, player stays 
+       //23: missing code  
     	
-    	String[] ids = this.indexPage.getUsetTexts();
-    	// user 1 will stay 
-    	String result = ids[0] + " choose to STAY";
-    	System.out.println(this.indexPage.hasText(result));
-    	assertThat(this.indexPage.hasText(result), is(true));
-    	
-    	//user 2 has stay
-    	this.delay(1);
-    	result = ids[1] + " choose to STAY";
-    	assertThat(this.indexPage.hasText(result), is(true));
-    	
-    	// user 3 will hit
-    	
-    	this.delay(1);
-    	result = ids[2] + " choose to HIT";
-    	assertThat(this.indexPage.hasText(result), is(true));
-    	    	
-    	// Player will stay
-    	this.delay(5);
-     	assertThat(this.waitForDisplayed(this.indexPage.stay).isEnabled(), is(true));
-    	this.indexPage.stay.click();
-
-    	assertThat(this.waitForDisplayed(this.indexPage.start).isEnabled(), is(true));
     	/*****************  Check results ******************/
-    	// user 1 loses
-    	result = ids[0] + " won with a score of FOUR_OF_A_KIND, ranked 1";
-    	assertThat(this.indexPage.hasText(result), is(true));
     	
-    	//user 2 looses
-    	result = ids[1] + " lost with a score of FULL_HOUSE, ranked 2";
-    	assertThat(this.indexPage.hasText(result), is(true));
-    	
-    	// user 3 looses
-    	result = ids[2] + " lost with a score of ONE_PAIR, ranked 4";
-    	assertThat(this.indexPage.hasText(result), is(true));
-    	    	
-    	// Player looses
-    	result = ids[3] + " lost with a score of FLUSH, ranked 3";
-    	assertThat(this.indexPage.hasText(result), is(true));
-    
-    	
-    	this.indexPage.disconnect.click();
+        //24: missing code for user 1 wins, 3 others lose
     
     }
     
@@ -249,7 +182,7 @@ public class RankingTests extends AbstractSeleniumTest {
     @Test
     public void Rig3(){
     	/* This had is rigged with :
-    	 * 	- O1: One pair
+    	 *  - O1: One pair
     	 *  - O2: 3 of a kind
     	 *  - 03: straight flush
     	 *  - p:  high card
@@ -261,7 +194,7 @@ public class RankingTests extends AbstractSeleniumTest {
     	this.waitForDisplayed(this.indexPage.rig).isEnabled();
     	this.indexPage.rig.click();
     	
-    	/************************* Set inital hands ************************/
+    	/************************* Set initial hands ************************/
     	// Player  High Card 
     	this.waitForAlert();
     	Alert a = this.webDriver.switchTo().alert();
@@ -290,77 +223,25 @@ public class RankingTests extends AbstractSeleniumTest {
     	assertThat(this.indexPage.hasText("Setting all cards"), is(true));     
     	/****************************** check user options ************************/
     	
-    
-   
     	//Handle prompt to improve user 1
-    	this.waitForAlert();
-    	a = this.webDriver.switchTo().alert();
-    	a.sendKeys("0:rank-7 clubs,1:rank-j clubs,4:rank-5 diams");
-    	a.accept();
+    	// with “0:rank-7 clubs,1:rank-j clubs,4:rank-5 diams"
+    	//25: missing code
     	
-        
     	
        	//Handle prompt to improve user 2
-       	this.waitForAlert();
-       	a = this.webDriver.switchTo().alert();
-       	a.sendKeys("0:rank-4 spades,1:rank-a clubs");
-       	a.accept();
-       	
-    	
-    	String[] ids = this.indexPage.getUsetTexts();
-    	// user 1 will hit 
-    	String result = ids[0] + " choose to HIT";
-    	System.out.println(this.indexPage.hasText(result));
-    	assertThat(this.indexPage.hasText(result), is(true));
-    
-    	
-    	//user 2 will it
-    	this.delay(5);
-    	result = ids[1] + " choose to HIT";
-    	assertThat(this.indexPage.hasText(result), is(true));
-    	
-    	// user 3 will STAY
-    	this.delay(5);
-    	result = ids[2] + " choose to STAY";
-    	assertThat(this.indexPage.hasText(result), is(true));
-    	    	
-    	// Player High Card
-    	
-    	this.delay(5);
-     	assertThat(this.waitForDisplayed(this.indexPage.hit).isEnabled(), is(true));
-    	this.indexPage.hit.click();
-    	this.indexPage.card1.click();
-    	this.indexPage.card3.click();
-    	this.indexPage.done.click();
-    	
-    	this.waitForAlert();
-    	a = this.webDriver.switchTo().alert();
-    	a.sendKeys("0:rank-4 spades, 1:rank-7 clubs, 2:rank-a clubs,3:rank-q spades,4:rank-5 spades");
-    	a.accept();
+       	//with ”0:rank-4 spades,1:rank-a clubs"
+       	//26: missing code 
 
-    	this.delay(5);
-    	assertThat(this.waitForDisplayed(this.indexPage.start).isEnabled(), is(true));
-    	/*****************  Check results ******************/
-    	// user 1 loses
-    	result = ids[0] + " lost with a score of ONE_PAIR, ranked 3";
-    	System.out.println(this.indexPage.hasText(result));
-    	assertThat(this.indexPage.hasText(result), is(true));
-    	
-    	//user 2 looses
-    	result = ids[1] + " lost with a score of THREE_OF_A_KIND, ranked 2";
-    	assertThat(this.indexPage.hasText(result), is(true));
-    	
-    	// user 3 looses
-    	result = ids[2] + " won with a score of STRAIGHT_FLUSH, ranked 1";
-    	assertThat(this.indexPage.hasText(result), is(true));
+	//user 1, user 2 hit and user 3 stays
+    	//27: missing code  
     	    	
-    	// Player looses
-    	result = ids[3] + " lost with a score of HIGH_CARD, ranked 4";
-    	assertThat(this.indexPage.hasText(result), is(true));
-    
-    	this.delay(5);
+    	// Player gets
+	//“0:rank-4 spades, 1:rank-7 clubs, 2:rank-a clubs,3:rank-q spades,4:rank-5 spades")
+    	//28: missing code 
+
+    	/*****************  Check results ******************/
     	
-    	this.indexPage.disconnect.click();
+	//29: missing code for the outcome
     
     }
 

@@ -4,7 +4,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 /**
  * An AI player.
- * Created by Cheryl on 11/25/2017.
+ * 
  */
 public class AIPlayer extends Player {
 

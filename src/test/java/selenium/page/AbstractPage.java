@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * Represents a selenium.page.
  *
- * Created by Mike on 10/6/2015.
+ * 
  */
 @Component
 @Lazy

@@ -9,8 +9,7 @@ import org.seleniumhq.jetty7.util.log.Log;
 /**
  * A Hand that a player has.
  * <p/>
- * Created by Mike on 10/27/2015.
- * Modifeid by Cheryl
+ * 
  */
 public class Hand {
 

@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Test the ability to connect and disconnect to the game.
- * Created by Cheryl 
+ * 
  */
 @SeleniumTest
 public class ConnectionBasicsTest extends AbstractSeleniumTest{
@@ -39,26 +39,20 @@ public class ConnectionBasicsTest extends AbstractSeleniumTest{
     public void canOpenLobby() {
     	this.indexPage.connect.click();
     	this.indexPage.open.click();
-    	assertThat(this.indexPage.hasText("Opening the lobby with specified settings."), is(true));
+    	//1: missing assertThat
     	 this.indexPage.disconnect.click(); 
     }
  
     @Test
     public void canConenctTwoPlayers() {
     	// connect
-     	this.indexPage.connect.click();
-    	this.indexPage.setNumberPlayers(2);
-    	this.indexPage.open.click();
+     	//2: missing code
     	
     	//second connect
-    	ChromeDriver second = (ChromeDriver) this.quickConnectAnotherUser();
-    	assertThat(this.indexPage.hasText("Successfully connected to the game with unique id"), is(true));
-    	assertThat(this.indexPage.start.isEnabled(), is(true));
-    	
+    	//3: missing code
+
     	// quit
-    	this.disconnectSecondUser(second);
-    	this.indexPage.disconnect.click();
-     	
+    	//4: missing code     	
     	
     	
     }
@@ -66,29 +60,20 @@ public class ConnectionBasicsTest extends AbstractSeleniumTest{
     @Test
     public void canConenctMultiplePlayers() {
     	// connect 
-    	this.indexPage.connect.click();
-     	this.indexPage.setNumberPlayers(3);
-     	this.indexPage.open.click();
-     	
+    	//5: missing code          	
     	// connect second
-    	ChromeDriver second = (ChromeDriver) this.quickConnectAnotherUser();
-    	assertThat(this.indexPage.hasText("Successfully connected to the game with unique id "), is(true));
+    	//6: missing code         
+    	// connect third then disconnect
+    	//7: missing code        
+ }
     
-    	// connect third
-    	ChromeDriver third = (ChromeDriver) this.quickConnectAnotherUser();
-    	assertThat(this.indexPage.hasText("Successfully connected to the game with unique id "), is(true));
-   
-    	this.disconnectSecondUser(second);
-    	this.disconnectSecondUser(third);
-    	this.indexPage.disconnect.click();  
-    }
-    
+
     @Test
     public void canStartGame() {
     	this.indexPage.connect.click();
     	this.indexPage.open.click();
     	this.indexPage.start.click();
-    	assertThat(this.indexPage.hasText("The game has started! Please wait for your turn."), is(true));
+    	//8: missing assertThat
     	this.indexPage.disconnect.click();
     }
     

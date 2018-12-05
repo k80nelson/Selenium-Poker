@@ -5,7 +5,7 @@ import static org.apache.commons.lang3.StringUtils.capitalize;
 /**
  * The suit of a card.
  * <p/>
- * Created by Mike on 10/27/2015.
+ * 
  */
 public enum Suit {  
     DIAMONDS("diams"),

@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Parent test for all selenium classes so we can wait for links.
  * <p/>
- * Created by Mike on 10/6/2015.
+ * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = PokerApplication.class, locations = {"/META-INF/applicationContext.xml"})

@@ -3,8 +3,7 @@ package ca.carleton.poker.game.message;
 /**
  * Stores message strings to use across the application.
  * <p/>
- * Created by Mike on 10/7/2015.
- * - > modified by Cheryl 11/26/2017
+ * 
  */
 public class MessageUtil {
 

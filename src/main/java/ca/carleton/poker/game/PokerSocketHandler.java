@@ -34,7 +34,7 @@ import static org.apache.commons.collections.CollectionUtils.size;
 
 /**
  * Socket handler that will contain our Poker controls.
- * created by Cheryl 
+ * 
  *  
  */
 @Component

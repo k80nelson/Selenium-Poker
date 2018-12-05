@@ -5,6 +5,12 @@ import org.springframework.web.socket.WebSocketSession;
 import ca.carleton.poker.game.GameOption;
 import ca.carleton.poker.game.entity.card.Hand;
 
+/**
+ * Player for web-based poker game
+ * 
+ *  
+ */
+
 public abstract class Player {
 	private Hand hand;
 	private WebSocketSession session;

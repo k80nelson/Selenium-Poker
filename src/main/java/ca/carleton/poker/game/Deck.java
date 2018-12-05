@@ -21,7 +21,7 @@ import static java.util.Collections.shuffle;
 /**
  * Represents a card deck.
  * <p/>
- * Created by Mike on 11/3/2015.
+ * 
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)

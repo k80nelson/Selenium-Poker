@@ -7,7 +7,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.util.concurrent.TimeUnit;
 
 /**
- * created by Cheryl 
+ * 
  */
 public class WebDriverFactory {
 
