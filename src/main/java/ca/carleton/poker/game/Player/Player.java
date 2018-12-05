@@ -16,6 +16,15 @@ public abstract class Player {
 	private WebSocketSession session;
 	private String uid;
 	private GameOption lastOption;
+	private int index = 0;
+	
+	public int getIndex() {
+		return index;
+	}
+	
+	public void setIndex(int index) {
+		this.index = index;
+	}
 	
 		public Player(){}
 	   public Player(final WebSocketSession session, String id) {

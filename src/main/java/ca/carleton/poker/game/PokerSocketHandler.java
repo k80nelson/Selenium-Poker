@@ -65,7 +65,7 @@ public class PokerSocketHandler extends TextWebSocketHandler {
         LOG.info("Opened new session for {}.", session.getId());        
            
        	if (this.acceptingConnections && this.game.registerPlayer(session)) {
-            this.sendMessage(session, message(Message.PLAYER_CONNECTED, session.getId()).build());
+            this.sendMessage(session, message(Message.PLAYER_CONNECTED, session.getId(),game.getPlayerFor(session.getId()).getIndex()).build());
             this.broadCastMessage(session, message(Message.OTHER_PLAYER_CONNECTED, session.getId()).build());
 
             if (this.game.getPlayerFor(session).isAdmin()) {
@@ -422,7 +422,7 @@ private void processPlayers() {
         // SET AI Hand Values
         for(int i = 0; i <this.game.getConnectedAIPlayers().size(); i++){
         	this.broadCastMessageFromServer(message(Message.OTHER_VALUE,
-        			i+1,
+        			game.getConnectedAIPlayers().get(i).getIndex(),
                     this.game.getConnectedAIPlayers().get(i).getHand().getPokerValue().toString()).build());
         }
        

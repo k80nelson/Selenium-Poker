@@ -2,6 +2,8 @@ var ws = null;
 var playerId = null;
 var cards = "";
 var rigged = false;
+var admin = false;
+var index = 0;
 
 function setConnected(connected) {
     document.getElementById('connect').disabled = connected;
@@ -15,7 +17,7 @@ function setGameOptionsEnabled(enabled) {
 }
 
 function setAdmin(enabled) {
-    admin = true;
+    admin = enabled;
     document.getElementById('open').disabled = !enabled;
     document.getElementById('shutdown').disabled = !enabled;
     document.getElementById('numberPlayers').disabled = !enabled;
@@ -99,7 +101,9 @@ function dispatch(message) {
             var last = connectedMessage[connectedMessage.length - 1];
             if (split[1] === 'CONNECTED') {
                 setUID(last);
+                index = split[3];
             }
+
             break;
         case 'NOT+ACCEPTING':
             log(logMessage);
@@ -281,7 +285,7 @@ function rig_game(){
 }
 
 function returnCards(sessionID, move){
-   clientLog(sessionID+ "choose to "+ move);
+   clientLog(sessionID+ "chose to "+ move);
     var jsonCards = null;
     if(move == "HIT"){
         // get Improved cards
@@ -364,7 +368,9 @@ function start() {
     enableStart(false);
     removeCards();
     var r =     document.getElementById('rigged');
-    document.getElementById("connect-container").removeChild(r);
+    if (r != null){
+        document.getElementById("connect-container").removeChild(r);
+    }
 
 }
 
@@ -387,12 +393,16 @@ function addCardForPlayer(card, sessionID) {
  * Add a new card for another player.
    */
 function addCardForOther(card, id, sessionID) {
+    if(!admin && (id <= index)){
+        console.log("HERE");
+        id =  Number(id) + 1;
+    }
     var input = document.createElement('div');
     input.innerHTML = card;
     input.id=("otherHand"+id+ "Card" + document.getElementById('otherHandCards'.concat(id)).childElementCount);
     console.log('Trying to append to ' + 'otherHandCards'.concat(id));
     document.getElementById('otherHandCards'.concat(id)).appendChild(input);
-    document.getElementById('otherHandText'.concat(id)).innerHTML = "Other Player's Hand (" + sessionID + ")";
+    document.getElementById('otherHandText'.concat(id)).innerHTML = "Other Player's Hand, Player " + id + " (" + sessionID + ")";
 
     
 }
@@ -407,9 +417,12 @@ function updatePlayerValue(value) {
     document.getElementById('yourHandText').innerHTML = old.concat(" ~ Value: ".concat(value));
 }
 
-function updateOtherValue(index, value) {
-    var old = removeOldValue(document.getElementById('otherHandText'.concat(index)).innerHTML);
-    document.getElementById('otherHandText'.concat(index)).innerHTML = old.concat(" ~ Value: ".concat(value));
+function updateOtherValue(id, value) {
+    if(!admin && id <= index){
+        id += 1;
+    }
+    var old = removeOldValue(document.getElementById('otherHandText'.concat(id)).innerHTML);
+    document.getElementById('otherHandText'.concat(id)).innerHTML = old.concat(" ~ Value: ".concat(value));
 }
 
 function resetYourText() {

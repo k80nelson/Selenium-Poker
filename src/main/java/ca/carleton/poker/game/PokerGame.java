@@ -95,7 +95,9 @@ public class PokerGame {
         	for(int i = this.players.size(); i < DEFAULT_MAX_PLAYERS; i++ ){
         		final int next = this.counter.incrementAndGet();
         	    String id =  String.format("AI-%d", next);
-        		this.players.add(new AIPlayer(null, id));
+        	    AIPlayer newPlayer = new AIPlayer(null, id);
+        	    newPlayer.setIndex(players.size());
+        		this.players.add(newPlayer);
         		LOG.info("Adding {} to the game.", id);
         	}
         	 return true;
@@ -126,6 +128,7 @@ public class PokerGame {
 
 
         this.players.remove(session.getId());
+        aiPlayer.setIndex(players.size());
         this.players.add(aiPlayer);
         LOG.info("Replaced old player with new AI - copied cards.");
         return true;
@@ -141,6 +144,7 @@ public class PokerGame {
      */
     public boolean registerPlayer(final WebSocketSession session) {
         RealPlayer player = new RealPlayer(session, session.getId());
+        
     	// Set to admin if they are the first conneciton
         LOG.info("Player is trying to connect {}, {}", player.getuid(), player.getSession());
         if (this.players.isEmpty()) {
@@ -151,7 +155,9 @@ public class PokerGame {
     	//if(!this.players.contains(player)){
            if(!this.players.contains(player)){
             	 LOG.info("Player is being added {}, {}", player.getuid(), player.getSession());
+            	 player.setIndex(players.size());
             	 return this.players.add(player);
+            	 
            }
        
            return false;
@@ -410,7 +416,7 @@ public class PokerGame {
     public Map<Player, List<TextMessage>> buildHandMessages() {
         final Map<Player, List<TextMessage>> messages = new HashMap<>();
 
-        int otherPlayerIndex = 1;
+        //int otherPlayerIndex = 1;
 
         // We only need to do this for real players.
         for (final Player player : this.getConnectedRealPlayers()) {
@@ -446,16 +452,16 @@ public class PokerGame {
             		for (final Card card : playerOtherThanCurrent.getHand().getCards()) {
 	                    playerMessages.add(message(MessageUtil.Message.ADD_OTHER_PLAYER_CARD,
 	                            card.toFormHTML(),
-	                            otherPlayerIndex,
+	                            playerOtherThanCurrent.getIndex(),
 	                            playerOtherThanCurrent.getuid())
 	                            .build());
 	                }
-            		 otherPlayerIndex++;
+            		 //otherPlayerIndex++;
 	            }
             	  
             }
 
-            otherPlayerIndex = 1;
+            //otherPlayerIndex = 1;
         }
         return messages;
     }
