@@ -102,7 +102,7 @@ public abstract class AbstractSeleniumTest {
 
 
 	public void waitForAlert() {
-		new WebDriverWait(this.webDriver,5).until(ExpectedConditions.alertIsPresent());
+		new WebDriverWait(this.webDriver,20).until(ExpectedConditions.alertIsPresent());
 
 	}
 

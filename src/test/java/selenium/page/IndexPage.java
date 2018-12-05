@@ -27,8 +27,8 @@ import java.util.concurrent.TimeUnit;
 public class IndexPage extends  AbstractPage<IndexPage> {
 
 	
-	@Autowired
-	public PokerGame game; 
+	//@Autowired
+	//public PokerGame game; 
 	 
   //  public ChromeDriver chrome;
     
@@ -174,9 +174,9 @@ public class IndexPage extends  AbstractPage<IndexPage> {
      */
     public String[] getUsetTexts() {
     	String[] ids = new String[4];
-    	ids[0] = this.webDriver.findElement(By.id("otherHandText1")).getText().replace("Other Player's Hand", "").replaceAll("[\\(\\)]", "");
-    	ids[1] = this.webDriver.findElement(By.id("otherHandText2")).getText().replace("Other Player's Hand", "").replaceAll("[\\(\\)]", "");
-    	ids[2] = this.webDriver.findElement(By.id("otherHandText3")).getText().replace("Other Player's Hand", "").replaceAll("[\\(\\)]", "");
+    	ids[0] = this.webDriver.findElement(By.id("otherHandText1")).getText().replace("Other Player's Hand", "").replaceAll("[\\(\\)]", "").replaceAll(", Player \\d ", "");
+    	ids[1] = this.webDriver.findElement(By.id("otherHandText2")).getText().replace("Other Player's Hand", "").replaceAll("[\\(\\)]", "").replaceAll(", Player \\d ", "");
+    	ids[2] = this.webDriver.findElement(By.id("otherHandText3")).getText().replace("Other Player's Hand", "").replaceAll("[\\(\\)]", "").replaceAll(", Player \\d ", "");
     	ids[3] = this.webDriver.findElement(By.id("yourHandText")).getText().replace("Your Hand", "").replaceAll("[\\(\\)]", "");
         
     	return ids;

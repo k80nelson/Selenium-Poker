@@ -30,17 +30,32 @@ public class Strategy1Tests extends AbstractSeleniumTest {
     private IndexPage indexPage;
     
     
-    @Test
-    public void S1Test1(){
-    	
-    }
+    // Royal flush, hold
+    
+    // straight flush, hold
+    
+    // four kind, hold
+    
+    // full house, hold
+    
+    // flush, hold
+    
+    // straight, hold
+    
+    
+    // exchange all non pairs or 3 kinds
+    
+    // three kind
+    
+    // two pairs
+    
+    // one pair
+    
+    // no pairs
+    
 
-    @Test
-    public void S1Test2(){
-    	
-    }
 
-    //more tests 
+
 
 
 

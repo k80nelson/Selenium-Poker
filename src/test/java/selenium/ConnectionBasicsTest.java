@@ -137,6 +137,7 @@ public class ConnectionBasicsTest extends AbstractSeleniumTest{
     	this.indexPage.connect.click();
     	this.indexPage.open.click();
     	this.indexPage.start.click();
+    	//8: missing assertThat
     	assertTrue(this.indexPage.hasText("The game has started! Please wait for your turn."));
     	this.indexPage.disconnect.click();
     }
