@@ -41,13 +41,22 @@ public class ConnectionBasicsTest extends AbstractSeleniumTest{
     @Test
     public void canOpenLobby() {
     	this.indexPage.connect.click();
+    	this.waitForDisplayed(this.indexPage.open).isEnabled();
+    	
+    	this.delay(2);
     	this.indexPage.open.click();
+    	this.delay(2);
     	//1: missing assertThat
+    	assertTrue(this.indexPage.hasText("Successfully connected to the game with unique id "+ this.indexPage.getPlayerUID()));
+    	assertTrue(this.indexPage.hasText("Opening the lobby with specified settings."));
+    	assertTrue(this.indexPage.start.isEnabled());
     	 this.indexPage.disconnect.click(); 
     }
  
     @Test
     public void canConenctTwoPlayers() {
+    	// connect
+     	//2: missing code
     	this.indexPage.connect.click();
     	this.waitForDisplayed(this.indexPage.open).isEnabled();
     	this.delay(2);
@@ -58,7 +67,9 @@ public class ConnectionBasicsTest extends AbstractSeleniumTest{
     	this.delay(2);
     	this.indexPage.open.click();
     	
-    	
+
+    	//second connect
+    	//3: missing code
     	ChromeDriver second = (ChromeDriver) this.quickConnectAnotherUser();
     	this.delay(2);
     	
@@ -68,6 +79,8 @@ public class ConnectionBasicsTest extends AbstractSeleniumTest{
     	assertTrue(this.indexPage.hasText(UID + " has connected to the game."));
     	assertThat(this.indexPage.start.isEnabled(), is(true));
     	
+    	// quit
+    	//4: missing code 
     	this.disconnectSecondUser(second);
     	this.indexPage.disconnect.click();
 
@@ -75,6 +88,8 @@ public class ConnectionBasicsTest extends AbstractSeleniumTest{
     
     @Test
     public void canConenctMultiplePlayers() {
+    	// connect 
+    	//5: missing code   
     	this.indexPage.connect.click();
     	this.waitForDisplayed(this.indexPage.open).isEnabled();
     	this.delay(2);
@@ -85,7 +100,8 @@ public class ConnectionBasicsTest extends AbstractSeleniumTest{
     	this.delay(2);
     	this.indexPage.open.click();
     	
-    	
+    	// connect second
+    	//6: missing code 
     	ChromeDriver second = (ChromeDriver) this.quickConnectAnotherUser();
     	this.delay(2);
     	
@@ -95,6 +111,8 @@ public class ConnectionBasicsTest extends AbstractSeleniumTest{
     	assertTrue(this.indexPage.hasText(UID + " has connected to the game."));
     	assertThat(this.indexPage.start.isEnabled(), is(false));
     	
+    	// connect third then disconnect
+    	//7: missing code 
     	ChromeDriver third = (ChromeDriver) this.quickConnectAnotherUser();
     	this.delay(2);
     	
@@ -108,12 +126,9 @@ public class ConnectionBasicsTest extends AbstractSeleniumTest{
     	this.disconnectSecondUser(third);
     	this.indexPage.disconnect.click();
     	
-    	// connect 
-    	//5: missing code          	
-    	// connect second
-    	//6: missing code         
-    	// connect third then disconnect
-    	//7: missing code        
+    	       	
+    	        
+    	       
  }
     
 
@@ -122,7 +137,7 @@ public class ConnectionBasicsTest extends AbstractSeleniumTest{
     	this.indexPage.connect.click();
     	this.indexPage.open.click();
     	this.indexPage.start.click();
-    	//8: missing assertThat
+    	assertTrue(this.indexPage.hasText("The game has started! Please wait for your turn."));
     	this.indexPage.disconnect.click();
     }
     
