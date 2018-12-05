@@ -1,0 +1,16 @@
+ca.carleton.poker.game.player.Player
+	Added an index system
+
+ca.carleton.poker.game.PokerGame
+	Added support for the index system
+	Added all AI game support
+	
+ca.carleton.poker.game.PokerSocketHandler
+	Added support for the index system
+	Added all AI game support
+
+ca.carleton.poker.game.message.MessageUtil
+	Added support for the index system
+	Added all AI game support
+
+	

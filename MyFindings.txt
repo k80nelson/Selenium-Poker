@@ -1,0 +1,67 @@
+1. What can you test with Selenium?
+You can test your user interface with selenium. You can only verify the 
+user-visible results using selenium, because at its heart it is mostly just
+a web driver. Selenium works best as an automated acceptance testing tool.
+It uses a black box approach to the system, so whatever you dont make
+visible to your user will be unable to be tested with selenium. INTEGRATION
+testing is what selenium does best. If you only use the selenium API with java,
+you can imitate real users. 
+INTEGRATION TESTING (kind of? UI testing)
+
+2. What can you test with Selenium and JUnit?
+JUnit alone allows you to unit/component test your system. With unit testing
+you can verify each part of the software in isolaton. When combined with selenium
+you can use these tools to perform system testing, where you can test your UI and how it integrates with your system as a whole. Any faults in how your
+systems interact will be found through this testing. JUnit also provides an 
+assertion testing framework, which allows for pass/fail continous integration.
+SYSTEM TESTING
+
+
+3. What can you not test with Selenuim by itself?
+Unit testing is impossible with selenium. By definition, you will be dealing 
+with some component interaction between your browser and your system, which 
+is a layer of testing that you haven't performed if you are only using selenium 
+to test your system.
+
+selenium is not a test tool. it is an automation framework, and it will not 
+provide you with a mechanism to perform assertations. 
+
+UNIT TESTING
+
+
+4. What can you not test with Selenium and JUnit?
+truly black box acceptance tests will always need an abstraction like
+cucumber with its step definitions. Selenium is very tightly
+coupled with your current system interface, and any change there will require
+you to rewrite your tests. If you need continuous acceptance tests, you will need
+to abstract your scenarios into something like cucumber.
+ACCEPTANCE TESTING/BLACK BOX TESTING/BEHAVIOUR DRIVEN DEVELOPMENT
+
+
+
+5. How would you go about using Selenium and other testing tools to test your game's interface AND your game's logic in a systematic way?
+
+We need testing on every level, so to start we need to seperate the 
+interface and the logic of our program.
+
+To test the logic, we'll need unit testing, integration testing, and acceptance
+testing. JUnit and cucumber work great for this, especially if you write your
+tests such that you can use an input file and write as many test cases as you need for your integration/acceptance testing. 
+
+I'd break down every unit of the program, put them in order from most to least 
+important, and test as I go with whatever unit testing framework we were using.
+Once a class or a few classes have been built, we can move on to integration 
+testing with some pass/fail scenarios. 
+
+Repeating this until you have built up a component of your system, and then 
+work towards creating a few more components and we move on to system testing.
+This is where for instance if you were using an MVC pattern, you'd be testing
+out your controller/view interactions. JUnit works for this in combination with
+Selenium and a mock deployment server.
+
+Testing your UI can be done with JUnit and Selenium, and finally for the last
+acceptance tests you can use Cucumber to automate all of your scenarios 
+regardless of how the UI may change in the future.
+
+
+
