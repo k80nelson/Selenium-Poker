@@ -4,6 +4,7 @@ var cards = "";
 var rigged = false;
 var admin = false;
 var index = 0;
+var allAI = false;
 
 function setConnected(connected) {
     document.getElementById('connect').disabled = connected;
@@ -132,9 +133,8 @@ function dispatch(message) {
             getCard();
             break;
         case 'OTHER+MOVE':
-            log(logMessage);
+            log(split[0].concat(split[2] + " chose to " + split[3]));
             break;
-                  break;
         case 'RIG+AI':
             returnCards(split[2], split[3]);
             break;
@@ -148,7 +148,7 @@ function dispatch(message) {
             addCardForOther(split[2], split[3], split[4]);
             break;
         case 'PLAYER+VALUE':
-            updatePlayerValue(split[2]);
+            updatePlayerValue(split[2],split[3]);
             break;
         case 'OTHER+VALUE':
             updateOtherValue(split[2], split[3]);
@@ -384,7 +384,13 @@ function addCardForPlayer(card, sessionID) {
     var input = document.createElement('div');
     input.innerHTML = card;
     input.id  = ("PlayerCard"+id);
-    document.getElementById('yourHandText').innerHTML = "Your Hand (" + sessionID + ")";
+    if(allAI){
+        document.getElementById('yourHandText').innerHTML = "Other Player's Hand, Player 0 (" + sessionID + ")";
+    }
+    else{
+        document.getElementById('yourHandText').innerHTML = "Your Hand (" + sessionID + ")";
+    }
+    
     document.getElementById('playerHandCards').appendChild(input);
 }
 
@@ -393,6 +399,7 @@ function addCardForPlayer(card, sessionID) {
  * Add a new card for another player.
    */
 function addCardForOther(card, id, sessionID) {
+    var val = id;
     if(!admin && (id <= index)){
         console.log("HERE");
         id =  Number(id) + 1;
@@ -402,7 +409,7 @@ function addCardForOther(card, id, sessionID) {
     input.id=("otherHand"+id+ "Card" + document.getElementById('otherHandCards'.concat(id)).childElementCount);
     console.log('Trying to append to ' + 'otherHandCards'.concat(id));
     document.getElementById('otherHandCards'.concat(id)).appendChild(input);
-    document.getElementById('otherHandText'.concat(id)).innerHTML = "Other Player's Hand, Player " + id + " (" + sessionID + ")";
+    document.getElementById('otherHandText'.concat(id)).innerHTML = "Other Player's Hand, Player " + val + " (" + sessionID + ")";
 
     
 }
@@ -412,13 +419,26 @@ function removeOldValue(old) {
     return split[0];
 }
 
-function updatePlayerValue(value) {
-    var old = removeOldValue(document.getElementById('yourHandText').innerHTML);
-    document.getElementById('yourHandText').innerHTML = old.concat(" ~ Value: ".concat(value));
+function updatePlayerValue(value, id) {
+    if(id == index){
+        var old = removeOldValue(document.getElementById('yourHandText').innerHTML);
+        document.getElementById('yourHandText').innerHTML = old.concat(" ~ Value: ".concat(value));
+    }
+
+    else if (id < index){
+        id = Number(id) + 1;
+    }
+    var old = removeOldValue(document.getElementById('otherHandText'.concat(id)).innerHTML);
+    document.getElementById('otherHandText'.concat(id)).innerHTML = old.concat(" ~ Value: ".concat(value));
 }
 
 function updateOtherValue(id, value) {
-    if(!admin && id <= index){
+    if (id == 0 && allAI){
+        var old = removeOldValue(document.getElementById('yourHandText').innerHTML);
+        document.getElementById('yourHandText').innerHTML = old.concat(" ~ Value: ".concat(value));
+        return;
+    }
+    else if(!admin && id <= index){
         id += 1;
     }
     var old = removeOldValue(document.getElementById('otherHandText'.concat(id)).innerHTML);
@@ -453,7 +473,9 @@ function removeCards() {
 function acceptOthers() {
     if (ws != null) {
         var numP = document.getElementById('numberPlayers').value;
-
+        if(Number(numP) == 0){
+            allAI = true;
+        }
         clientLog('Opening the lobby with specified settings. When the correct number of players have connected, the start button will become available.');
         var send = 'ACCEPT|' + numP;
         ws.send(send);
@@ -491,9 +513,6 @@ function log(message) {
     p.innerHTML = message;
 
     console.appendChild(p);
-    while (console.childNodes.length > 25) {
-        console.removeChild(console.firstChild);
-    }
     console.scrollTop = console.scrollHeight;
 }
 

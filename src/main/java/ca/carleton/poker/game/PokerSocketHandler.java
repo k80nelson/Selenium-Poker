@@ -144,10 +144,15 @@ public class PokerSocketHandler extends TextWebSocketHandler {
        
         switch (contents[0]) {
             case "ACCEPT":
-                LOG.info("Now accepting connections.");
-                this.acceptingConnections = true;
-                this.game.openLobby(Integer.parseInt(contents[1]));
-
+            	if(Integer.parseInt(contents[1]) == 0) {
+            		this.game.allAI();
+            	}
+            	else {
+            		LOG.info("Now accepting connections.");
+                    this.acceptingConnections = true;
+                    this.game.openLobby(Integer.parseInt(contents[1]));
+            	}
+                
                 // Case where we're playing with 1 person - need to start right away.
                 if (this.game.readyToStart()) {
                 
@@ -417,7 +422,7 @@ private void processPlayers() {
         // Set Hand Values
         for(Player p: this.game.getConnectedRealPlayers()){
         	this.broadCastMessageFromServer(message(Message.PLAYER_VALUE,
-                    p.getHand().getPokerValue().toString()).build());
+                    p.getHand().getPokerValue().toString(),p.getIndex()).build());
         }
         // SET AI Hand Values
         for(int i = 0; i <this.game.getConnectedAIPlayers().size(); i++){
@@ -522,16 +527,28 @@ private void processPlayers() {
      * @param message the message.
      */
     private void broadCastMessageFromServer(final TextMessage message) {
-        this.game.getConnectedRealPlayers().stream()
-                .map(Player::getSession)
-                .forEach(session ->
-                {
-                    try {
-                        session.sendMessage(message);
-                    } catch (final Exception exception) {
-                        this.closeSession(session, CloseStatus.PROTOCOL_ERROR);
-                    }
-                });
+    	if(this.game.ALLAI) {
+    		try {
+    			LOG.trace("SENDING {} TO {}.",message.getPayload(), this.game.getAdmin().getSession());
+    			this.game.getAdmin().getSession().sendMessage(message);
+    		}
+    		catch (final Exception exception){
+    			this.closeSession(this.game.getAdmin().getSession(), CloseStatus.PROTOCOL_ERROR);
+    		}
+    	}
+    	else{
+    		this.game.getConnectedRealPlayers().stream()
+            .map(Player::getSession)
+            .forEach(session ->
+            {
+                try {
+                    session.sendMessage(message);
+                } catch (final Exception exception) {
+                    this.closeSession(session, CloseStatus.PROTOCOL_ERROR);
+                }
+            });
+    	}
+        
     }
 
     /**

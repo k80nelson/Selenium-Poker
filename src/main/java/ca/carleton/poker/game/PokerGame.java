@@ -55,6 +55,10 @@ public class PokerGame {
     private State gameState;
 
     private ArrayList<Player> players;
+    
+    private Player admin;
+    
+    boolean ALLAI = false;
 
     @Autowired
     private Deck deck;
@@ -150,6 +154,7 @@ public class PokerGame {
         if (this.players.isEmpty()) {
             LOG.info("Setting first player as admin:{}.", player.getuid());
             player.setAdmin(true);
+            admin = player;
     	}
         // Check that the player doesn't exist and add them
     	//if(!this.players.contains(player)){
@@ -309,6 +314,12 @@ public class PokerGame {
 		waitingOnReal = b;		
 	}
 	
+	public void allAI() {
+		this.roundMaxPlayers = 0;
+		this.ALLAI = true;
+		players.clear();
+	}
+	
 	// open game Lobby, and wait for players to connect
 	  public void openLobby(final int numberOfPlayers) {
 	        if (numberOfPlayers < 1 || numberOfPlayers > 4) {
@@ -325,6 +336,7 @@ public class PokerGame {
 	      LOG.info("Current number of players is {}. Required number is {}.", size(this.players), numberRequired);
 	      return size(this.players) == numberRequired;
 	}
+	
 	
     
      //Get the player sessions connected to this game including AI.
@@ -377,11 +389,12 @@ public class PokerGame {
     
 
 	public Player getAdmin() {
+		return admin;
+		/*
 		for(RealPlayer p: this.getConnectedRealPlayers()){
 			System.out.println(p.getuid()+" " +p.isAdmin());
 			if(p.isAdmin()) return p;
-		}
-		return null;
+		}*/
 	}
 
 
@@ -417,52 +430,81 @@ public class PokerGame {
         final Map<Player, List<TextMessage>> messages = new HashMap<>();
 
         //int otherPlayerIndex = 1;
-
-        // We only need to do this for real players.
-        for (final Player player : this.getConnectedRealPlayers()) {
-        	player.getHand().sortRank();
-            messages.putIfAbsent(player, new ArrayList<>());
-            final List<TextMessage> playerMessages = messages.get(player);
-
-            // Step 0, build the message that we're dealing the cards.
-            playerMessages.add(message(MessageUtil.Message.DEALING_CARDS).build());
-
-            // Step 1, build the messages to send the player their cards.
-            player.getHand()
-                    .getCards()
-                    .forEach(card -> {
-                        // Make it temporarily visible to the player (i.e we want to show it to the person).
-                        if (card.isHidden()) {
-                            card.setHidden(false);
-                            playerMessages.add(message(MessageUtil.Message.ADD_PLAYER_CARD,
-                                    card.toFormHTML(),
-                                    player.getSession().getId()).build());
-                            card.setHidden(true);
-                        } else {
-                            playerMessages.add(message(MessageUtil.Message.ADD_PLAYER_CARD,
-                                    card.toFormHTML(),
-                                    player.getSession().getId()).build());
-                        }
-                    });
-     
-
-            // Step 2, build the messages to send the player the other player's (AI's) cards.
-            for (final Player playerOtherThanCurrent : this.getConnectedPlayers()) {
-            	if(!player.equals(playerOtherThanCurrent)){
-            		for (final Card card : playerOtherThanCurrent.getHand().getCards()) {
+        
+        if (ALLAI) {
+        	messages.putIfAbsent(admin, new ArrayList<>());
+        	final List<TextMessage> playerMessages = messages.get(admin);
+        	playerMessages.add(message(MessageUtil.Message.DEALING_CARDS).build());
+        	for (final Player AI : this.getConnectedPlayers()) {
+            	if(AI.getIndex() != 0){
+            		for (final Card card : AI.getHand().getCards()) {
 	                    playerMessages.add(message(MessageUtil.Message.ADD_OTHER_PLAYER_CARD,
 	                            card.toFormHTML(),
-	                            playerOtherThanCurrent.getIndex(),
-	                            playerOtherThanCurrent.getuid())
+	                            AI.getIndex(),
+	                            AI.getuid())
 	                            .build());
 	                }
-            		 //otherPlayerIndex++;
+	            }else {
+	            	AI.getHand()
+                    .getCards()
+                    .forEach(card -> {
+                            playerMessages.add(message(MessageUtil.Message.ADD_PLAYER_CARD,
+                                    card.toFormHTML(),
+                                    AI.getuid()).build());
+                        
+                    });
 	            }
             	  
             }
-
-            //otherPlayerIndex = 1;
         }
+        else {
+        	for (final Player player : this.getConnectedRealPlayers()) {
+            	player.getHand().sortRank();
+                messages.putIfAbsent(player, new ArrayList<>());
+                final List<TextMessage> playerMessages = messages.get(player);
+
+                // Step 0, build the message that we're dealing the cards.
+                playerMessages.add(message(MessageUtil.Message.DEALING_CARDS).build());
+
+                // Step 1, build the messages to send the player their cards.
+                player.getHand()
+                        .getCards()
+                        .forEach(card -> {
+                            // Make it temporarily visible to the player (i.e we want to show it to the person).
+                            if (card.isHidden()) {
+                                card.setHidden(false);
+                                playerMessages.add(message(MessageUtil.Message.ADD_PLAYER_CARD,
+                                        card.toFormHTML(),
+                                        player.getSession().getId()).build());
+                                card.setHidden(true);
+                            } else {
+                                playerMessages.add(message(MessageUtil.Message.ADD_PLAYER_CARD,
+                                        card.toFormHTML(),
+                                        player.getSession().getId()).build());
+                            }
+                        });
+         
+
+                // Step 2, build the messages to send the player the other player's (AI's) cards.
+                for (final Player playerOtherThanCurrent : this.getConnectedPlayers()) {
+                	if(!player.equals(playerOtherThanCurrent)){
+                		for (final Card card : playerOtherThanCurrent.getHand().getCards()) {
+    	                    playerMessages.add(message(MessageUtil.Message.ADD_OTHER_PLAYER_CARD,
+    	                            card.toFormHTML(),
+    	                            playerOtherThanCurrent.getIndex(),
+    	                            playerOtherThanCurrent.getuid())
+    	                            .build());
+    	                }
+                		 //otherPlayerIndex++;
+    	            }
+                	  
+                }
+
+                //otherPlayerIndex = 1;
+            }
+            
+        }
+        // We only need to do this for real players.
         return messages;
     }
 

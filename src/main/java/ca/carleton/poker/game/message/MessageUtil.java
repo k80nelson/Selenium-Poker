@@ -23,7 +23,7 @@ public class MessageUtil {
         ADD_DEALER_CARD("|ADD+DEALER+CARD|%s|%s"),
         // Send index 0 or 1 so we know which one to fill out, as well as their ID to set.
         ADD_OTHER_PLAYER_CARD("|ADD+OTHER+PLAYER+CARD|%s|%s|%s"),
-        PLAYER_VALUE("|PLAYER+VALUE|%s"),
+        PLAYER_VALUE("|PLAYER+VALUE|%s|%s"),
           // index, value
         OTHER_VALUE("|OTHER+VALUE|%s|%s"),
         READY_TO_START("|READY+TO+START|The game is now ready to begin. Press start when ready."),
