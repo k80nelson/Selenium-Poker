@@ -1,6 +1,7 @@
 package selenium.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.FindBy;
@@ -133,8 +134,6 @@ public class IndexPage extends  AbstractPage<IndexPage> {
     @FindBy(id = "console")
     public WebElement console;
 	 
-    
- 
     
     public int countNumberOfCardsFor(final WebElement cardList) {
         return this.getAllCardsFor(cardList).size();
